@@ -123,7 +123,9 @@ listaPedido.appendChild(item);
       return;
     }
 
-    const codigo = "LZ-" + Math.floor(Math.random() * 100000);
+    const fecha = new Date();
+const codigo = `LZ-${fecha.getFullYear()}${fecha.getMonth()+1}${fecha.getDate()}-${Math.floor(Math.random()*1000)}`;
+
 
     let mensaje = `Pedido ${codigo}%0A%0A`;
 
