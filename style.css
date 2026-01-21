@@ -139,3 +139,18 @@ section {
   padding-top: 40px;
   border-top: 2px solid #e67e22;
 }
+
+#whatsapp {
+  margin-top: 20px;
+  padding: 12px 18px;
+  background-color: #25D366;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#whatsapp:hover {
+  background-color: #1ebe5d;
+}
