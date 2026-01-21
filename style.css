@@ -83,3 +83,18 @@ main {
 section {
   margin-bottom: 50px;
 }
+
+.categoria {
+  margin-top: 60px;
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+  color: #e67e22;
+  border-bottom: 2px solid #e67e22;
+  padding-bottom: 5px;
+}
+
+.proximamente {
+  font-style: italic;
+  opacity: 0.7;
+  margin-bottom: 40px;
+}
