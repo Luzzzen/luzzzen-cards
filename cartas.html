@@ -55,12 +55,14 @@
     </section>
 
     <!-- PEDIDO -->
-    <section id="pedido">
-      <h2>Tu pedido</h2>
-      <ul id="lista-pedido"></ul>
-      <p id="total"></p>
-      <button id="whatsapp">Enviar pedido por WhatsApp</button>
-    </section>
+   <section id="pedido">
+  <h2>Tu pedido</h2>
+  <ul id="lista-pedido"></ul>
+  <p id="total">Total: $0</p>
+
+  <button id="vaciar">Vaciar pedido</button>
+  <button id="whatsapp">Enviar pedido por WhatsApp</button>
+</section>
 
   </main>
 
@@ -110,9 +112,7 @@ listaPedido.appendChild(item);
       totalTexto.innerText = `Total: $${total.toLocaleString()}`;
     });
   });
-    
-  <button id="vaciar">Vaciar pedido</button>
-    
+     
   botonWhatsapp.addEventListener("click", () => {
     if (items.length === 0) {
       alert("No agregaste ninguna carta.");
