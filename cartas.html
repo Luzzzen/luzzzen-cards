@@ -236,6 +236,32 @@ function handleSwipe() {
     modalImg.src = imagenes[indice].src;
   }
 }    
+    
+    /* =========================
+   CARRITO MOBILE
+========================= */
+
+const carritoItems = document.getElementById("carrito-items");
+const carritoTotal = document.getElementById("carrito-total");
+const verPedidoBtn = document.getElementById("ver-pedido");
+
+function actualizarCarritoMobile() {
+  carritoItems.innerText = `${items.length} ítem${items.length !== 1 ? "s" : ""}`;
+  carritoTotal.innerText = `$${total.toLocaleString()}`;
+}
+
+// Llamamos cada vez que cambia el carrito
+const observer = new MutationObserver(actualizarCarritoMobile);
+observer.observe(listaPedido, { childList: true });
+
+// Scroll al pedido
+verPedidoBtn.addEventListener("click", () => {
+  document.getElementById("pedido").scrollIntoView({ behavior: "smooth" });
+});
+
+// Inicial
+actualizarCarritoMobile();
+
 </script>
 
 </body>
