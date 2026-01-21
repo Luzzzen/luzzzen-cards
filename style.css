@@ -225,3 +225,15 @@ section {
 .menu-catalogo a:hover {
   transform: translateY(-6px);
 }
+
+.imagenes-carta img {
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+
+.titulo-carta {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 6px 0;
+}
