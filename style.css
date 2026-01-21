@@ -378,3 +378,46 @@ button {
     right: 10px;
   }
 }
+
+/* =========================
+   CARRITO FIJO MOBILE
+========================= */
+
+#carrito-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  #carrito-mobile {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #0b2a45;
+    border-top: 2px solid #e67e22;
+    padding: 12px 16px;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 999;
+  }
+
+  #carrito-mobile span {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  #ver-pedido {
+    background-color: #e67e22;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+  /* Para que no tape contenido */
+  body {
+    padding-bottom: 70px;
+  }
+}
