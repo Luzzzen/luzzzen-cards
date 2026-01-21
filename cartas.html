@@ -1,40 +1,108 @@
- <section id="productos">
-  <h2>Catálogo</h2>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cartas individuales | Luzzzen Cards</title>
 
-  <!-- CARTAS INDIVIDUALES -->
-  <h3 class="categoria">Cartas individuales</h3>
-  <div class="catalogo">
-    <div class="carta">
-      <img src="https://via.placeholder.com/200x280" alt="Carta ejemplo">
-      <h4>Carta Ejemplo 1</h4>
-      <p class="precio">$5.000</p>
-      <button class="agregar">Agregar al pedido</button>
-    </div>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 
-    <div class="carta">
-      <img src="https://via.placeholder.com/200x280" alt="Carta ejemplo">
-      <h4>Carta Ejemplo 2</h4>
-      <p class="precio">$7.500</p>
-      <button class="agregar">Agregar al pedido</button>
-    </div>
-  </div>
+  <link rel="stylesheet" href="style.css">
+</head>
 
-  <!-- FIRMAS -->
-  <h3 class="categoria">Firmas</h3>
-  <p class="proximamente">Próximamente</p>
+<body>
 
-  <!-- JERSEYS -->
-  <h3 class="categoria">Jerseys</h3>
-  <p class="proximamente">Próximamente</p>
+  <header>
+    <a href="index.html" class="volver">← Volver al inicio</a>
+    <h1>Cartas individuales</h1>
+    <p>Cartas de fútbol disponibles</p>
+  </header>
 
-  <!-- SOBRES Y CAJAS -->
-  <h3 class="categoria">Sobres y cajas</h3>
-  <p class="proximamente">Próximamente</p>
-</section>
+  <main>
 
+    <section id="productos">
+
+      <div class="catalogo">
+
+        <!-- CARTA 1 -->
+        <div class="carta">
+          <img src="https://via.placeholder.com/200x280" alt="Carta ejemplo">
+          <h4>Carta Ejemplo 1</h4>
+          <p class="precio">$5.000</p>
+          <button class="agregar">Agregar al pedido</button>
+        </div>
+
+        <!-- CARTA 2 -->
+        <div class="carta">
+          <img src="https://via.placeholder.com/200x280" alt="Carta ejemplo">
+          <h4>Carta Ejemplo 2</h4>
+          <p class="precio">$7.500</p>
+          <button class="agregar">Agregar al pedido</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PEDIDO -->
     <section id="pedido">
-  <h2>Tu pedido</h2>
-  <ul id="lista-pedido"></ul>
-  <p id="total"></p>
-  <button id="whatsapp">Enviar pedido por WhatsApp</button>
-</section>
+      <h2>Tu pedido</h2>
+      <ul id="lista-pedido"></ul>
+      <p id="total"></p>
+      <button id="whatsapp">Enviar pedido por WhatsApp</button>
+    </section>
+
+  </main>
+
+  <script>
+    const botones = document.querySelectorAll(".agregar");
+    const listaPedido = document.getElementById("lista-pedido");
+    const totalTexto = document.getElementById("total");
+    const botonWhatsapp = document.getElementById("whatsapp");
+
+    let total = 0;
+    let items = [];
+
+    botones.forEach(boton => {
+      boton.addEventListener("click", () => {
+        const carta = boton.parentElement;
+        const nombre = carta.querySelector("h4").innerText;
+        const precioTexto = carta.querySelector(".precio").innerText;
+        const precio = parseInt(precioTexto.replace(/\D/g, ""));
+
+        items.push({ nombre, precio });
+
+        const item = document.createElement("li");
+        item.innerText = `${nombre} – ${precioTexto}`;
+        listaPedido.appendChild(item);
+
+        total += precio;
+        totalTexto.innerText = `Total: $${total.toLocaleString()}`;
+      });
+    });
+
+    botonWhatsapp.addEventListener("click", () => {
+      if (items.length === 0) {
+        alert("No agregaste ninguna carta.");
+        return;
+      }
+
+      const codigo = "LZ-" + Math.floor(Math.random() * 100000);
+
+      let mensaje = `Pedido ${codigo}%0A%0A`;
+
+      items.forEach(item => {
+        mensaje += `• ${item.nombre} - $${item.precio.toLocaleString()}%0A`;
+      });
+
+      mensaje += `%0A Total: $${total.toLocaleString()}`;
+
+      const numero = "54911XXXXXXXX"; // PONÉ TU NÚMERO
+      const url = `https://wa.me/${numero}?text=${mensaje}`;
+
+      window.open(url, "_blank");
+    });
+  </script>
+
+</body>
+</html>
