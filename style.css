@@ -254,3 +254,29 @@ section {
   max-height: 90%;
   border-radius: 8px;
 }
+
+.imagenes-carta {
+  position: relative;
+}
+
+.imagenes-carta img {
+  display: block;
+  width: 100%;
+  border-radius: 6px;
+  transition: opacity 0.25s ease;
+}
+
+.imagenes-carta img:nth-child(2) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.carta:hover .imagenes-carta img:nth-child(1) {
+  opacity: 0;
+}
+
+.carta:hover .imagenes-carta img:nth-child(2) {
+  opacity: 1;
+}
