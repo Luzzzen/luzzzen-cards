@@ -91,15 +91,28 @@
       // ✅ Agregar si no existe
       items.push({ nombre, precio });
 
-      const item = document.createElement("li");
-      item.innerText = `${nombre} – ${precioTexto}`;
-      listaPedido.appendChild(item);
+     const item = document.createElement("li");
+item.innerHTML = `
+  ${nombre} – ${precioTexto}
+  <button class="eliminar">✕</button>
+`;
+listaPedido.appendChild(item);
+      item.querySelector(".eliminar").addEventListener("click", () => {
+  listaPedido.removeChild(item);
+
+  total -= precio;
+  totalTexto.innerText = `Total: $${total.toLocaleString()}`;
+
+  items = items.filter(i => i.nombre !== nombre);
+});
 
       total += precio;
       totalTexto.innerText = `Total: $${total.toLocaleString()}`;
     });
   });
-
+    
+  <button id="vaciar">Vaciar pedido</button>
+    
   botonWhatsapp.addEventListener("click", () => {
     if (items.length === 0) {
       alert("No agregaste ninguna carta.");
@@ -121,6 +134,12 @@
 
     window.open(url, "_blank");
   });
+    document.getElementById("vaciar").addEventListener("click", () => {
+  listaPedido.innerHTML = "";
+  items = [];
+  total = 0;
+  totalTexto.innerText = "Total: $0";
+});
 </script>
 
 </body>
