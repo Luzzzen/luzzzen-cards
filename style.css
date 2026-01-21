@@ -2,15 +2,24 @@
    BASE
 ========================= */
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
   background-color: #0b2a45;
   color: #ffffff;
+  font-size: 16px;
 }
 
 h1, h2 {
   font-family: 'Playfair Display', serif;
+}
+
+p {
+  line-height: 1.6;
 }
 
 header {
@@ -35,10 +44,6 @@ h2 {
   margin-bottom: 10px;
 }
 
-p {
-  line-height: 1.6;
-}
-
 main {
   max-width: 900px;
   margin: 0 auto;
@@ -55,7 +60,7 @@ section {
 
 .catalogo {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 30px;
   margin: 30px 0 60px;
 }
@@ -92,18 +97,19 @@ section {
 
 .imagenes-carta img:nth-child(2) {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   opacity: 0;
 }
 
 /* Hover SOLO desktop */
-.carta:hover .imagenes-carta img:nth-child(1) {
-  opacity: 0;
-}
+@media (hover: hover) {
+  .carta:hover .imagenes-carta img:nth-child(1) {
+    opacity: 0;
+  }
 
-.carta:hover .imagenes-carta img:nth-child(2) {
-  opacity: 1;
+  .carta:hover .imagenes-carta img:nth-child(2) {
+    opacity: 1;
+  }
 }
 
 /* =========================
@@ -127,6 +133,7 @@ section {
 button {
   min-height: 44px;
   cursor: pointer;
+  font-family: inherit;
 }
 
 .agregar {
@@ -215,7 +222,7 @@ button {
 }
 
 /* =========================
-   INDEX (MENÚ PRINCIPAL)
+   INDEX – MENÚ PRINCIPAL
 ========================= */
 
 .menu-catalogo {
@@ -240,33 +247,22 @@ button {
   transform: scale(0.97);
 }
 
-@media (min-width: 769px) {
-  .menu-catalogo {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
-  }
-}
-
 /* =========================
-   MOBILE-FIRST (ESCALA REAL)
+   MOBILE (PRIMERO)
 ========================= */
 
 @media (max-width: 768px) {
 
   body {
-    font-size: 18px;
+    font-size: 17px;
   }
 
   header {
     padding: 22px 14px;
   }
 
-  header p {
-    font-size: 15px;
-  }
-
   h1 {
-    font-size: 2.6rem;
+    font-size: 2.4rem;
   }
 
   h2 {
@@ -286,11 +282,10 @@ button {
 
   .carta {
     padding: 22px;
-    max-width: 100%;
   }
 
   .titulo-carta {
-    font-size: 17px;
+    font-size: 16px;
   }
 
   .precio {
@@ -303,12 +298,6 @@ button {
     width: 100%;
     font-size: 18px;
     padding: 14px;
-  }
-
-  /* Desactivar hover en mobile */
-  .carta:hover .imagenes-carta img:nth-child(1),
-  .carta:hover .imagenes-carta img:nth-child(2) {
-    opacity: unset;
   }
 
   .modal img {
@@ -330,36 +319,13 @@ button {
   }
 }
 
-@media (max-width: 480px) {
+/* =========================
+   DESKTOP
+========================= */
 
-  body {
-    font-size: 16px;
-  }
-
-  h1 {
-    font-size: 2rem;
-  }
-
-  header p {
-    font-size: 15px;
-  }
-
-  .menu-item {
-    font-size: 17px;
-    padding: 20px;
-  }
-
-  .carta {
-    max-width: 100%;
-    padding: 20px;
-  }
-
-  .titulo-carta {
-    font-size: 16px;
-    line-height: 1.3;
-  }
-
-  .precio {
-    font-size: 20px;
+@media (min-width: 769px) {
+  .menu-catalogo {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
   }
 }
