@@ -72,13 +72,12 @@
   <button class="flecha derecha">›</button>
 </div>
 
-
   <script>
-/* ===============================
-   VARIABLES GENERALES
-================================ */
+/* =========================
+   CARRITO / PEDIDO
+========================= */
 
-const botones = document.querySelectorAll(".agregar");
+const botonesAgregar = document.querySelectorAll(".agregar");
 const listaPedido = document.getElementById("lista-pedido");
 const totalTexto = document.getElementById("total");
 const botonWhatsapp = document.getElementById("whatsapp");
@@ -87,48 +86,39 @@ const botonVaciar = document.getElementById("vaciar");
 let total = 0;
 let items = [];
 
-/* ===============================
-   AGREGAR AL PEDIDO
-================================ */
-
-botones.forEach(boton => {
+botonesAgregar.forEach(boton => {
   boton.addEventListener("click", () => {
-    const carta = boton.parentElement;
+    const carta = boton.closest(".carta");
     const nombre = carta.querySelector(".titulo-carta").innerText;
     const precioTexto = carta.querySelector(".precio").innerText;
     const precio = parseInt(precioTexto.replace(/\D/g, ""));
 
-    // Evitar duplicados
-    const yaExiste = items.some(item => item.nombre === nombre);
-    if (yaExiste) {
+    if (items.some(item => item.nombre === nombre)) {
       alert("Esta carta ya está en tu pedido.");
       return;
     }
 
     items.push({ nombre, precio });
 
-    const item = document.createElement("li");
-    item.innerHTML = `
+    const li = document.createElement("li");
+    li.innerHTML = `
       ${nombre} – ${precioTexto}
       <button class="eliminar">✕</button>
     `;
-    listaPedido.appendChild(item);
 
-    item.querySelector(".eliminar").addEventListener("click", () => {
-      listaPedido.removeChild(item);
+    li.querySelector(".eliminar").addEventListener("click", () => {
+      listaPedido.removeChild(li);
+      items = items.filter(i => i.nombre !== nombre);
       total -= precio;
       totalTexto.innerText = `Total: $${total.toLocaleString()}`;
-      items = items.filter(i => i.nombre !== nombre);
     });
+
+    listaPedido.appendChild(li);
 
     total += precio;
     totalTexto.innerText = `Total: $${total.toLocaleString()}`;
   });
 });
-
-/* ===============================
-   VACIAR PEDIDO
-================================ */
 
 botonVaciar.addEventListener("click", () => {
   listaPedido.innerHTML = "";
@@ -137,10 +127,6 @@ botonVaciar.addEventListener("click", () => {
   totalTexto.innerText = "Total: $0";
 });
 
-/* ===============================
-   ENVIAR POR WHATSAPP
-================================ */
-
 botonWhatsapp.addEventListener("click", () => {
   if (items.length === 0) {
     alert("No agregaste ninguna carta.");
@@ -148,7 +134,7 @@ botonWhatsapp.addEventListener("click", () => {
   }
 
   const fecha = new Date();
-  const codigo = `LZ-${fecha.getFullYear()}${fecha.getMonth() + 1}${fecha.getDate()}-${Math.floor(Math.random() * 1000)}`;
+  const codigo = `LZ-${fecha.getFullYear()}${fecha.getMonth()+1}${fecha.getDate()}-${Math.floor(Math.random()*1000)}`;
 
   let mensaje = `Pedido ${codigo}%0A%0A`;
 
@@ -158,60 +144,60 @@ botonWhatsapp.addEventListener("click", () => {
 
   mensaje += `%0A Total: $${total.toLocaleString()}`;
 
-  const numero = "5491125608635";
-  const url = `https://wa.me/${numero}?text=${mensaje}`;
-
-  window.open(url, "_blank");
+  window.open(`https://wa.me/5491125608635?text=${mensaje}`, "_blank");
 });
 
-/* ===============================
-   MODAL DE IMÁGENES
-================================ */
+
+/* =========================
+   MODAL DE IMÁGENES (PRO)
+========================= */
 
 const modal = document.getElementById("modal");
 const modalImg = document.getElementById("modal-img");
 const flechaIzq = document.querySelector(".flecha.izquierda");
 const flechaDer = document.querySelector(".flecha.derecha");
 
-let imagenesActuales = [];
-let indiceActual = 0;
+let imagenes = [];
+let indice = 0;
 
-// Abrir modal (siempre desde la imagen frontal)
-document.querySelectorAll(".imagenes-carta").forEach(carta => {
-  const imgs = carta.querySelectorAll("img");
+// Abrir modal
+document.querySelectorAll(".imagenes-carta").forEach(contenedor => {
+  contenedor.addEventListener("click", e => {
+    e.stopPropagation();
 
-  carta.addEventListener("click", () => {
-    imagenesActuales = [...imgs];
-    indiceActual = 0;
-    modalImg.src = imagenesActuales[indiceActual].src;
+    imagenes = [...contenedor.querySelectorAll("img")];
+    indice = 0;
+
+    modalImg.src = imagenes[indice].src;
     modal.style.display = "flex";
+
+    // Mostrar u ocultar flechas
+    if (imagenes.length > 1) {
+      flechaIzq.style.display = "block";
+      flechaDer.style.display = "block";
+    } else {
+      flechaIzq.style.display = "none";
+      flechaDer.style.display = "none";
+    }
   });
 });
 
 // Flechas
 flechaDer.addEventListener("click", e => {
   e.stopPropagation();
-  indiceActual = (indiceActual + 1) % imagenesActuales.length;
-  modalImg.src = imagenesActuales[indiceActual].src;
+  indice = (indice + 1) % imagenes.length;
+  modalImg.src = imagenes[indice].src;
 });
 
 flechaIzq.addEventListener("click", e => {
   e.stopPropagation();
-  indiceActual =
-    (indiceActual - 1 + imagenesActuales.length) % imagenesActuales.length;
-  modalImg.src = imagenesActuales[indiceActual].src;
+  indice = (indice - 1 + imagenes.length) % imagenes.length;
+  modalImg.src = imagenes[indice].src;
 });
 
-// Evitar cierre al tocar imagen
-modalImg.addEventListener("click", e => {
-  e.stopPropagation();
-});
-
-// Cerrar solo tocando el fondo
-modal.addEventListener("click", e => {
-  if (e.target === modal) {
-    modal.style.display = "none";
-  }
+// Cerrar modal
+modal.addEventListener("click", () => {
+  modal.style.display = "none";
 });
 </script>
 
