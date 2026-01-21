@@ -75,6 +75,30 @@
 
   </main>
 
+<script>
+  const botones = document.querySelectorAll(".agregar");
+  const listaPedido = document.getElementById("lista-pedido");
+  const totalTexto = document.getElementById("total");
+
+  let total = 0;
+
+  botones.forEach(boton => {
+    boton.addEventListener("click", () => {
+      const carta = boton.parentElement;
+      const nombre = carta.querySelector("h4").innerText;
+      const precioTexto = carta.querySelector(".precio").innerText;
+      const precio = parseInt(precioTexto.replace(/\D/g, ""));
+
+      const item = document.createElement("li");
+      item.innerText = `${nombre} – ${precioTexto}`;
+      listaPedido.appendChild(item);
+
+      total += precio;
+      totalTexto.innerText = `Total: $${total.toLocaleString()}`;
+    });
+  });
+</script>
+  
 </body>
 
 </body>
