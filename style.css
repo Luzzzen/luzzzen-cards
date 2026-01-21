@@ -119,3 +119,23 @@ section {
   justify-content: center;
   border-radius: 8px;
 }
+
+.agregar {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background-color: #e67e22;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.agregar:hover {
+  background-color: #cf6d17;
+}
+
+#pedido {
+  margin-top: 80px;
+  padding-top: 40px;
+  border-top: 2px solid #e67e22;
+}
