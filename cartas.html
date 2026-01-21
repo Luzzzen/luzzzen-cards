@@ -199,6 +199,37 @@ flechaIzq.addEventListener("click", e => {
 modal.addEventListener("click", () => {
   modal.style.display = "none";
 });
+/* =========================
+   SWIPE TÁCTIL (MOBILE)
+========================= */
+
+let touchStartX = 0;
+let touchEndX = 0;
+
+modalImg.addEventListener("touchstart", e => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+modalImg.addEventListener("touchend", e => {
+  touchEndX = e.changedTouches[0].screenX;
+  handleSwipe();
+});
+
+function handleSwipe() {
+  const diferencia = touchStartX - touchEndX;
+
+  // swipe izquierda
+  if (diferencia > 50 && imagenes.length > 1) {
+    indice = (indice + 1) % imagenes.length;
+    modalImg.src = imagenes[indice].src;
+  }
+
+  // swipe derecha
+  if (diferencia < -50 && imagenes.length > 1) {
+    indice = (indice - 1 + imagenes.length) % imagenes.length;
+    modalImg.src = imagenes[indice].src;
+  }
+}    
 </script>
 
 </body>
