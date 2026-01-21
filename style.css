@@ -202,3 +202,26 @@ section {
   color: #999;
   margin-top: 15px;
 }
+
+.menu-catalogo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  margin-top: 40px;
+}
+
+.menu-catalogo a {
+  text-decoration: none;
+  padding: 30px;
+  border-radius: 14px;
+  background-color: #ffffff;
+  text-align: center;
+  font-size: 18px;
+  color: #111;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: transform 0.25s ease;
+}
+
+.menu-catalogo a:hover {
+  transform: translateY(-6px);
+}
