@@ -150,14 +150,37 @@ const codigo = `LZ-${fecha.getFullYear()}${fecha.getMonth()+1}${fecha.getDate()}
   totalTexto.innerText = "Total: $0";
 });
 
-    const modal = document.getElementById("modal");
+   const modal = document.getElementById("modal");
 const modalImg = document.getElementById("modal-img");
+const flechaIzq = document.querySelector(".flecha.izquierda");
+const flechaDer = document.querySelector(".flecha.derecha");
 
-document.querySelectorAll(".carta img").forEach(img => {
-  img.addEventListener("click", () => {
+let imagenesActuales = [];
+let indiceActual = 0;
+
+document.querySelectorAll(".imagenes-carta").forEach(carta => {
+  const imgs = carta.querySelectorAll("img");
+
+  carta.addEventListener("click", () => {
+    imagenesActuales = [...imgs];
+    indiceActual = 0;
+
+    modalImg.src = imagenesActuales[indiceActual].src;
     modal.style.display = "flex";
-    modalImg.src = img.src;
   });
+});
+
+flechaDer.addEventListener("click", e => {
+  e.stopPropagation();
+  indiceActual = (indiceActual + 1) % imagenesActuales.length;
+  modalImg.src = imagenesActuales[indiceActual].src;
+});
+
+flechaIzq.addEventListener("click", e => {
+  e.stopPropagation();
+  indiceActual =
+    (indiceActual - 1 + imagenesActuales.length) % imagenesActuales.length;
+  modalImg.src = imagenesActuales[indiceActual].src;
 });
 
 modal.addEventListener("click", () => {
