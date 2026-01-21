@@ -305,3 +305,76 @@ section {
 .flecha:hover {
   background: rgba(0,0,0,0.8);
 }
+
+@media (max-width: 768px) {
+
+  main {
+    padding: 20px 12px;
+  }
+
+  header {
+    padding: 30px 15px;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .catalogo {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .carta {
+    padding: 18px;
+  }
+
+  .titulo-carta {
+    font-size: 15px;
+  }
+
+  .precio {
+    font-size: 18px;
+  }
+}
+
+button {
+  min-height: 44px; /* estándar mobile */
+}
+
+@media (max-width: 768px) {
+  .agregar,
+  #vaciar,
+  #whatsapp {
+    width: 100%;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal img {
+    max-width: 95vw;
+    max-height: 85vh;
+  }
+
+  .flecha {
+    font-size: 34px;
+    padding: 8px 14px;
+  }
+
+  .flecha.izquierda {
+    left: 10px;
+  }
+
+  .flecha.derecha {
+    right: 10px;
+  }
+}
