@@ -44,57 +44,6 @@
       <p>Instagram: @luzzzen</p>
     </section>
 
-  </main>
-
-<script>
-  const botones = document.querySelectorAll(".agregar");
-  const listaPedido = document.getElementById("lista-pedido");
-  const totalTexto = document.getElementById("total");
-  const botonWhatsapp = document.getElementById("whatsapp");
-
-  let total = 0;
-  let items = [];
-
-  botones.forEach(boton => {
-    boton.addEventListener("click", () => {
-      const carta = boton.parentElement;
-      const nombre = carta.querySelector("h4").innerText;
-      const precioTexto = carta.querySelector(".precio").innerText;
-      const precio = parseInt(precioTexto.replace(/\D/g, ""));
-
-      items.push({ nombre, precio });
-
-      const item = document.createElement("li");
-      item.innerText = `${nombre} – ${precioTexto}`;
-      listaPedido.appendChild(item);
-
-      total += precio;
-      totalTexto.innerText = `Total: $${total.toLocaleString()}`;
-    });
-  });
-
-  botonWhatsapp.addEventListener("click", () => {
-    if (items.length === 0) {
-      alert("No agregaste ninguna carta.");
-      return;
-    }
-
-    const codigo = "LZ-" + Math.floor(Math.random() * 100000);
-
-    let mensaje = `Pedido ${codigo}%0A%0A`;
-
-    items.forEach(item => {
-      mensaje += `• ${item.nombre} - $${item.precio.toLocaleString()}%0A`;
-    });
-
-    mensaje += `%0A Total: $${total.toLocaleString()}`;
-
-    const numero = "5491125608635";
-    const url = `https://wa.me/${numero}?text=${mensaje}`;
-
-    window.open(url, "_blank");
-  });
-</script>
-  
+  </main>  
 </body>
 </html>
