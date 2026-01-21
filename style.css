@@ -216,7 +216,11 @@ button {
 @media (max-width: 768px) {
 
   header {
-    padding: 30px 15px;
+    padding: 20px 12px;
+  }
+
+  header p {
+    font-size: 14px;
   }
 
   h1 {
@@ -229,6 +233,8 @@ button {
 
   main {
     padding: 20px 12px;
+    max-width: 100%;
+    margin: 0;
   }
 
   .catalogo {
@@ -238,6 +244,8 @@ button {
 
   .carta {
     padding: 18px;
+    max-width: 360px;
+    margin: 0 auto;
   }
 
   .titulo-carta {
