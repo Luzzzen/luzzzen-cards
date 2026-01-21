@@ -55,54 +55,63 @@
   </main>
 
   <script>
-    const botones = document.querySelectorAll(".agregar");
-    const listaPedido = document.getElementById("lista-pedido");
-    const totalTexto = document.getElementById("total");
-    const botonWhatsapp = document.getElementById("whatsapp");
+  const botones = document.querySelectorAll(".agregar");
+  const listaPedido = document.getElementById("lista-pedido");
+  const totalTexto = document.getElementById("total");
+  const botonWhatsapp = document.getElementById("whatsapp");
 
-    let total = 0;
-    let items = [];
+  let total = 0;
+  let items = [];
 
-    botones.forEach(boton => {
-      boton.addEventListener("click", () => {
-        const carta = boton.parentElement;
-        const nombre = carta.querySelector("h4").innerText;
-        const precioTexto = carta.querySelector(".precio").innerText;
-        const precio = parseInt(precioTexto.replace(/\D/g, ""));
+  botones.forEach(boton => {
+    boton.addEventListener("click", () => {
+      const carta = boton.parentElement;
+      const nombre = carta.querySelector("h4").innerText;
+      const precioTexto = carta.querySelector(".precio").innerText;
+      const precio = parseInt(precioTexto.replace(/\D/g, ""));
 
-        items.push({ nombre, precio });
+      // 🔍 Verificar si ya existe
+      const yaExiste = items.some(item => item.nombre === nombre);
 
-        const item = document.createElement("li");
-        item.innerText = `${nombre} – ${precioTexto}`;
-        listaPedido.appendChild(item);
-
-        total += precio;
-        totalTexto.innerText = `Total: $${total.toLocaleString()}`;
-      });
-    });
-
-    botonWhatsapp.addEventListener("click", () => {
-      if (items.length === 0) {
-        alert("No agregaste ninguna carta.");
+      if (yaExiste) {
+        alert("Esta carta ya está en tu pedido.");
         return;
       }
 
-      const codigo = "LZ-" + Math.floor(Math.random() * 100000);
+      // ✅ Agregar si no existe
+      items.push({ nombre, precio });
 
-      let mensaje = `Pedido ${codigo}%0A%0A`;
+      const item = document.createElement("li");
+      item.innerText = `${nombre} – ${precioTexto}`;
+      listaPedido.appendChild(item);
 
-      items.forEach(item => {
-        mensaje += `• ${item.nombre} - $${item.precio.toLocaleString()}%0A`;
-      });
-
-      mensaje += `%0A Total: $${total.toLocaleString()}`;
-
-      const numero = "54911XXXXXXXX"; // PONÉ TU NÚMERO
-      const url = `https://wa.me/${numero}?text=${mensaje}`;
-
-      window.open(url, "_blank");
+      total += precio;
+      totalTexto.innerText = `Total: $${total.toLocaleString()}`;
     });
-  </script>
+  });
+
+  botonWhatsapp.addEventListener("click", () => {
+    if (items.length === 0) {
+      alert("No agregaste ninguna carta.");
+      return;
+    }
+
+    const codigo = "LZ-" + Math.floor(Math.random() * 100000);
+
+    let mensaje = `Pedido ${codigo}%0A%0A`;
+
+    items.forEach(item => {
+      mensaje += `• ${item.nombre} - $${item.precio.toLocaleString()}%0A`;
+    });
+
+    mensaje += `%0A Total: $${total.toLocaleString()}`;
+
+    const numero = "5491125608635"; // tu número
+    const url = `https://wa.me/${numero}?text=${mensaje}`;
+
+    window.open(url, "_blank");
+  });
+</script>
 
 </body>
 </html>
