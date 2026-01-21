@@ -35,6 +35,10 @@ h2 {
   margin-bottom: 10px;
 }
 
+p {
+  line-height: 1.6;
+}
+
 main {
   max-width: 900px;
   margin: 0 auto;
@@ -58,8 +62,8 @@ section {
 
 .carta {
   background-color: #ffffff;
-  border-radius: 12px;
-  padding: 15px;
+  border-radius: 14px;
+  padding: 16px;
   text-align: center;
   box-shadow: 0 10px 25px rgba(0,0,0,0.08);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -81,7 +85,7 @@ section {
 
 .imagenes-carta img {
   width: 100%;
-  border-radius: 6px;
+  border-radius: 8px;
   display: block;
   transition: opacity 0.25s ease;
 }
@@ -107,16 +111,16 @@ section {
 ========================= */
 
 .titulo-carta {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
-  margin: 8px 0;
+  margin: 10px 0;
   color: #F28C28;
 }
 
 .precio {
-  font-size: 16px;
-  font-weight: 500;
-  margin: 8px 0;
+  font-size: 17px;
+  font-weight: 600;
+  margin: 10px 0;
   color: #e67e22;
 }
 
@@ -126,12 +130,13 @@ button {
 }
 
 .agregar {
-  margin-top: 10px;
-  padding: 10px;
+  margin-top: 12px;
+  padding: 12px;
   background-color: #e67e22;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
+  font-size: 15px;
 }
 
 .agregar:hover {
@@ -150,11 +155,11 @@ button {
 
 #whatsapp {
   margin-top: 20px;
-  padding: 12px;
+  padding: 14px;
   background-color: #25D366;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 16px;
 }
 
@@ -170,7 +175,7 @@ button {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.85);
   justify-content: center;
   align-items: center;
   z-index: 1000;
@@ -179,7 +184,7 @@ button {
 .modal img {
   max-width: 90%;
   max-height: 90%;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 /* Flechas */
@@ -210,59 +215,97 @@ button {
 }
 
 /* =========================
-   MOBILE
+   INDEX (MENÚ PRINCIPAL)
+========================= */
+
+.menu-catalogo {
+  display: grid;
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.menu-item {
+  display: block;
+  background-color: #ffffff;
+  color: #0b2a45;
+  text-decoration: none;
+  padding: 20px;
+  border-radius: 14px;
+  font-size: 19px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.menu-item:active {
+  transform: scale(0.97);
+}
+
+@media (min-width: 769px) {
+  .menu-catalogo {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+  }
+}
+
+/* =========================
+   MOBILE-FIRST (ESCALA REAL)
 ========================= */
 
 @media (max-width: 768px) {
 
+  body {
+    font-size: 18px;
+  }
+
   header {
-    padding: 20px 12px;
+    padding: 22px 14px;
   }
 
   header p {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   h1 {
-    font-size: 2.2rem;
+    font-size: 2.6rem;
   }
 
   h2 {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
 
   main {
-    padding: 20px 12px;
     max-width: 100%;
     margin: 0;
+    padding: 24px 14px;
   }
 
   .catalogo {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 24px;
   }
 
   .carta {
-    padding: 18px;
-    max-width: 360px;
-    margin: 0 auto;
+    padding: 22px;
+    max-width: 100%;
   }
 
   .titulo-carta {
-    font-size: 15px;
+    font-size: 17px;
   }
 
   .precio {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .agregar,
   #vaciar,
   #whatsapp {
     width: 100%;
+    font-size: 18px;
+    padding: 14px;
   }
 
-  /* DESACTIVAR HOVER EN MOBILE */
+  /* Desactivar hover en mobile */
   .carta:hover .imagenes-carta img:nth-child(1),
   .carta:hover .imagenes-carta img:nth-child(2) {
     opacity: unset;
@@ -284,38 +327,5 @@ button {
 
   .flecha.derecha {
     right: 10px;
-  }
-}
-
-/* =========================
-   INDEX MOBILE-FIRST
-========================= */
-
-.menu-catalogo {
-  display: grid;
-  gap: 14px;
-  margin-top: 30px;
-}
-
-.menu-item {
-  display: block;
-  background-color: #ffffff;
-  color: #0b2a45;
-  text-decoration: none;
-  padding: 18px;
-  border-radius: 12px;
-  font-size: 18px;
-  font-weight: 500;
-  text-align: center;
-}
-
-.menu-item:active {
-  transform: scale(0.98);
-}
-
-@media (min-width: 769px) {
-  .menu-catalogo {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
   }
 }
