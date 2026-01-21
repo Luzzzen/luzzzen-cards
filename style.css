@@ -15,6 +15,11 @@ header {
   border-bottom: 2px solid #e67e22; /* naranja */
 }
 
+.logo {
+  width: 120px;
+  margin-bottom: 20px;
+}
+
 h1 {
   margin: 0;
   font-size: 3rem;
