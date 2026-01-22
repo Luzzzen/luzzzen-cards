@@ -514,3 +514,36 @@ button {
   border-radius: 8px;
   font-size: 16px;
 }
+
+/* =========================
+   NAVEGACIÓN CATÁLOGO
+========================= */
+
+.nav-catalogo {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 20px auto 30px;
+}
+
+.nav-item {
+  padding: 10px 16px;
+  border-radius: 20px;
+  background-color: rgba(255,255,255,0.1);
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.nav-item:hover {
+  background-color: #e67e22;
+  transform: translateY(-2px);
+}
+
+/* Activo (opcional) */
+.nav-item.activo {
+  background-color: #e67e22;
+  font-weight: 600;
+}
