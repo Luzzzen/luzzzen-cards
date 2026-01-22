@@ -485,6 +485,18 @@ button {
 .drawer-footer {
   padding: 16px;
   border-top: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.drawer-secundario {
+  background: transparent;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
 }
 
 #drawer-total {
