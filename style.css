@@ -547,3 +547,33 @@ button {
   background-color: #e67e22;
   font-weight: 600;
 }
+
+/* =========================
+   INDICADOR ZOOM
+========================= */
+
+.imagenes-carta {
+  position: relative;
+  cursor: zoom-in;
+}
+
+.icono-zoom {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.65);
+  color: white;
+  font-size: 14px;
+  padding: 6px;
+  border-radius: 50%;
+  pointer-events: none; /* clave: no bloquea el click */
+  z-index: 2;
+}
+
+/* Mobile: un poquito más grande */
+@media (max-width: 768px) {
+  .icono-zoom {
+    font-size: 16px;
+    padding: 8px;
+  }
+}
