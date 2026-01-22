@@ -271,6 +271,38 @@ verPedidoBtn.addEventListener("click", () => {
 // Inicial
 actualizarCarritoMobile();
 
+/* =========================
+   CARRITO FLOTANTE LOGICA
+========================= */
+
+const carritoFloat = document.getElementById("carrito-float");
+const carritoBadge = document.getElementById("carrito-badge");
+
+function actualizarCarritoFloat() {
+  carritoBadge.innerText = items.length;
+
+  if (items.length === 0) {
+    carritoFloat.classList.add("oculto");
+  } else {
+    carritoFloat.classList.remove("oculto");
+  }
+}
+
+// Llamar cada vez que cambia el carrito
+const observer = new MutationObserver(actualizarCarritoFloat);
+observer.observe(listaPedido, { childList: true });
+
+// Click → ir al pedido
+carritoFloat.addEventListener("click", () => {
+  document.getElementById("pedido").scrollIntoView({
+    behavior: "smooth"
+  });
+});
+
+// Inicial
+actualizarCarritoFloat();
+
+
 </script>
 
 </body>
