@@ -13,14 +13,11 @@
   <link rel="stylesheet" href="style.css">
 
   <!-- FAVICON -->
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-
-<!-- APP / MOBILE -->
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="manifest" href="site.webmanifest">
-
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
 </head>
 
 <body>
@@ -31,47 +28,45 @@
   <p>Cartas de fútbol disponibles</p>
 </header>
 
-  <nav class="nav-catalogo">
+<nav class="nav-catalogo">
   <a href="cartas.html" class="nav-item activo">Cartas</a>
   <a href="jerseys.html" class="nav-item">Jerseys</a>
   <a href="firmas.html" class="nav-item">Firmas</a>
   <a href="sobres.html" class="nav-item">Sobres & cajas</a>
 </nav>
 
-  
 <main>
 
-<section id="productos">
-  <div class="catalogo" id="catalogo">
-</div>
+  <!-- CATÁLOGO -->
+  <section id="productos">
+    <div class="catalogo" id="catalogo"></div>
+  </section>
 
-</section>
+  <!-- PEDIDO (vista larga) -->
+  <section id="pedido">
+    <h2>Tu pedido</h2>
+    <ul id="lista-pedido"></ul>
+    <p id="total">Total: $0</p>
+    <button id="vaciar">Vaciar pedido</button>
+    <button id="whatsapp">Enviar pedido por WhatsApp</button>
+  </section>
 
-<section id="pedido">
-  <h2>Tu pedido</h2>
-  <ul id="lista-pedido"></ul>
-  <p id="total">Total: $0</p>
-  <button id="vaciar">Vaciar pedido</button>
-  <button id="whatsapp">Enviar pedido por WhatsApp</button>
-</section>
-
-<div class="volver-footer">
-  <a href="index.html" class="btn-volver">← Volver al inicio</a>
-</div>
+  <div class="volver-footer">
+    <a href="index.html" class="btn-volver">← Volver al inicio</a>
+  </div>
 
 </main>
 
 <!-- MODAL IMÁGENES -->
 <div id="modal" class="modal">
   <button class="flecha izquierda">‹</button>
-  <img id="modal-img">
+  <img id="modal-img" alt="">
   <button class="flecha derecha">›</button>
 </div>
 
 <!-- CARRITO FLOTANTE -->
 <button id="carrito-float">
-  🛒
-  <span id="carrito-badge">0</span>
+  🛒 <span id="carrito-badge">0</span>
 </button>
 
 <!-- DRAWER -->
@@ -85,28 +80,94 @@
 
   <ul id="drawer-lista"></ul>
 
-<div class="drawer-footer">
-  <p id="drawer-total">Total: $0</p>
-
-  <button id="drawer-vaciar" class="drawer-secundario">
-    Vaciar carrito
-  </button>
-
-  <button id="drawer-whatsapp">
-    Enviar pedido por WhatsApp
-  </button>
-</div>
+  <div class="drawer-footer">
+    <p id="drawer-total">Total: $0</p>
+    <button id="drawer-vaciar" class="drawer-secundario">Vaciar carrito</button>
+    <button id="drawer-whatsapp">Enviar pedido por WhatsApp</button>
+  </div>
 </aside>
 
+<!-- =========================
+     PRODUCTOS
+========================= -->
 <script src="productos.js"></script>
 
+<!-- =========================
+     RENDER CATÁLOGO + ZOOM
+========================= -->
 <script>
-  const catalogo = document.getElementById("catalogo");
+const catalogo = document.getElementById("catalogo");
 
-  productos.forEach(producto => {
-    ...
+/* Renderizar cartas */
+productos.forEach(producto => {
+  const carta = document.createElement("div");
+  carta.className = "carta";
+  carta.dataset.id = producto.id;
+
+  carta.innerHTML = `
+    <div class="imagenes-carta" data-id="${producto.id}">
+      <img src="${producto.imagenes[0]}" alt="${producto.nombre}">
+      ${producto.imagenes[1] ? `<img src="${producto.imagenes[1]}" alt="${producto.nombre} dorso">` : ""}
+      <span class="icono-zoom">🔍</span>
+    </div>
+
+    <h4 class="titulo-carta">${producto.nombre}</h4>
+    <p class="precio">$${producto.precio.toLocaleString()}</p>
+    <button class="agregar">Agregar al pedido</button>
+  `;
+
+  catalogo.appendChild(carta);
+});
+
+/* =========================
+   MODAL ZOOM (SIEMPRE FRENTE)
+========================= */
+
+const modal = document.getElementById("modal");
+const modalImg = document.getElementById("modal-img");
+const flechaIzq = document.querySelector(".flecha.izquierda");
+const flechaDer = document.querySelector(".flecha.derecha");
+
+let imagenesActuales = [];
+let indiceActual = 0;
+
+document.querySelectorAll(".imagenes-carta").forEach(contenedor => {
+  contenedor.addEventListener("click", () => {
+    const id = contenedor.dataset.id;
+    const producto = productos.find(p => p.id === id);
+
+    imagenesActuales = producto.imagenes;
+    indiceActual = 0;
+
+    modalImg.src = imagenesActuales[0];
+    modal.style.display = "flex";
+
+    const mostrarFlechas = imagenesActuales.length > 1;
+    flechaIzq.style.display = mostrarFlechas ? "block" : "none";
+    flechaDer.style.display = mostrarFlechas ? "block" : "none";
   });
-  
+});
+
+flechaDer.addEventListener("click", e => {
+  e.stopPropagation();
+  indiceActual = (indiceActual + 1) % imagenesActuales.length;
+  modalImg.src = imagenesActuales[indiceActual];
+});
+
+flechaIzq.addEventListener("click", e => {
+  e.stopPropagation();
+  indiceActual = (indiceActual - 1 + imagenesActuales.length) % imagenesActuales.length;
+  modalImg.src = imagenesActuales[indiceActual];
+});
+
+modal.addEventListener("click", () => {
+  modal.style.display = "none";
+});
+</script>
+
+<!-- =========================
+     CARRITO (COMPARTIDO)
+========================= -->
 <script src="js/carrito.js"></script>
 
 </body>
