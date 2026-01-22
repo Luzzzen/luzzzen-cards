@@ -118,51 +118,6 @@ productos.forEach(producto => {
 
   catalogo.appendChild(carta);
 });
-
-/* =========================
-   MODAL ZOOM (SIEMPRE FRENTE)
-========================= */
-
-const modal = document.getElementById("modal");
-const modalImg = document.getElementById("modal-img");
-const flechaIzq = document.querySelector(".flecha.izquierda");
-const flechaDer = document.querySelector(".flecha.derecha");
-
-let imagenesActuales = [];
-let indiceActual = 0;
-
-document.querySelectorAll(".imagenes-carta").forEach(contenedor => {
-  contenedor.addEventListener("click", () => {
-    const id = contenedor.dataset.id;
-    const producto = productos.find(p => p.id === id);
-
-    imagenesActuales = producto.imagenes;
-    indiceActual = 0;
-
-    modalImg.src = imagenesActuales[0];
-    modal.style.display = "flex";
-
-    const mostrarFlechas = imagenesActuales.length > 1;
-    flechaIzq.style.display = mostrarFlechas ? "block" : "none";
-    flechaDer.style.display = mostrarFlechas ? "block" : "none";
-  });
-});
-
-flechaDer.addEventListener("click", e => {
-  e.stopPropagation();
-  indiceActual = (indiceActual + 1) % imagenesActuales.length;
-  modalImg.src = imagenesActuales[indiceActual];
-});
-
-flechaIzq.addEventListener("click", e => {
-  e.stopPropagation();
-  indiceActual = (indiceActual - 1 + imagenesActuales.length) % imagenesActuales.length;
-  modalImg.src = imagenesActuales[indiceActual];
-});
-
-modal.addEventListener("click", () => {
-  modal.style.display = "none";
-});
 </script>
 
 <!-- =========================
