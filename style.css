@@ -413,3 +413,91 @@ button {
 #carrito-float.oculto {
   display: none;
 }
+
+/* =========================
+   DRAWER CARRITO
+========================= */
+
+#drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  z-index: 998;
+}
+
+#drawer-carrito {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 360px;
+  max-width: 90%;
+  height: 100%;
+  background: #ffffff;
+  color: #111;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.3s ease;
+}
+
+#drawer-carrito.abierto {
+  right: 0;
+}
+
+#drawer-overlay.activo {
+  display: block;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #ddd;
+}
+
+.drawer-header h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+#cerrar-drawer {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+#drawer-lista {
+  flex: 1;
+  padding: 16px;
+  list-style: none;
+  overflow-y: auto;
+}
+
+#drawer-lista li {
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.drawer-footer {
+  padding: 16px;
+  border-top: 1px solid #ddd;
+}
+
+#drawer-total {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+#drawer-whatsapp {
+  width: 100%;
+  padding: 14px;
+  background-color: #25D366;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+}
