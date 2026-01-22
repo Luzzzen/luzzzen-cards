@@ -295,7 +295,7 @@ actualizarCarritoFloat();
 cargarCarrito();
 
 /* =========================
-   MODAL DE IMÁGENES (FIX)
+   MODAL DE IMÁGENES (FIX DEFINITIVO)
 ========================= */
 
 const modal = document.getElementById("modal");
@@ -306,19 +306,17 @@ const flechaDer = document.querySelector(".flecha.derecha");
 let imagenes = [];
 let indice = 0;
 
-// ABRIR MODAL AL CLICK EN LA IMAGEN
-document.querySelectorAll(".imagenes-carta img").forEach(img => {
-  img.addEventListener("click", e => {
+// ABRIR MODAL (SIEMPRE DESDE EL FRENTE)
+document.querySelectorAll(".imagenes-carta").forEach(contenedor => {
+  contenedor.addEventListener("click", e => {
     e.stopPropagation();
 
-    const contenedor = img.closest(".imagenes-carta");
     imagenes = [...contenedor.querySelectorAll("img")];
-    indice = imagenes.indexOf(img);
+    indice = 0; // 👈 SIEMPRE arranca en la primera imagen
 
     modalImg.src = imagenes[indice].src;
     modal.style.display = "flex";
 
-    // Mostrar flechas solo si hay más de una imagen
     if (imagenes.length > 1) {
       flechaIzq.style.display = "block";
       flechaDer.style.display = "block";
@@ -329,7 +327,7 @@ document.querySelectorAll(".imagenes-carta img").forEach(img => {
   });
 });
 
-// FLECHAS
+// Flechas
 flechaDer.addEventListener("click", e => {
   e.stopPropagation();
   indice = (indice + 1) % imagenes.length;
@@ -342,12 +340,12 @@ flechaIzq.addEventListener("click", e => {
   modalImg.src = imagenes[indice].src;
 });
 
-// CERRAR MODAL
+// Cerrar modal
 modal.addEventListener("click", () => {
   modal.style.display = "none";
 });
 
-// SWIPE MOBILE
+// Swipe mobile
 let touchStartX = 0;
 let touchEndX = 0;
 
