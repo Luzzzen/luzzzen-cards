@@ -221,6 +221,93 @@ if (drawerVaciar) {
 }
 
 /* =========================
+   ZOOM / MODAL DE IMÁGENES
+========================= */
+
+const modal = document.getElementById("modal");
+const modalImg = document.getElementById("modal-img");
+const flechaIzq = document.querySelector(".flecha.izquierda");
+const flechaDer = document.querySelector(".flecha.derecha");
+
+let imagenesActuales = [];
+let indiceActual = 0;
+
+if (modal && modalImg) {
+  document.querySelectorAll(".imagenes-carta").forEach(contenedor => {
+    contenedor.addEventListener("click", e => {
+      e.stopPropagation();
+
+      imagenesActuales = Array.from(contenedor.querySelectorAll("img"));
+      indiceActual = 0; // 🔑 SIEMPRE empieza en la frontal
+
+      modalImg.src = imagenesActuales[indiceActual].src;
+      modal.style.display = "flex";
+
+      if (imagenesActuales.length > 1) {
+        flechaIzq.style.display = "block";
+        flechaDer.style.display = "block";
+      } else {
+        flechaIzq.style.display = "none";
+        flechaDer.style.display = "none";
+      }
+    });
+  });
+
+  // Flecha derecha
+  if (flechaDer) {
+    flechaDer.addEventListener("click", e => {
+      e.stopPropagation();
+      indiceActual = (indiceActual + 1) % imagenesActuales.length;
+      modalImg.src = imagenesActuales[indiceActual].src;
+    });
+  }
+
+  // Flecha izquierda
+  if (flechaIzq) {
+    flechaIzq.addEventListener("click", e => {
+      e.stopPropagation();
+      indiceActual =
+        (indiceActual - 1 + imagenesActuales.length) %
+        imagenesActuales.length;
+      modalImg.src = imagenesActuales[indiceActual].src;
+    });
+  }
+
+  // Cerrar modal
+  modal.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  /* =========================
+     SWIPE MOBILE
+  ========================= */
+
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  modalImg.addEventListener("touchstart", e => {
+    touchStartX = e.changedTouches[0].screenX;
+  });
+
+  modalImg.addEventListener("touchend", e => {
+    touchEndX = e.changedTouches[0].screenX;
+    const diff = touchStartX - touchEndX;
+
+    if (diff > 50 && imagenesActuales.length > 1) {
+      indiceActual = (indiceActual + 1) % imagenesActuales.length;
+      modalImg.src = imagenesActuales[indiceActual].src;
+    }
+
+    if (diff < -50 && imagenesActuales.length > 1) {
+      indiceActual =
+        (indiceActual - 1 + imagenesActuales.length) %
+        imagenesActuales.length;
+      modalImg.src = imagenesActuales[indiceActual].src;
+    }
+  });
+}
+
+/* =========================
    INIT
 ========================= */
 
