@@ -248,6 +248,41 @@ button {
 }
 
 /* =========================
+   BOTÓN VOLVER
+========================= */
+
+.btn-volver {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 10px 16px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 999px; /* pill */
+  font-size: 14px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-volver:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Centrado abajo */
+.volver-footer {
+  margin-top: 60px;
+  text-align: center;
+}
+
+/* Mobile: botón más grande */
+@media (max-width: 768px) {
+  .btn-volver {
+    font-size: 16px;
+    padding: 14px 20px;
+  }
+}
+
+/* =========================
    MOBILE (PRIMERO)
 ========================= */
 
