@@ -2,10 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Cartas Individuales |Luzzzen Cards</title>
+  <title>Cartas Individuales | Luzzzen Cards</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,56 +13,48 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-
 <body>
 
-  <header>
-    <a href="index.html" class="btn-volver">← Volver al inicio</a>
-    <h1>Cartas individuales</h1>
-    <p>Cartas de fútbol disponibles</p>
-  </header>
+<header>
+  <a href="index.html" class="btn-volver">← Volver al inicio</a>
+  <h1>Cartas individuales</h1>
+  <p>Cartas de fútbol disponibles</p>
+</header>
 
-  <main>
+<main>
 
-    <section id="productos">
+<section id="productos">
+  <div class="catalogo">
 
-      <div class="catalogo">
-
-        <!-- CARTA 1 -->
-        <div class="carta">
-          <div class="imagenes-carta">
-          <img src="imagenes/HazardPruebaFront.jpg" alt="Hazard ejemplo adelante">
-          <img src="imagenes/HazardPruebaBack.jpg" alt="Hazard ejemplo atras">
-        </div>
-  <h4 class="titulo-carta">
-    Hazard - Chelsea – Panini WCCF 2016
-  </h4>
-  <p class="precio">$7.500</p>
-  <button class="agregar">Agregar al pedido</button>
-</div>
-
-        <!-- CARTA 2 -->
-        <div class="carta">
-          <div class="imagenes-carta">
-          <img src="imagenes/HazardPruebaFront.jpg" alt="Hazard ejemplo adelante">
-          <img src="imagenes/HazardPruebaBack.jpg" alt="Hazard ejemplo atras">
-        </div>
-  <h4 class="titulo-carta">
-    Didier Drogba – Panini Colección 2016
-  </h4>
-  <p class="precio">$5.000</p>
-  <button class="agregar">Agregar al pedido</button>
-</div>
-
+    <!-- CARTA 1 -->
+    <div class="carta">
+      <div class="imagenes-carta">
+        <img src="imagenes/HazardPruebaFront.jpg" alt="Hazard frente">
+        <img src="imagenes/HazardPruebaBack.jpg" alt="Hazard dorso">
       </div>
-    </section>
+      <h4 class="titulo-carta">Hazard - Chelsea – Panini WCCF 2016</h4>
+      <p class="precio">$7.500</p>
+      <button class="agregar">Agregar al pedido</button>
+    </div>
 
-    <!-- PEDIDO -->
-   <section id="pedido">
+    <!-- CARTA 2 -->
+    <div class="carta">
+      <div class="imagenes-carta">
+        <img src="imagenes/HazardPruebaFront.jpg" alt="Drogba frente">
+        <img src="imagenes/HazardPruebaBack.jpg" alt="Drogba dorso">
+      </div>
+      <h4 class="titulo-carta">Didier Drogba – Panini Colección 2016</h4>
+      <p class="precio">$5.000</p>
+      <button class="agregar">Agregar al pedido</button>
+    </div>
+
+  </div>
+</section>
+
+<section id="pedido">
   <h2>Tu pedido</h2>
   <ul id="lista-pedido"></ul>
   <p id="total">Total: $0</p>
-
   <button id="vaciar">Vaciar pedido</button>
   <button id="whatsapp">Enviar pedido por WhatsApp</button>
 </section>
@@ -71,21 +62,39 @@
 <div class="volver-footer">
   <a href="index.html" class="btn-volver">← Volver al inicio</a>
 </div>
-    
-  </main>
 
-  <div id="modal" class="modal">
+</main>
+
+<!-- MODAL IMÁGENES -->
+<div id="modal" class="modal">
   <button class="flecha izquierda">‹</button>
   <img id="modal-img">
   <button class="flecha derecha">›</button>
 </div>
 
-<!-- Carrito flotante -->
+<!-- CARRITO FLOTANTE -->
 <button id="carrito-float">
   🛒
   <span id="carrito-badge">0</span>
 </button>
-  
+
+<!-- DRAWER -->
+<div id="drawer-overlay"></div>
+
+<aside id="drawer-carrito">
+  <header class="drawer-header">
+    <h3>Tu pedido</h3>
+    <button id="cerrar-drawer">✕</button>
+  </header>
+
+  <ul id="drawer-lista"></ul>
+
+  <div class="drawer-footer">
+    <p id="drawer-total">Total: $0</p>
+    <button id="drawer-whatsapp">Enviar pedido por WhatsApp</button>
+  </div>
+</aside>
+
 <script>
 /* =========================
    VARIABLES BASE
@@ -116,69 +125,53 @@ function cargarCarrito() {
   const carritoGuardado = localStorage.getItem("luzzzenCarrito");
   const totalGuardado = localStorage.getItem("luzzzenTotal");
 
-  if (carritoGuardado) {
-    items = JSON.parse(carritoGuardado);
-    total = parseInt(totalGuardado) || 0;
+  if (!carritoGuardado) return;
 
-    items.forEach(item => {
-      const li = document.createElement("li");
-      li.innerHTML = `
-        ${item.nombre} – $${item.precio.toLocaleString()}
-        <button class="eliminar">✕</button>
-      `;
+  items = JSON.parse(carritoGuardado);
+  total = parseInt(totalGuardado) || 0;
 
-      li.querySelector(".eliminar").addEventListener("click", () => {
-        listaPedido.removeChild(li);
-        items = items.filter(i => i.nombre !== item.nombre);
-        total -= item.precio;
-        totalTexto.innerText = `Total: $${total.toLocaleString()}`;
-        guardarCarrito();
-        actualizarCarritoFloat();
-      });
-
-      listaPedido.appendChild(li);
-    });
-
-    totalTexto.innerText = `Total: $${total.toLocaleString()}`;
-    actualizarCarritoFloat();
-  }
+  items.forEach(item => agregarItemDOM(item.nombre, item.precio));
+  actualizarTotal();
+  actualizarCarritoFloat();
 }
 
 /* =========================
    CARRITO
 ========================= */
 
+function agregarItemDOM(nombre, precio) {
+  const li = document.createElement("li");
+  li.innerHTML = `
+    ${nombre} – $${precio.toLocaleString()}
+    <button class="eliminar">✕</button>
+  `;
+
+  li.querySelector(".eliminar").addEventListener("click", () => {
+    listaPedido.removeChild(li);
+    items = items.filter(i => i.nombre !== nombre);
+    total -= precio;
+    actualizarTotal();
+    actualizarCarritoFloat();
+    guardarCarrito();
+  });
+
+  listaPedido.appendChild(li);
+}
+
 botonesAgregar.forEach(boton => {
   boton.addEventListener("click", () => {
     const carta = boton.closest(".carta");
     const nombre = carta.querySelector(".titulo-carta").innerText;
-    const precioTexto = carta.querySelector(".precio").innerText;
-    const precio = parseInt(precioTexto.replace(/\D/g, ""));
+    const precio = parseInt(carta.querySelector(".precio").innerText.replace(/\D/g, ""));
 
-    // Evitar duplicados
     if (items.some(item => item.nombre === nombre)) {
       alert("Esta carta ya está en tu pedido.");
       return;
     }
 
     items.push({ nombre, precio });
+    agregarItemDOM(nombre, precio);
 
-    const li = document.createElement("li");
-    li.innerHTML = `
-      ${nombre} – ${precioTexto}
-      <button class="eliminar">✕</button>
-    `;
-
-    li.querySelector(".eliminar").addEventListener("click", () => {
-      listaPedido.removeChild(li);
-      items = items.filter(i => i.nombre !== nombre);
-      total -= precio;
-      actualizarTotal();
-      actualizarCarritoFloat();
-      guardarCarrito();
-    });
-
-    listaPedido.appendChild(li);
     total += precio;
     actualizarTotal();
     actualizarCarritoFloat();
@@ -192,165 +185,53 @@ botonVaciar.addEventListener("click", () => {
   total = 0;
   actualizarTotal();
   actualizarCarritoFloat();
-  localStorage.removeItem("luzzzenCarrito");
-  localStorage.removeItem("luzzzenTotal");
+  localStorage.clear();
 });
 
 function actualizarTotal() {
   totalTexto.innerText = `Total: $${total.toLocaleString()}`;
 }
-  
+
 /* =========================
    WHATSAPP
 ========================= */
 
 botonWhatsapp.addEventListener("click", () => {
-  if (items.length === 0) {
-    alert("No agregaste ninguna carta.");
-    return;
-  }
+  if (items.length === 0) return alert("No agregaste ninguna carta.");
 
-  const fecha = new Date();
-  const codigo = `LZ-${fecha.getFullYear()}${fecha.getMonth()+1}${fecha.getDate()}-${Math.floor(Math.random()*1000)}`;
-
+  const codigo = `LZ-${Date.now()}`;
   let mensaje = `Pedido ${codigo}%0A%0A`;
 
-  items.forEach(item => {
-    mensaje += `• ${item.nombre} - $${item.precio.toLocaleString()}%0A`;
-  });
-
+  items.forEach(i => mensaje += `• ${i.nombre} - $${i.precio.toLocaleString()}%0A`);
   mensaje += `%0A Total: $${total.toLocaleString()}`;
 
   window.open(`https://wa.me/5491125608635?text=${mensaje}`, "_blank");
 });
 
 /* =========================
-   CARRITO FLOTANTE
+   CARRITO FLOTANTE + DRAWER
 ========================= */
 
 function actualizarCarritoFloat() {
   carritoBadge.innerText = items.length;
-
-  if (items.length === 0) {
-    carritoFloat.style.display = "none";
-  } else {
-    carritoFloat.style.display = "flex";
-  }
+  carritoFloat.style.display = items.length ? "flex" : "none";
 }
-
-carritoFloat.addEventListener("click", () => {
-  document.getElementById("pedido").scrollIntoView({
-    behavior: "smooth"
-  });
-});
-
-actualizarCarritoFloat();
-
-<!-- Overlay -->
-<div id="drawer-overlay"></div>
-
-<!-- Drawer carrito -->
-<aside id="drawer-carrito">
-  <header class="drawer-header">
-    <h3>Tu pedido</h3>
-    <button id="cerrar-drawer">✕</button>
-  </header>
-
-  <ul id="drawer-lista"></ul>
-
-  <div class="drawer-footer">
-    <p id="drawer-total">Total: $0</p>
-    <button id="drawer-whatsapp">Enviar pedido por WhatsApp</button>
-  </div>
-</aside>
-  
-/* =========================
-   MODAL DE IMÁGENES
-========================= */
-
-const modal = document.getElementById("modal");
-const modalImg = document.getElementById("modal-img");
-const flechaIzq = document.querySelector(".flecha.izquierda");
-const flechaDer = document.querySelector(".flecha.derecha");
-
-let imagenes = [];
-let indice = 0;
-
-document.querySelectorAll(".imagenes-carta").forEach(contenedor => {
-  contenedor.addEventListener("click", e => {
-    e.stopPropagation();
-
-    imagenes = [...contenedor.querySelectorAll("img")];
-    indice = 0;
-
-    modalImg.src = imagenes[indice].src;
-    modal.style.display = "flex";
-
-    if (imagenes.length > 1) {
-      flechaIzq.style.display = "block";
-      flechaDer.style.display = "block";
-    } else {
-      flechaIzq.style.display = "none";
-      flechaDer.style.display = "none";
-    }
-  });
-});
-
-flechaDer.addEventListener("click", e => {
-  e.stopPropagation();
-  indice = (indice + 1) % imagenes.length;
-  modalImg.src = imagenes[indice].src;
-});
-
-flechaIzq.addEventListener("click", e => {
-  e.stopPropagation();
-  indice = (indice - 1 + imagenes.length) % imagenes.length;
-  modalImg.src = imagenes[indice].src;
-});
-
-modal.addEventListener("click", () => {
-  modal.style.display = "none";
-});
-
-/* =========================
-   SWIPE MOBILE
-========================= */
-
-let touchStartX = 0;
-let touchEndX = 0;
-
-modalImg.addEventListener("touchstart", e => {
-  touchStartX = e.changedTouches[0].screenX;
-});
-
-modalImg.addEventListener("touchend", e => {
-  touchEndX = e.changedTouches[0].screenX;
-  const diff = touchStartX - touchEndX;
-
-  if (diff > 50 && imagenes.length > 1) {
-    indice = (indice + 1) % imagenes.length;
-    modalImg.src = imagenes[indice].src;
-  }
-
-  if (diff < -50 && imagenes.length > 1) {
-    indice = (indice - 1 + imagenes.length) % imagenes.length;
-    modalImg.src = imagenes[indice].src;
-  }
-});
-
-  /* =========================
-   DRAWER LOGICA
-========================= */
 
 const drawer = document.getElementById("drawer-carrito");
 const drawerOverlay = document.getElementById("drawer-overlay");
-const cerrarDrawerBtn = document.getElementById("cerrar-drawer");
 const drawerLista = document.getElementById("drawer-lista");
 const drawerTotal = document.getElementById("drawer-total");
+const cerrarDrawerBtn = document.getElementById("cerrar-drawer");
 const drawerWhatsapp = document.getElementById("drawer-whatsapp");
 
 function abrirDrawer() {
-  actualizarDrawer();
+  drawerLista.innerHTML = "";
+  items.forEach(i => {
+    const li = document.createElement("li");
+    li.innerText = `${i.nombre} – $${i.precio.toLocaleString()}`;
+    drawerLista.appendChild(li);
+  });
+  drawerTotal.innerText = `Total: $${total.toLocaleString()}`;
   drawer.classList.add("abierto");
   drawerOverlay.classList.add("activo");
 }
@@ -360,27 +241,17 @@ function cerrarDrawer() {
   drawerOverlay.classList.remove("activo");
 }
 
-function actualizarDrawer() {
-  drawerLista.innerHTML = "";
-
-  items.forEach(item => {
-    const li = document.createElement("li");
-    li.innerText = `${item.nombre} – $${item.precio.toLocaleString()}`;
-    drawerLista.appendChild(li);
-  });
-
-  drawerTotal.innerText = `Total: $${total.toLocaleString()}`;
-}
-
 carritoFloat.addEventListener("click", abrirDrawer);
 cerrarDrawerBtn.addEventListener("click", cerrarDrawer);
 drawerOverlay.addEventListener("click", cerrarDrawer);
+drawerWhatsapp.addEventListener("click", () => botonWhatsapp.click());
 
-// Reusar WhatsApp
-drawerWhatsapp.addEventListener("click", () => {
-  botonWhatsapp.click();
-});
-  
+/* =========================
+   INIT
+========================= */
+
+actualizarCarritoFloat();
+cargarCarrito();
 </script>
 
 </body>
