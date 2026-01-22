@@ -233,11 +233,32 @@ const drawerWhatsapp = document.getElementById("drawer-whatsapp");
 
 function abrirDrawer() {
   drawerLista.innerHTML = "";
-  items.forEach(i => {
+
+  items.forEach(item => {
     const li = document.createElement("li");
-    li.innerText = `${i.nombre} – $${i.precio.toLocaleString()}`;
+    li.innerHTML = `
+      ${item.nombre} – $${item.precio.toLocaleString()}
+      <button class="eliminar">✕</button>
+    `;
+
+    li.querySelector(".eliminar").addEventListener("click", () => {
+      // eliminar del carrito principal
+      items = items.filter(i => i.nombre !== item.nombre);
+      total -= item.precio;
+
+      // refrescar UI
+      listaPedido.innerHTML = "";
+      items.forEach(i => agregarItemDOM(i.nombre, i.precio));
+
+      actualizarTotal();
+      actualizarCarritoFloat();
+      guardarCarrito();
+      abrirDrawer(); // refresca drawer
+    });
+
     drawerLista.appendChild(li);
   });
+
   drawerTotal.innerText = `Total: $${total.toLocaleString()}`;
   drawer.classList.add("abierto");
   drawerOverlay.classList.add("activo");
@@ -252,6 +273,19 @@ carritoFloat.addEventListener("click", abrirDrawer);
 cerrarDrawerBtn.addEventListener("click", cerrarDrawer);
 drawerOverlay.addEventListener("click", cerrarDrawer);
 drawerWhatsapp.addEventListener("click", () => botonWhatsapp.click());
+
+const drawerVaciar = document.getElementById("drawer-vaciar");
+
+drawerVaciar.addEventListener("click", () => {
+  listaPedido.innerHTML = "";
+  items = [];
+  total = 0;
+
+  actualizarTotal();
+  actualizarCarritoFloat();
+  guardarCarrito();
+  cerrarDrawer();
+});
 
 /* =========================
    INIT
