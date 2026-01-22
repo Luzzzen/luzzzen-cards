@@ -104,6 +104,47 @@ let items = [];
 let total = 0;
 
 /* =========================
+   LOCAL STORAGE
+========================= */
+
+function guardarCarrito() {
+  localStorage.setItem("luzzzenCarrito", JSON.stringify(items));
+  localStorage.setItem("luzzzenTotal", total);
+}
+
+function cargarCarrito() {
+  const carritoGuardado = localStorage.getItem("luzzzenCarrito");
+  const totalGuardado = localStorage.getItem("luzzzenTotal");
+
+  if (carritoGuardado) {
+    items = JSON.parse(carritoGuardado);
+    total = parseInt(totalGuardado) || 0;
+
+    items.forEach(item => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        ${item.nombre} – $${item.precio.toLocaleString()}
+        <button class="eliminar">✕</button>
+      `;
+
+      li.querySelector(".eliminar").addEventListener("click", () => {
+        listaPedido.removeChild(li);
+        items = items.filter(i => i.nombre !== item.nombre);
+        total -= item.precio;
+        totalTexto.innerText = `Total: $${total.toLocaleString()}`;
+        guardarCarrito();
+        actualizarCarritoFloat();
+      });
+
+      listaPedido.appendChild(li);
+    });
+
+    totalTexto.innerText = `Total: $${total.toLocaleString()}`;
+    actualizarCarritoFloat();
+  }
+}
+
+/* =========================
    CARRITO
 ========================= */
 
