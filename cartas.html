@@ -85,11 +85,10 @@
   🛒
   <span id="carrito-badge">0</span>
 </button>
-
   
-  <script>
+<script>
 /* =========================
-   CARRITO / PEDIDO
+   VARIABLES BASE
 ========================= */
 
 const botonesAgregar = document.querySelectorAll(".agregar");
@@ -98,8 +97,15 @@ const totalTexto = document.getElementById("total");
 const botonWhatsapp = document.getElementById("whatsapp");
 const botonVaciar = document.getElementById("vaciar");
 
-let total = 0;
+const carritoFloat = document.getElementById("carrito-float");
+const carritoBadge = document.getElementById("carrito-badge");
+
 let items = [];
+let total = 0;
+
+/* =========================
+   CARRITO
+========================= */
 
 botonesAgregar.forEach(boton => {
   boton.addEventListener("click", () => {
@@ -108,6 +114,7 @@ botonesAgregar.forEach(boton => {
     const precioTexto = carta.querySelector(".precio").innerText;
     const precio = parseInt(precioTexto.replace(/\D/g, ""));
 
+    // Evitar duplicados
     if (items.some(item => item.nombre === nombre)) {
       alert("Esta carta ya está en tu pedido.");
       return;
@@ -125,13 +132,14 @@ botonesAgregar.forEach(boton => {
       listaPedido.removeChild(li);
       items = items.filter(i => i.nombre !== nombre);
       total -= precio;
-      totalTexto.innerText = `Total: $${total.toLocaleString()}`;
+      actualizarTotal();
+      actualizarCarritoFloat();
     });
 
     listaPedido.appendChild(li);
-
     total += precio;
-    totalTexto.innerText = `Total: $${total.toLocaleString()}`;
+    actualizarTotal();
+    actualizarCarritoFloat();
   });
 });
 
@@ -139,8 +147,17 @@ botonVaciar.addEventListener("click", () => {
   listaPedido.innerHTML = "";
   items = [];
   total = 0;
-  totalTexto.innerText = "Total: $0";
+  actualizarTotal();
+  actualizarCarritoFloat();
 });
+
+function actualizarTotal() {
+  totalTexto.innerText = `Total: $${total.toLocaleString()}`;
+}
+
+/* =========================
+   WHATSAPP
+========================= */
 
 botonWhatsapp.addEventListener("click", () => {
   if (items.length === 0) {
@@ -162,9 +179,30 @@ botonWhatsapp.addEventListener("click", () => {
   window.open(`https://wa.me/5491125608635?text=${mensaje}`, "_blank");
 });
 
+/* =========================
+   CARRITO FLOTANTE
+========================= */
+
+function actualizarCarritoFloat() {
+  carritoBadge.innerText = items.length;
+
+  if (items.length === 0) {
+    carritoFloat.style.display = "none";
+  } else {
+    carritoFloat.style.display = "flex";
+  }
+}
+
+carritoFloat.addEventListener("click", () => {
+  document.getElementById("pedido").scrollIntoView({
+    behavior: "smooth"
+  });
+});
+
+actualizarCarritoFloat();
 
 /* =========================
-   MODAL DE IMÁGENES (PRO)
+   MODAL DE IMÁGENES
 ========================= */
 
 const modal = document.getElementById("modal");
@@ -175,7 +213,6 @@ const flechaDer = document.querySelector(".flecha.derecha");
 let imagenes = [];
 let indice = 0;
 
-// Abrir modal
 document.querySelectorAll(".imagenes-carta").forEach(contenedor => {
   contenedor.addEventListener("click", e => {
     e.stopPropagation();
@@ -186,7 +223,6 @@ document.querySelectorAll(".imagenes-carta").forEach(contenedor => {
     modalImg.src = imagenes[indice].src;
     modal.style.display = "flex";
 
-    // Mostrar u ocultar flechas
     if (imagenes.length > 1) {
       flechaIzq.style.display = "block";
       flechaDer.style.display = "block";
@@ -197,7 +233,6 @@ document.querySelectorAll(".imagenes-carta").forEach(contenedor => {
   });
 });
 
-// Flechas
 flechaDer.addEventListener("click", e => {
   e.stopPropagation();
   indice = (indice + 1) % imagenes.length;
@@ -210,12 +245,12 @@ flechaIzq.addEventListener("click", e => {
   modalImg.src = imagenes[indice].src;
 });
 
-// Cerrar modal
 modal.addEventListener("click", () => {
   modal.style.display = "none";
 });
+
 /* =========================
-   SWIPE TÁCTIL (MOBILE)
+   SWIPE MOBILE
 ========================= */
 
 let touchStartX = 0;
@@ -227,82 +262,18 @@ modalImg.addEventListener("touchstart", e => {
 
 modalImg.addEventListener("touchend", e => {
   touchEndX = e.changedTouches[0].screenX;
-  handleSwipe();
-});
+  const diff = touchStartX - touchEndX;
 
-function handleSwipe() {
-  const diferencia = touchStartX - touchEndX;
-
-  // swipe izquierda
-  if (diferencia > 50 && imagenes.length > 1) {
+  if (diff > 50 && imagenes.length > 1) {
     indice = (indice + 1) % imagenes.length;
     modalImg.src = imagenes[indice].src;
   }
 
-  // swipe derecha
-  if (diferencia < -50 && imagenes.length > 1) {
+  if (diff < -50 && imagenes.length > 1) {
     indice = (indice - 1 + imagenes.length) % imagenes.length;
     modalImg.src = imagenes[indice].src;
   }
-}    
-    
-    /* =========================
-   CARRITO MOBILE
-========================= */
-
-const carritoItems = document.getElementById("carrito-items");
-const carritoTotal = document.getElementById("carrito-total");
-const verPedidoBtn = document.getElementById("ver-pedido");
-
-function actualizarCarritoMobile() {
-  carritoItems.innerText = `${items.length} ítem${items.length !== 1 ? "s" : ""}`;
-  carritoTotal.innerText = `$${total.toLocaleString()}`;
-}
-
-// Llamamos cada vez que cambia el carrito
-const observer = new MutationObserver(actualizarCarritoMobile);
-observer.observe(listaPedido, { childList: true });
-
-// Scroll al pedido
-verPedidoBtn.addEventListener("click", () => {
-  document.getElementById("pedido").scrollIntoView({ behavior: "smooth" });
 });
-
-// Inicial
-actualizarCarritoMobile();
-
-/* =========================
-   CARRITO FLOTANTE LOGICA
-========================= */
-
-const carritoFloat = document.getElementById("carrito-float");
-const carritoBadge = document.getElementById("carrito-badge");
-
-function actualizarCarritoFloat() {
-  carritoBadge.innerText = items.length;
-
-  if (items.length === 0) {
-    carritoFloat.classList.add("oculto");
-  } else {
-    carritoFloat.classList.remove("oculto");
-  }
-}
-
-// Llamar cada vez que cambia el carrito
-const observer = new MutationObserver(actualizarCarritoFloat);
-observer.observe(listaPedido, { childList: true });
-
-// Click → ir al pedido
-carritoFloat.addEventListener("click", () => {
-  document.getElementById("pedido").scrollIntoView({
-    behavior: "smooth"
-  });
-});
-
-// Inicial
-actualizarCarritoFloat();
-
-
 </script>
 
 </body>
