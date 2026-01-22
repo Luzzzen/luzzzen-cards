@@ -175,12 +175,14 @@ botonesAgregar.forEach(boton => {
       total -= precio;
       actualizarTotal();
       actualizarCarritoFloat();
+      guardarCarrito();
     });
 
     listaPedido.appendChild(li);
     total += precio;
     actualizarTotal();
     actualizarCarritoFloat();
+    guardarCarrito();
   });
 });
 
@@ -190,12 +192,14 @@ botonVaciar.addEventListener("click", () => {
   total = 0;
   actualizarTotal();
   actualizarCarritoFloat();
+  localStorage.removeItem("luzzzenCarrito");
+  localStorage.removeItem("luzzzenTotal");
 });
 
 function actualizarTotal() {
   totalTexto.innerText = `Total: $${total.toLocaleString()}`;
 }
-
+  
 /* =========================
    WHATSAPP
 ========================= */
