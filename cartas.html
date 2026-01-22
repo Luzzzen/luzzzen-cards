@@ -292,6 +292,50 @@ modalImg.addEventListener("touchend", e => {
     modalImg.src = imagenes[indice].src;
   }
 });
+
+  /* =========================
+   DRAWER LOGICA
+========================= */
+
+const drawer = document.getElementById("drawer-carrito");
+const drawerOverlay = document.getElementById("drawer-overlay");
+const cerrarDrawerBtn = document.getElementById("cerrar-drawer");
+const drawerLista = document.getElementById("drawer-lista");
+const drawerTotal = document.getElementById("drawer-total");
+const drawerWhatsapp = document.getElementById("drawer-whatsapp");
+
+function abrirDrawer() {
+  actualizarDrawer();
+  drawer.classList.add("abierto");
+  drawerOverlay.classList.add("activo");
+}
+
+function cerrarDrawer() {
+  drawer.classList.remove("abierto");
+  drawerOverlay.classList.remove("activo");
+}
+
+function actualizarDrawer() {
+  drawerLista.innerHTML = "";
+
+  items.forEach(item => {
+    const li = document.createElement("li");
+    li.innerText = `${item.nombre} – $${item.precio.toLocaleString()}`;
+    drawerLista.appendChild(li);
+  });
+
+  drawerTotal.innerText = `Total: $${total.toLocaleString()}`;
+}
+
+carritoFloat.addEventListener("click", abrirDrawer);
+cerrarDrawerBtn.addEventListener("click", cerrarDrawer);
+drawerOverlay.addEventListener("click", cerrarDrawer);
+
+// Reusar WhatsApp
+drawerWhatsapp.addEventListener("click", () => {
+  botonWhatsapp.click();
+});
+  
 </script>
 
 </body>
