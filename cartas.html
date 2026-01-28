@@ -6,10 +6,12 @@
 
   <title>Cartas Individuales | Luzzzen Cards</title>
 
+  <!-- FUENTES -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
 
   <!-- FAVICON -->
@@ -22,12 +24,18 @@
 
 <body>
 
+<!-- =========================
+     HEADER
+========================= -->
 <header>
   <a href="index.html" class="btn-volver">← Volver al inicio</a>
   <h1>Cartas individuales</h1>
   <p>Cartas de fútbol disponibles</p>
 </header>
 
+<!-- =========================
+     NAV CATEGORÍAS
+========================= -->
 <nav class="nav-catalogo">
   <a href="cartas.html" class="nav-item activo">Cartas</a>
   <a href="jerseys.html" class="nav-item">Jerseys</a>
@@ -37,12 +45,16 @@
 
 <main>
 
-  <!-- CATÁLOGO -->
+  <!-- =========================
+       CATÁLOGO
+  ========================= -->
   <section id="productos">
     <div class="catalogo" id="catalogo"></div>
   </section>
 
-  <!-- PEDIDO (vista larga) -->
+  <!-- =========================
+       PEDIDO (vista larga)
+  ========================= -->
   <section id="pedido">
     <h2>Tu pedido</h2>
     <ul id="lista-pedido"></ul>
@@ -57,19 +69,25 @@
 
 </main>
 
-<!-- MODAL IMÁGENES -->
+<!-- =========================
+     MODAL IMÁGENES (ZOOM)
+========================= -->
 <div id="modal" class="modal">
   <button class="flecha izquierda">‹</button>
   <img id="modal-img" alt="">
   <button class="flecha derecha">›</button>
 </div>
 
-<!-- CARRITO FLOTANTE -->
+<!-- =========================
+     CARRITO FLOTANTE
+========================= -->
 <button id="carrito-float">
   🛒 <span id="carrito-badge">0</span>
 </button>
 
-<!-- DRAWER -->
+<!-- =========================
+     DRAWER CARRITO
+========================= -->
 <div id="drawer-overlay"></div>
 
 <aside id="drawer-carrito">
@@ -88,32 +106,50 @@
 </aside>
 
 <!-- =========================
-     PRODUCTOS
+     PRODUCTOS (DATA)
 ========================= -->
 <script src="productos.js"></script>
 
 <!-- =========================
-     RENDER CATÁLOGO + ZOOM
+     RENDER CATÁLOGO
 ========================= -->
 <script>
 const catalogo = document.getElementById("catalogo");
 
-/* Renderizar cartas */
-productos.forEach(producto => {
+/* 🔹 SOLO CARTAS */
+const cartas = productos.filter(
+  producto => producto.categoria === "cartas"
+);
+
+cartas.forEach(producto => {
   const carta = document.createElement("div");
   carta.className = "carta";
-  carta.dataset.id = producto.id;
 
   carta.innerHTML = `
-    <div class="imagenes-carta" data-id="${producto.id}">
-      <img src="${producto.imagenes[0]}" alt="${producto.nombre}">
-      ${producto.imagenes[1] ? `<img src="${producto.imagenes[1]}" alt="${producto.nombre} dorso">` : ""}
+    <div class="imagenes-carta">
+      ${producto.imagenes
+        .map(
+          (img, i) =>
+            `<img src="${img}" alt="${producto.nombre}${i === 1 ? " dorso" : ""}">`
+        )
+        .join("")}
       <span class="icono-zoom">🔍</span>
     </div>
 
-    <h4 class="titulo-carta">${producto.nombre}</h4>
+    <h4 class="titulo-carta">
+      ${producto.nombre} – ${producto.descripcion}
+    </h4>
+
     <p class="precio">$${producto.precio.toLocaleString()}</p>
-    <button class="agregar">Agregar al pedido</button>
+
+    <button
+      class="agregar"
+      data-id="${producto.id}"
+      data-nombre="${producto.nombre} – ${producto.descripcion}"
+      data-precio="${producto.precio}"
+    >
+      Agregar al pedido
+    </button>
   `;
 
   catalogo.appendChild(carta);
@@ -121,7 +157,7 @@ productos.forEach(producto => {
 </script>
 
 <!-- =========================
-     CARRITO (COMPARTIDO)
+     CARRITO + ZOOM (GLOBAL)
 ========================= -->
 <script src="js/carrito.js"></script>
 
