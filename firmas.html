@@ -3,33 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Firmas | Luzzzen Cards</title>
 
+  <!-- FUENTES -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
 
   <!-- FAVICON -->
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-
-<!-- APP / MOBILE -->
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="manifest" href="site.webmanifest">
-
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
 </head>
 
 <body>
 
-  <header>
-    <a href="index.html" class="btn-volver">← Volver al inicio</a>
-    <h1>Firmas</h1>
-    <p>Cartas firmadas disponibles</p>
-  </header>
-  
+<header>
+  <a href="index.html" class="btn-volver">← Volver al inicio</a>
+  <h1>Firmas</h1>
+  <p>Cartas firmadas disponibles</p>
+</header>
+
 <nav class="nav-catalogo">
   <a href="cartas.html" class="nav-item">Cartas</a>
   <a href="jerseys.html" class="nav-item">Jerseys</a>
@@ -37,28 +37,31 @@
   <a href="sobres.html" class="nav-item">Sobres & cajas</a>
 </nav>
 
-  <main>
+<main>
 
-     <!-- CATÁLOGO -->
+  <!-- CATÁLOGO -->
   <section id="productos">
     <div class="catalogo" id="catalogo"></div>
   </section>
 
-    <section class="proximamente">
-      <p>Esta sección estará disponible próximamente.</p>
-    </section>
-<div class="volver-footer">
-  <a href="index.html" class="btn-volver">← Volver al inicio</a>
+  <div class="volver-footer">
+    <a href="index.html" class="btn-volver">← Volver al inicio</a>
+  </div>
+
+</main>
+
+<!-- MODAL IMÁGENES -->
+<div id="modal" class="modal">
+  <button class="flecha izquierda">‹</button>
+  <img id="modal-img" alt="">
+  <button class="flecha derecha">›</button>
 </div>
 
-  </main>
-
-   <!-- CARRITO FLOTANTE -->
+<!-- CARRITO FLOTANTE -->
 <button id="carrito-float">
-  🛒
-  <span id="carrito-badge">0</span>
+  🛒 <span id="carrito-badge">0</span>
 </button>
-  
+
 <!-- DRAWER -->
 <div id="drawer-overlay"></div>
 
@@ -72,17 +75,59 @@
 
   <div class="drawer-footer">
     <p id="drawer-total">Total: $0</p>
-
-    <button id="drawer-vaciar" class="drawer-secundario">
-      Vaciar carrito
-    </button>
-
-    <button id="drawer-whatsapp">
-      Enviar pedido por WhatsApp
-    </button>
+    <button id="drawer-vaciar" class="drawer-secundario">Vaciar carrito</button>
+    <button id="drawer-whatsapp">Enviar pedido por WhatsApp</button>
   </div>
 </aside>
 
+<!-- PRODUCTOS -->
+<script src="productos.js"></script>
+
+<!-- RENDER FIRMAS -->
+<script>
+const catalogo = document.getElementById("catalogo");
+
+const firmas = productos.filter(
+  producto => producto.categoria === "firmas"
+);
+
+if (firmas.length === 0) {
+  catalogo.innerHTML = `<p class="proximamente">Próximamente disponible.</p>`;
+}
+
+firmas.forEach(producto => {
+  const carta = document.createElement("div");
+  carta.className = "carta";
+
+  carta.innerHTML = `
+    <div class="imagenes-carta">
+      ${producto.imagenes
+        .map(img => `<img src="${img}" alt="${producto.nombre}">`)
+        .join("")}
+      <span class="icono-zoom">🔍</span>
+    </div>
+
+    <h4 class="titulo-carta">
+      ${producto.nombre} – ${producto.descripcion}
+    </h4>
+
+    <p class="precio">$${producto.precio.toLocaleString()}</p>
+
+    <button
+      class="agregar"
+      data-id="${producto.id}"
+      data-nombre="${producto.nombre} – ${producto.descripcion}"
+      data-precio="${producto.precio}"
+    >
+      Agregar al pedido
+    </button>
+  `;
+
+  catalogo.appendChild(carta);
+});
+</script>
+
+<!-- CARRITO + ZOOM -->
 <script src="js/carrito.js"></script>
 
 </body>
