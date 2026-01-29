@@ -1,19 +1,22 @@
 const productos = [
-   {
+  {
     id: 1,
-    nombre: "Hazard - Panini 2016",
+    categoria: "cartas",
+    nombre: "Hazard – Panini 2016",
     precio: 7500,
-    imagenes: ["imagenes/HazardPruebaFront.jpg",
-      "imagenes/HazardPruebaBack.jpg"],
-    categoria: "cartas"
+    imagenes: [
+      "imagenes/HazardPruebaFront.jpg",
+      "imagenes/HazardPruebaBack.jpg"
+    ]
   },
   {
     id: 2,
+    categoria: "cartas",
     nombre: "Didier Drogba – Panini Colección 2016",
     precio: 7500,
-    imagenes: ["imagenes/HazardPruebaFront.jpg",
-      "imagenes/HazardPruebaBack.jpg"],
-    categoria: "cartas"
+    imagenes: [
+      "imagenes/HazardPruebaFront.jpg",
+      "imagenes/HazardPruebaBack.jpg"
     ]
   },
   {
