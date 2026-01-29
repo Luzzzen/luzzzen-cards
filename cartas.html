@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Cartas Individuales | Luzzzen Cards</title>
+  <title>Cartas individuales | Luzzzen Cards</title>
 
   <!-- FUENTES -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,10 +22,7 @@
   <link rel="manifest" href="site.webmanifest">
 </head>
 
-<body>
-
 <body data-categoria="cartas">
-
 
 <!-- =========================
      HEADER
@@ -53,14 +50,15 @@
   ========================= -->
   <section id="productos">
     <div class="catalogo" id="catalogo"></div>
+
     <button id="ver-mas" class="btn-ver-mas">
-  <span>Ver más cartas</span>
-  <span class="flecha-abajo">⌄</span>
-</button>
+      <span>Ver más cartas</span>
+      <span class="flecha-abajo">⌄</span>
+    </button>
   </section>
 
   <!-- =========================
-       PEDIDO (vista larga)
+       PEDIDO (VISTA LARGA)
   ========================= -->
   <section id="pedido">
     <h2>Tu pedido</h2>
@@ -113,56 +111,15 @@
 </aside>
 
 <!-- =========================
-     PRODUCTOS (DATA)
+     DATA PRODUCTOS
 ========================= -->
 <script src="productos.js"></script>
 
 <!-- =========================
-     RENDER CATÁLOGO
+     RENDER CATÁLOGO (GLOBAL)
 ========================= -->
-<script>
-const catalogo = document.getElementById("catalogo");
-
-/* 🔹 SOLO CARTAS */
-const cartas = productos.filter(
-  producto => producto.categoria === "cartas"
-);
-
-cartas.forEach(producto => {
-  const carta = document.createElement("div");
-  carta.className = "carta";
-
-  carta.innerHTML = `
-    <div class="imagenes-carta">
-      ${producto.imagenes
-        .map(
-          (img, i) =>
-            `<img src="${img}" alt="${producto.nombre}${i === 1 ? " dorso" : ""}">`
-        )
-        .join("")}
-      <span class="icono-zoom">🔍</span>
-    </div>
-
-    <h4 class="titulo-carta">
-      ${producto.nombre} – ${producto.descripcion}
-    </h4>
-
-    <p class="precio">$${producto.precio.toLocaleString()}</p>
-
-    <button
-      class="agregar"
-      data-id="${producto.id}"
-      data-nombre="${producto.nombre} – ${producto.descripcion}"
-      data-precio="${producto.precio}"
-    >
-      Agregar al pedido
-    </button>
-  `;
-
-  catalogo.appendChild(carta);
-});
-</script>
 <script src="js/render-catalogo.js"></script>
+
 <!-- =========================
      CARRITO + ZOOM (GLOBAL)
 ========================= -->
