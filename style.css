@@ -577,3 +577,29 @@ button {
     padding: 8px;
   }
 }
+
+.btn-ver-mas {
+  margin: 40px auto 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background-color: #e67e22;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.btn-ver-mas:hover {
+  background-color: #cf6d17;
+  transform: translateY(-2px);
+}
+
+.flecha-abajo {
+  font-size: 22px;
+  line-height: 1;
+}
