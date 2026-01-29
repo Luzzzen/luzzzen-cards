@@ -5,58 +5,61 @@
 const catalogo = document.getElementById("catalogo");
 const btnVerMas = document.getElementById("ver-mas");
 
-// seguridad
-if (!catalogo || typeof productos === "undefined") {
-  console.warn("Catálogo o productos no disponibles");
-} else {
-  const categoriaActual = document.body.dataset.categoria;
+if (!catalogo) return;
 
-  const ITEMS_POR_PAGINA = 20;
-  let paginaActual = 0;
+// categoría actual desde el body
+const categoriaActual = document.body.dataset.categoria;
 
-  const productosFiltrados = productos.filter(
-    p => p.categoria === categoriaActual
-  );
+// configuración
+const ITEMS_POR_PAGINA = 20;
+let paginaActual = 0;
 
-  function renderCatalogo() {
-    const inicio = paginaActual * ITEMS_POR_PAGINA;
-    const fin = inicio + ITEMS_POR_PAGINA;
+// filtrar productos
+const productosFiltrados = productos.filter(
+  p => p.categoria === categoriaActual
+);
 
-    const bloque = productosFiltrados.slice(inicio, fin);
+function renderCatalogo() {
+  const inicio = paginaActual * ITEMS_POR_PAGINA;
+  const fin = inicio + ITEMS_POR_PAGINA;
 
-    bloque.forEach(producto => {
-      const carta = document.createElement("div");
-      carta.className = "carta";
+  const bloque = productosFiltrados.slice(inicio, fin);
 
-      carta.innerHTML = `
-        <div class="imagenes-carta">
-          <img src="${producto.imagenes[0]}" alt="${producto.nombre}">
-          ${
-            producto.imagenes[1]
-              ? `<img src="${producto.imagenes[1]}" alt="${producto.nombre} dorso">`
-              : ""
-          }
-          <span class="icono-zoom">🔍</span>
-        </div>
+  bloque.forEach(producto => {
+    const carta = document.createElement("div");
+    carta.className = "carta";
 
-        <h4 class="titulo-carta">${producto.nombre}</h4>
-        <p class="precio">$${producto.precio.toLocaleString()}</p>
-        <button class="agregar">Agregar al pedido</button>
-      `;
+    carta.innerHTML = `
+      <div class="imagenes-carta">
+        <img src="${producto.imagenes[0]}" alt="${producto.nombre}">
+        ${
+          producto.imagenes[1]
+            ? `<img src="${producto.imagenes[1]}" alt="${producto.nombre} dorso">`
+            : ""
+        }
+        <span class="icono-zoom">🔍</span>
+      </div>
 
-      catalogo.appendChild(carta);
-    });
+      <h4 class="titulo-carta">${producto.nombre}</h4>
+      <p class="precio">$${producto.precio.toLocaleString()}</p>
+      <button class="agregar">Agregar al pedido</button>
+    `;
 
-    paginaActual++;
+    catalogo.appendChild(carta);
+  });
 
-    if (paginaActual * ITEMS_POR_PAGINA >= productosFiltrados.length) {
-      if (btnVerMas) btnVerMas.style.display = "none";
-    }
+  paginaActual++;
+
+  // ocultar botón si no quedan más
+  if (paginaActual * ITEMS_POR_PAGINA >= productosFiltrados.length) {
+    btnVerMas.style.display = "none";
   }
-
-  if (btnVerMas) {
-    btnVerMas.addEventListener("click", renderCatalogo);
-  }
-
-  renderCatalogo();
 }
+
+// botón
+if (btnVerMas) {
+  btnVerMas.addEventListener("click", renderCatalogo);
+}
+
+// primer render
+renderCatalogo();
