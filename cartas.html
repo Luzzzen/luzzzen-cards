@@ -122,9 +122,48 @@
 <script src="productos.js"></script>
 
 <!-- =========================
-     RENDER CATÁLOGO (GLOBAL)
+     RENDER CATÁLOGO – CARTAS
 ========================= -->
+<script>
+const catalogo = document.getElementById("catalogo");
 
+// Filtrar solo cartas
+const cartas = productos.filter(
+  producto => producto.categoria === "cartas"
+);
+
+// Renderizar cartas
+cartas.forEach(producto => {
+  const carta = document.createElement("div");
+  carta.className = "carta";
+
+  carta.innerHTML = `
+    <div class="imagenes-carta">
+      <img src="${producto.imagenes[0]}" alt="${producto.nombre}">
+      ${
+        producto.imagenes[1]
+          ? `<img src="${producto.imagenes[1]}" alt="${producto.nombre} dorso">`
+          : ""
+      }
+      <span class="icono-zoom">🔍</span>
+    </div>
+
+    <h4 class="titulo-carta">${producto.nombre}</h4>
+    <p class="precio">$${producto.precio.toLocaleString()}</p>
+
+    <button
+      class="agregar"
+      data-id="${producto.id}"
+      data-nombre="${producto.nombre}"
+      data-precio="${producto.precio}"
+    >
+      Agregar al pedido
+    </button>
+  `;
+
+  catalogo.appendChild(carta);
+});
+</script>
 
 <!-- =========================
      CARRITO + ZOOM (GLOBAL)
