@@ -5,16 +5,24 @@
 const catalogo = document.getElementById("catalogo");
 const btnVerMas = document.getElementById("ver-mas");
 
+// leer categoría desde el body
+const categoriaActual = document.body.dataset.categoria;
+
 const ITEMS_POR_PAGINA = 20;
 let paginaActual = 0;
+
+// filtrar productos por categoría
+const productosFiltrados = productos.filter(
+  p => p.categoria === categoriaActual
+);
 
 function renderCatalogo() {
   const inicio = paginaActual * ITEMS_POR_PAGINA;
   const fin = inicio + ITEMS_POR_PAGINA;
 
-  const productosMostrar = productos.slice(inicio, fin);
+  const bloque = productosFiltrados.slice(inicio, fin);
 
-  productosMostrar.forEach(producto => {
+  bloque.forEach(producto => {
     const carta = document.createElement("div");
     carta.className = "carta";
 
@@ -35,16 +43,13 @@ function renderCatalogo() {
 
   paginaActual++;
 
-  // Si no quedan más productos
-  if (paginaActual * ITEMS_POR_PAGINA >= productos.length) {
+  if (paginaActual * ITEMS_POR_PAGINA >= productosFiltrados.length) {
     btnVerMas.style.display = "none";
   }
 }
 
-// Botón ver más
 if (btnVerMas) {
   btnVerMas.addEventListener("click", renderCatalogo);
 }
 
-// Primera carga
 renderCatalogo();
