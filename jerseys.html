@@ -114,7 +114,43 @@
 <!-- =========================
      RENDER CATÁLOGO (GLOBAL)
 ========================= -->
-<script src="js/render-catalogo.js"></script>
+<script>
+const catalogo = document.getElementById("catalogo");
+const categoria = document.body.dataset.categoria;
+
+// filtrar productos por categoría
+const productosCategoria = productos.filter(
+  producto => producto.categoria === categoria
+);
+
+// si no hay productos
+if (productosCategoria.length === 0) {
+  catalogo.innerHTML = `<p class="proximamente">Próximamente disponible.</p>`;
+}
+
+// renderizar productos
+productosCategoria.forEach(producto => {
+  const carta = document.createElement("div");
+  carta.className = "carta";
+
+  carta.innerHTML = `
+    <div class="imagenes-carta">
+      ${producto.imagenes
+        .map((img, i) =>
+          `<img src="${img}" alt="${producto.nombre}${i === 1 ? " dorso" : ""}">`
+        )
+        .join("")}
+      <span class="icono-zoom">🔍</span>
+    </div>
+
+    <h4 class="titulo-carta">${producto.nombre}</h4>
+    <p class="precio">$${producto.precio.toLocaleString()}</p>
+    <button class="agregar">Agregar al pedido</button>
+  `;
+
+  catalogo.appendChild(carta);
+});
+</script>
 
 <!-- =========================
      CARRITO + ZOOM (GLOBAL)
