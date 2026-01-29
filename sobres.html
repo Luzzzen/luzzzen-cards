@@ -22,16 +22,20 @@
   <link rel="manifest" href="site.webmanifest">
 </head>
 
-<body>
+<body data-categoria="sobres">
 
-  <body data-categoria="sobres">
-
+<!-- =========================
+     HEADER
+========================= -->
 <header>
   <a href="index.html" class="btn-volver">← Volver al inicio</a>
   <h1>Sobres y Cajas</h1>
   <p>Productos sellados disponibles</p>
 </header>
 
+<!-- =========================
+     NAV CATEGORÍAS
+========================= -->
 <nav class="nav-catalogo">
   <a href="cartas.html" class="nav-item">Cartas</a>
   <a href="jerseys.html" class="nav-item">Jerseys</a>
@@ -41,13 +45,16 @@
 
 <main>
 
-  <!-- CATÁLOGO -->
+  <!-- =========================
+       CATÁLOGO
+  ========================= -->
   <section id="productos">
     <div class="catalogo" id="catalogo"></div>
-     <button id="ver-mas" class="btn-ver-mas">
-  <span>Ver más cartas</span>
-  <span class="flecha-abajo">⌄</span>
-</button>
+
+    <button id="ver-mas" class="btn-ver-mas">
+      <span>Ver más productos</span>
+      <span class="flecha-abajo">⌄</span>
+    </button>
   </section>
 
   <div class="volver-footer">
@@ -56,19 +63,25 @@
 
 </main>
 
-<!-- MODAL IMÁGENES -->
+<!-- =========================
+     MODAL IMÁGENES (ZOOM)
+========================= -->
 <div id="modal" class="modal">
   <button class="flecha izquierda">‹</button>
   <img id="modal-img" alt="">
   <button class="flecha derecha">›</button>
 </div>
 
-<!-- CARRITO FLOTANTE -->
+<!-- =========================
+     CARRITO FLOTANTE
+========================= -->
 <button id="carrito-float">
   🛒 <span id="carrito-badge">0</span>
 </button>
 
-<!-- DRAWER -->
+<!-- =========================
+     DRAWER CARRITO
+========================= -->
 <div id="drawer-overlay"></div>
 
 <aside id="drawer-carrito">
@@ -86,58 +99,19 @@
   </div>
 </aside>
 
-<!-- PRODUCTOS -->
+<!-- =========================
+     DATA PRODUCTOS
+========================= -->
 <script src="productos.js"></script>
 
-<!-- RENDER SOBRES -->
-<script>
-const catalogo = document.getElementById("catalogo");
-
-const sobres = productos.filter(
-  producto => producto.categoria === "sobres"
-);
-
-if (sobres.length === 0) {
-  catalogo.innerHTML = `
-    <p class="proximamente">
-      Próximamente disponible.
-    </p>
-  `;
-}
-
-sobres.forEach(producto => {
-  const carta = document.createElement("div");
-  carta.className = "carta";
-
-  carta.innerHTML = `
-    <div class="imagenes-carta">
-      ${producto.imagenes
-        .map(img => `<img src="${img}" alt="${producto.nombre}">`)
-        .join("")}
-      <span class="icono-zoom">🔍</span>
-    </div>
-
-    <h4 class="titulo-carta">
-      ${producto.nombre} – ${producto.descripcion}
-    </h4>
-
-    <p class="precio">$${producto.precio.toLocaleString()}</p>
-
-    <button
-      class="agregar"
-      data-id="${producto.id}"
-      data-nombre="${producto.nombre} – ${producto.descripcion}"
-      data-precio="${producto.precio}"
-    >
-      Agregar al pedido
-    </button>
-  `;
-
-  catalogo.appendChild(carta);
-});
-</script>
+<!-- =========================
+     RENDER CATÁLOGO (GLOBAL)
+========================= -->
 <script src="js/render-catalogo.js"></script>
-<!-- CARRITO + ZOOM (COMPARTIDO) -->
+
+<!-- =========================
+     CARRITO + ZOOM (GLOBAL)
+========================= -->
 <script src="js/carrito.js"></script>
 
 </body>
