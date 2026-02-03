@@ -655,3 +655,31 @@ button {
     font-size: 1.2rem;
   }
 }
+
+/* =========================
+   BUSCADOR
+========================= */
+
+.buscador-wrap {
+  max-width: 420px;
+  margin: 20px auto 30px;
+}
+
+#buscador {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 999px;
+  border: none;
+  font-size: 15px;
+  outline: none;
+  background-color: rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+#buscador::placeholder {
+  color: rgba(255,255,255,0.7);
+}
+
+#buscador:focus {
+  background-color: rgba(255,255,255,0.25);
+}
