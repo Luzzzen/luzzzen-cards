@@ -661,6 +661,8 @@ button {
 ========================= */
 
 .buscador-wrap {
+  display: flex;
+  justify-content: center;
   max-width: 420px;
   margin: 20px auto 30px;
 }
@@ -682,4 +684,10 @@ button {
 
 #buscador:focus {
   background-color: rgba(255,255,255,0.25);
+}
+
+@media (min-width: 769px) {
+  .buscador-wrap {
+    margin-bottom: 20px;
+  }
 }
