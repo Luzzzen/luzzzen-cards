@@ -116,21 +116,6 @@
 </aside>
 
   <script src="js/carrito.js"></script>
-
-  <script>
-  const buscadorIndex = document.getElementById("buscador-index");
-
-  if (buscadorIndex) {
-    buscadorIndex.addEventListener("keydown", e => {
-      if (e.key === "Enter") {
-        const q = buscadorIndex.value.trim();
-        if (!q) return;
-
-        window.location.href = `cartas.html?q=${encodeURIComponent(q)}`;
-      }
-    });
-  }
-</script>
   
 </body>
 </html>
