@@ -5,11 +5,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const catalogo = document.getElementById("catalogo");
   const buscador = document.getElementById("buscador");
-if (busquedaInicial && buscador) {
-  buscador.value = busquedaInicial;
-}
-
-   
   if (!catalogo) return;
 
   const categoriaActual = document.body.dataset.categoria;
