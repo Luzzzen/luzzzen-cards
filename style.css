@@ -691,3 +691,45 @@ button {
     margin-bottom: 20px;
   }
 }
+
+/* =========================
+   PAGINACIÓN
+========================= */
+
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 40px 0 20px;
+  flex-wrap: wrap;
+}
+
+.paginacion button {
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: none;
+  background-color: rgba(255,255,255,0.1);
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.paginacion button:hover:not(:disabled) {
+  background-color: #e67e22;
+  transform: translateY(-1px);
+}
+
+.paginacion button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+#info-pagina {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background-color: rgba(255,255,255,0.15);
+}
