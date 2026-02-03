@@ -600,13 +600,51 @@ button {
 }
 
 /* =========================
-   HEADER + LOGO PLACA
+   HEADER
 ========================= */
 
 .header-principal {
   text-align: center;
   padding: 40px 20px 30px;
 }
+
+/* =========================
+   LOGO – INDEX
+========================= */
+
+.logo {
+  width: 240px;
+  margin: 0 auto 24px;
+  display: block;
+  filter:
+    drop-shadow(0 12px 30px rgba(0,0,0,0.4))
+    drop-shadow(0 0 18px rgba(242,140,40,0.25));
+}
+
+@media (max-width: 480px) {
+  .logo {
+    width: 170px;
+  }
+}
+
+/* =========================
+   LOGO – CATÁLOGO
+========================= */
+
+.logo-catalogo {
+  display: block;
+  width: 160px;
+  margin: 16px auto 28px;
+  filter:
+    drop-shadow(0 8px 20px rgba(0,0,0,0.35));
+}
+
+@media (max-width: 480px) {
+  .logo-catalogo {
+    width: 130px;
+  }
+}
+
 
 /* =========================
    BUSCADOR
