@@ -1,14 +1,30 @@
 /* =========================
-   RENDER CATÁLOGO + BUSCADOR
+   RENDER CATÁLOGO + BUSCADOR + PAGINACIÓN
 ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
   const catalogo = document.getElementById("catalogo");
   const buscador = document.getElementById("buscador");
+
+  const btnAnterior = document.getElementById("btn-anterior");
+  const btnSiguiente = document.getElementById("btn-siguiente");
+  const btnPrimera = document.getElementById("btn-primera");
+  const btnUltima = document.getElementById("btn-ultima");
+  const infoPagina = document.getElementById("info-pagina");
+
   if (!catalogo) return;
 
   const categoriaActual = document.body.dataset.categoria;
+
+  const ITEMS_POR_PAGINA = 24;
+  let paginaActual = 1;
+
   let productosCategoria = [];
+  let productosFiltrados = [];
+
+  /* =========================
+     CARGA JSON
+  ========================= */
 
   fetch("productos.json")
     .then(res => res.json())
@@ -17,7 +33,10 @@ document.addEventListener("DOMContentLoaded", () => {
         p => p.categoria === categoriaActual
       );
 
-      render(productosCategoria);
+      productosFiltrados = [...productosCategoria];
+      paginaActual = 1;
+
+      renderPagina();
     })
     .catch(error => {
       console.error("Error cargando productos.json", error);
@@ -25,16 +44,25 @@ document.addEventListener("DOMContentLoaded", () => {
         `<p class="proximamente">Error cargando productos.</p>`;
     });
 
-  function render(lista) {
+  /* =========================
+     RENDER DE PÁGINA
+  ========================= */
+
+  function renderPagina() {
     catalogo.innerHTML = "";
 
-    if (lista.length === 0) {
+    const inicio = (paginaActual - 1) * ITEMS_POR_PAGINA;
+    const fin = inicio + ITEMS_POR_PAGINA;
+    const bloque = productosFiltrados.slice(inicio, fin);
+
+    if (bloque.length === 0) {
       catalogo.innerHTML =
         `<p class="proximamente">No se encontraron resultados.</p>`;
+      actualizarPaginacion();
       return;
     }
 
-    lista.forEach(producto => {
+    bloque.forEach(producto => {
       const carta = document.createElement("div");
       carta.className = "carta";
 
@@ -56,28 +84,85 @@ document.addEventListener("DOMContentLoaded", () => {
           class="agregar"
           data-id="${producto.id}"
           data-nombre="${producto.nombre}"
-          data-precio="${producto.precio}"
-        >
+          data-precio="${producto.precio}">
           Agregar al pedido
         </button>
       `;
 
       catalogo.appendChild(carta);
     });
+
+    actualizarPaginacion();
   }
 
-  // BUSCADOR
+  /* =========================
+     PAGINACIÓN UI
+  ========================= */
+
+  function actualizarPaginacion() {
+    const totalPaginas = Math.ceil(
+      productosFiltrados.length / ITEMS_POR_PAGINA
+    );
+
+    if (infoPagina) {
+      infoPagina.textContent = `Página ${paginaActual} de ${totalPaginas}`;
+    }
+
+    btnAnterior && (btnAnterior.disabled = paginaActual === 1);
+    btnPrimera && (btnPrimera.disabled = paginaActual === 1);
+    btnSiguiente && (btnSiguiente.disabled = paginaActual === totalPaginas);
+    btnUltima && (btnUltima.disabled = paginaActual === totalPaginas);
+  }
+
+  /* =========================
+     EVENTOS PAGINACIÓN
+  ========================= */
+
+  btnAnterior?.addEventListener("click", () => {
+    if (paginaActual > 1) {
+      paginaActual--;
+      renderPagina();
+    }
+  });
+
+  btnSiguiente?.addEventListener("click", () => {
+    const totalPaginas = Math.ceil(
+      productosFiltrados.length / ITEMS_POR_PAGINA
+    );
+    if (paginaActual < totalPaginas) {
+      paginaActual++;
+      renderPagina();
+    }
+  });
+
+  btnPrimera?.addEventListener("click", () => {
+    paginaActual = 1;
+    renderPagina();
+  });
+
+  btnUltima?.addEventListener("click", () => {
+    paginaActual = Math.ceil(
+      productosFiltrados.length / ITEMS_POR_PAGINA
+    );
+    renderPagina();
+  });
+
+  /* =========================
+     BUSCADOR
+  ========================= */
+
   if (buscador) {
     buscador.addEventListener("input", () => {
       const q = buscador.value.toLowerCase();
 
-      const filtrados = productosCategoria.filter(p =>
+      productosFiltrados = productosCategoria.filter(p =>
         Object.values(p).some(valor =>
           String(valor).toLowerCase().includes(q)
         )
       );
 
-      render(filtrados);
+      paginaActual = 1;
+      renderPagina();
     });
   }
 });
