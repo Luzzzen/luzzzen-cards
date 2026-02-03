@@ -13,9 +13,9 @@ const ITEMS_POR_PAGINA = 20;
 let paginaActual = 0;
 
 // filtrar productos
-const productosFiltrados = productos.filter(
-  p => p.categoria === categoriaActual
-);
+//const productosFiltrados = productos.filter(
+//  p => p.categoria === categoriaActual
+//);
 
 function renderCatalogo() {
   const inicio = paginaActual * ITEMS_POR_PAGINA;
