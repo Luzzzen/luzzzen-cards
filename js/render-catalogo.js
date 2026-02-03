@@ -1,65 +1,92 @@
 /* =========================
-   RENDER CATÁLOGO (20 en 20)
+   RENDER CATÁLOGO (BASE JSON)
 ========================= */
 
 const catalogo = document.getElementById("catalogo");
 const btnVerMas = document.getElementById("ver-mas");
 
-if (!catalogo) return;
+// si no hay catálogo en la página, no hacer nada
+if (!catalogo) {
+  console.warn("No hay #catalogo en esta página");
+} else {
+  // categoría actual desde el body
+  const categoriaActual = document.body.dataset.categoria;
 
-// categoría actual desde el body
-const categoriaActual = document.body.dataset.categoria;
+  // configuración
+  const ITEMS_POR_PAGINA = 20;
+  let paginaActual = 0;
+  let productosFiltrados = [];
 
-// configuración
-const ITEMS_POR_PAGINA = 20;
-let paginaActual = 0;
+  /* =========================
+     FETCH JSON
+  ========================= */
 
-// filtrar productos
-const productosFiltrados = productos.filter(
-  p => p.categoria === categoriaActual
-);
+  fetch("productos.json")
+    .then(response => response.json())
+    .then(productos => {
+      console.log("Productos cargados:", productos);
 
-function renderCatalogo() {
-  const inicio = paginaActual * ITEMS_POR_PAGINA;
-  const fin = inicio + ITEMS_POR_PAGINA;
+      // filtrar por categoría
+      productosFiltrados = productos.filter(
+        p => p.categoria === categoriaActual
+      );
 
-  const bloque = productosFiltrados.slice(inicio, fin);
+      // primer render
+      renderCatalogo();
+    })
+    .catch(error => {
+      console.error("Error cargando productos:", error);
+    });
 
-  bloque.forEach(producto => {
-    const carta = document.createElement("div");
-    carta.className = "carta";
+  /* =========================
+     RENDER POR BLOQUES
+  ========================= */
 
-    carta.innerHTML = `
-      <div class="imagenes-carta">
-        <img src="${producto.imagenes[0]}" alt="${producto.nombre}">
-        ${
-          producto.imagenes[1]
-            ? `<img src="${producto.imagenes[1]}" alt="${producto.nombre} dorso">`
-            : ""
-        }
-        <span class="icono-zoom">🔍</span>
-      </div>
+  function renderCatalogo() {
+    const inicio = paginaActual * ITEMS_POR_PAGINA;
+    const fin = inicio + ITEMS_POR_PAGINA;
 
-      <h4 class="titulo-carta">${producto.nombre}</h4>
-      <p class="precio">$${producto.precio.toLocaleString()}</p>
-      <button class="agregar">Agregar al pedido</button>
-    `;
+    const bloque = productosFiltrados.slice(inicio, fin);
 
-    catalogo.appendChild(carta);
-  });
+    bloque.forEach(producto => {
+      const carta = document.createElement("div");
+      carta.className = "carta";
 
-  paginaActual++;
+      carta.innerHTML = `
+        <div class="imagenes-carta">
+          <img src="imagenes/${producto.imagen_front}" alt="${producto.nombre}">
+          ${
+            producto.imagen_back
+              ? `<img src="imagenes/${producto.imagen_back}" alt="${producto.nombre} dorso">`
+              : ""
+          }
+          <span class="icono-zoom">🔍</span>
+        </div>
 
-  // ocultar botón si no quedan más
-  if (paginaActual * ITEMS_POR_PAGINA >= productosFiltrados.length) {
-    btnVerMas.style.display = "none";
+        <h4 class="titulo-carta">${producto.nombre}</h4>
+        <p class="precio">$${producto.precio.toLocaleString()}</p>
+        <button class="agregar">Agregar al pedido</button>
+      `;
+
+      catalogo.appendChild(carta);
+    });
+
+    paginaActual++;
+
+    // ocultar botón si no quedan más
+    if (
+      !btnVerMas ||
+      paginaActual * ITEMS_POR_PAGINA >= productosFiltrados.length
+    ) {
+      if (btnVerMas) btnVerMas.style.display = "none";
+    }
+  }
+
+  /* =========================
+     BOTÓN VER MÁS
+  ========================= */
+
+  if (btnVerMas) {
+    btnVerMas.addEventListener("click", renderCatalogo);
   }
 }
-
-// botón
-if (btnVerMas) {
-  btnVerMas.addEventListener("click", renderCatalogo);
-}
-
-// primer render
-renderCatalogo();
