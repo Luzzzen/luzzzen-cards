@@ -5,6 +5,18 @@
 document.addEventListener("DOMContentLoaded", () => {
   const catalogo = document.getElementById("catalogo");
   const buscador = document.getElementById("buscador");
+
+// =========================
+// BÚSQUEDA DESDE INDEX (?q=)
+// =========================
+const params = new URLSearchParams(window.location.search);
+const busquedaInicial = params.get("q");
+
+if (busquedaInicial && buscador) {
+  buscador.value = busquedaInicial;
+}
+
+   
   if (!catalogo) return;
 
   const categoriaActual = document.body.dataset.categoria;
