@@ -1,8 +1,14 @@
 /* =========================
-   VARIABLES BASE
+   ESTADO GLOBAL
 ========================= */
 
-const botonesAgregar = document.querySelectorAll(".agregar");
+let items = [];
+let total = 0;
+
+/* =========================
+   ELEMENTOS DOM
+========================= */
+
 const listaPedido = document.getElementById("lista-pedido");
 const totalTexto = document.getElementById("total");
 const botonWhatsapp = document.getElementById("whatsapp");
@@ -18,9 +24,6 @@ const drawerTotal = document.getElementById("drawer-total");
 const cerrarDrawerBtn = document.getElementById("cerrar-drawer");
 const drawerWhatsapp = document.getElementById("drawer-whatsapp");
 const drawerVaciar = document.getElementById("drawer-vaciar");
-
-let items = [];
-let total = 0;
 
 /* =========================
    LOCAL STORAGE
@@ -50,7 +53,7 @@ function cargarCarrito() {
 }
 
 /* =========================
-   CARRITO BASE
+   RENDER PEDIDO (VISTA LARGA)
 ========================= */
 
 function agregarItemDOM(nombre, precio) {
@@ -63,17 +66,33 @@ function agregarItemDOM(nombre, precio) {
   `;
 
   li.querySelector(".eliminar").addEventListener("click", () => {
-    items = items.filter(i => i.nombre !== nombre);
-    total -= precio;
-    li.remove();
-
-    actualizarTotal();
-    actualizarCarritoFloat();
-    guardarCarrito();
+    eliminarItem(nombre);
   });
 
   listaPedido.appendChild(li);
 }
+
+function eliminarItem(nombre) {
+  const item = items.find(i => i.nombre === nombre);
+  if (!item) return;
+
+  items = items.filter(i => i.nombre !== nombre);
+  total -= item.precio;
+
+  if (listaPedido) {
+    [...listaPedido.children].forEach(li => {
+      if (li.textContent.includes(nombre)) li.remove();
+    });
+  }
+
+  guardarCarrito();
+  actualizarTotal();
+  actualizarCarritoFloat();
+}
+
+/* =========================
+   TOTALES / FLOAT
+========================= */
 
 function actualizarTotal() {
   if (totalTexto) {
@@ -81,31 +100,36 @@ function actualizarTotal() {
   }
 }
 
+function actualizarCarritoFloat() {
+  if (!carritoFloat) return;
+
+  carritoBadge.innerText = items.length;
+  carritoFloat.style.display = items.length ? "flex" : "none";
+}
+
 /* =========================
-   BOTONES AGREGAR
+   EVENT DELEGATION – AGREGAR
 ========================= */
 
-botonesAgregar.forEach(boton => {
-  boton.addEventListener("click", () => {
-    const carta = boton.closest(".carta");
-    const nombre = carta.querySelector(".titulo-carta").innerText;
-    const precio = parseInt(
-      carta.querySelector(".precio").innerText.replace(/\D/g, "")
-    );
+document.addEventListener("click", e => {
+  const boton = e.target.closest(".agregar");
+  if (!boton) return;
 
-    if (items.some(i => i.nombre === nombre)) {
-      alert("Esta carta ya está en tu pedido.");
-      return;
-    }
+  const nombre = boton.dataset.nombre;
+  const precio = parseInt(boton.dataset.precio);
 
-    items.push({ nombre, precio });
-    agregarItemDOM(nombre, precio);
+  if (items.some(i => i.nombre === nombre)) {
+    alert("Este producto ya está en tu pedido.");
+    return;
+  }
 
-    total += precio;
-    actualizarTotal();
-    actualizarCarritoFloat();
-    guardarCarrito();
-  });
+  items.push({ nombre, precio });
+  total += precio;
+
+  agregarItemDOM(nombre, precio);
+  guardarCarrito();
+  actualizarTotal();
+  actualizarCarritoFloat();
 });
 
 /* =========================
@@ -117,9 +141,9 @@ if (botonVaciar) {
     items = [];
     total = 0;
     if (listaPedido) listaPedido.innerHTML = "";
+    guardarCarrito();
     actualizarTotal();
     actualizarCarritoFloat();
-    localStorage.clear();
   });
 }
 
@@ -127,44 +151,25 @@ if (botonVaciar) {
    WHATSAPP
 ========================= */
 
-if (botonWhatsapp) {
-  botonWhatsapp.addEventListener("click", () => {
-    if (items.length === 0) {
-      alert("No agregaste ninguna carta.");
-      return;
-    }
+function enviarWhatsapp() {
+  if (items.length === 0) {
+    alert("No agregaste ningún producto.");
+    return;
+  }
 
-    let mensaje = `Pedido LZ-${Date.now()}%0A%0A`;
+  let mensaje = `Pedido LZ-${Date.now()}%0A%0A`;
 
-    items.forEach(i => {
-      mensaje += `• ${i.nombre} - $${i.precio.toLocaleString()}%0A`;
-    });
-
-    mensaje += `%0A Total: $${total.toLocaleString()}`;
-
-    window.open(
-      `https://wa.me/5491125608635?text=${mensaje}`,
-      "_blank"
-    );
+  items.forEach(i => {
+    mensaje += `• ${i.nombre} - $${i.precio.toLocaleString()}%0A`;
   });
+
+  mensaje += `%0A Total: $${total.toLocaleString()}`;
+
+  window.open(`https://wa.me/5491125608635?text=${mensaje}`, "_blank");
 }
 
-/* =========================
-   CARRITO FLOTANTE
-========================= */
-
-function actualizarCarritoFloat() {
-  if (!carritoFloat) return;
-
-  carritoBadge.innerText = items.length;
-  carritoFloat.style.display = items.length ? "flex" : "none";
-}
-
-if (carritoFloat) {
-  carritoFloat.addEventListener("click", () => {
-    abrirDrawer();
-  });
-}
+if (botonWhatsapp) botonWhatsapp.addEventListener("click", enviarWhatsapp);
+if (drawerWhatsapp) drawerWhatsapp.addEventListener("click", enviarWhatsapp);
 
 /* =========================
    DRAWER
@@ -183,12 +188,7 @@ function abrirDrawer() {
     `;
 
     li.querySelector(".eliminar").addEventListener("click", () => {
-      items = items.filter(i => i.nombre !== item.nombre);
-      total -= item.precio;
-
-      guardarCarrito();
-      actualizarTotal();
-      actualizarCarritoFloat();
+      eliminarItem(item.nombre);
       abrirDrawer();
     });
 
@@ -205,9 +205,9 @@ function cerrarDrawer() {
   drawerOverlay.classList.remove("activo");
 }
 
+if (carritoFloat) carritoFloat.addEventListener("click", abrirDrawer);
 if (cerrarDrawerBtn) cerrarDrawerBtn.addEventListener("click", cerrarDrawer);
 if (drawerOverlay) drawerOverlay.addEventListener("click", cerrarDrawer);
-if (drawerWhatsapp) drawerWhatsapp.addEventListener("click", () => botonWhatsapp.click());
 
 if (drawerVaciar) {
   drawerVaciar.addEventListener("click", () => {
@@ -215,13 +215,13 @@ if (drawerVaciar) {
     total = 0;
     guardarCarrito();
     cerrarDrawer();
-    actualizarCarritoFloat();
     actualizarTotal();
+    actualizarCarritoFloat();
   });
 }
 
 /* =========================
-   ZOOM / MODAL DE IMÁGENES
+   ZOOM / MODAL (DINÁMICO)
 ========================= */
 
 const modal = document.getElementById("modal");
@@ -232,78 +232,41 @@ const flechaDer = document.querySelector(".flecha.derecha");
 let imagenesActuales = [];
 let indiceActual = 0;
 
-if (modal && modalImg) {
-  document.querySelectorAll(".imagenes-carta").forEach(contenedor => {
-    contenedor.addEventListener("click", e => {
-      e.stopPropagation();
+document.addEventListener("click", e => {
+  const contenedor = e.target.closest(".imagenes-carta");
+  if (!contenedor || !modal) return;
 
-      imagenesActuales = Array.from(contenedor.querySelectorAll("img"));
-      indiceActual = 0; // 🔑 SIEMPRE empieza en la frontal
+  imagenesActuales = Array.from(contenedor.querySelectorAll("img"));
+  indiceActual = 0;
 
-      modalImg.src = imagenesActuales[indiceActual].src;
-      modal.style.display = "flex";
+  modalImg.src = imagenesActuales[indiceActual].src;
+  modal.style.display = "flex";
 
-      if (imagenesActuales.length > 1) {
-        flechaIzq.style.display = "block";
-        flechaDer.style.display = "block";
-      } else {
-        flechaIzq.style.display = "none";
-        flechaDer.style.display = "none";
-      }
-    });
+  const mostrar = imagenesActuales.length > 1 ? "block" : "none";
+  flechaIzq.style.display = mostrar;
+  flechaDer.style.display = mostrar;
+});
+
+if (flechaDer) {
+  flechaDer.addEventListener("click", e => {
+    e.stopPropagation();
+    indiceActual = (indiceActual + 1) % imagenesActuales.length;
+    modalImg.src = imagenesActuales[indiceActual].src;
   });
+}
 
-  // Flecha derecha
-  if (flechaDer) {
-    flechaDer.addEventListener("click", e => {
-      e.stopPropagation();
-      indiceActual = (indiceActual + 1) % imagenesActuales.length;
-      modalImg.src = imagenesActuales[indiceActual].src;
-    });
-  }
+if (flechaIzq) {
+  flechaIzq.addEventListener("click", e => {
+    e.stopPropagation();
+    indiceActual =
+      (indiceActual - 1 + imagenesActuales.length) % imagenesActuales.length;
+    modalImg.src = imagenesActuales[indiceActual].src;
+  });
+}
 
-  // Flecha izquierda
-  if (flechaIzq) {
-    flechaIzq.addEventListener("click", e => {
-      e.stopPropagation();
-      indiceActual =
-        (indiceActual - 1 + imagenesActuales.length) %
-        imagenesActuales.length;
-      modalImg.src = imagenesActuales[indiceActual].src;
-    });
-  }
-
-  // Cerrar modal
+if (modal) {
   modal.addEventListener("click", () => {
     modal.style.display = "none";
-  });
-
-  /* =========================
-     SWIPE MOBILE
-  ========================= */
-
-  let touchStartX = 0;
-  let touchEndX = 0;
-
-  modalImg.addEventListener("touchstart", e => {
-    touchStartX = e.changedTouches[0].screenX;
-  });
-
-  modalImg.addEventListener("touchend", e => {
-    touchEndX = e.changedTouches[0].screenX;
-    const diff = touchStartX - touchEndX;
-
-    if (diff > 50 && imagenesActuales.length > 1) {
-      indiceActual = (indiceActual + 1) % imagenesActuales.length;
-      modalImg.src = imagenesActuales[indiceActual].src;
-    }
-
-    if (diff < -50 && imagenesActuales.length > 1) {
-      indiceActual =
-        (indiceActual - 1 + imagenesActuales.length) %
-        imagenesActuales.length;
-      modalImg.src = imagenesActuales[indiceActual].src;
-    }
   });
 }
 
