@@ -17,44 +17,44 @@ let paginaActual = 0;
 //  p => p.categoria === categoriaActual
 //);
 
-function renderCatalogo() {
-  const inicio = paginaActual * ITEMS_POR_PAGINA;
-  const fin = inicio + ITEMS_POR_PAGINA;
+//function renderCatalogo() {
+//  const inicio = paginaActual * ITEMS_POR_PAGINA;
+//  const fin = inicio + ITEMS_POR_PAGINA;
 
-  const bloque = productosFiltrados.slice(inicio, fin);
+//  const bloque = productosFiltrados.slice(inicio, fin);
 
-  bloque.forEach(producto => {
-    const carta = document.createElement("div");
-    carta.className = "carta";
+//  bloque.forEach(producto => {
+//    const carta = document.createElement("div");
+//    carta.className = "carta";
 
-    carta.innerHTML = `
-      <div class="imagenes-carta">
-        <img src="imagenes/${producto.imagen_front}" alt="${producto.nombre}">
-        ${
-          producto.imagen_back
-            ? `<img src="imagenes/${producto.imagen_back}" alt="${producto.nombre} dorso">`
-            : ""
-        }
-        <span class="icono-zoom">🔍</span>
-      </div>
+//    carta.innerHTML = `
+//      <div class="imagenes-carta">
+//        <img src="imagenes/${producto.imagen_front}" alt="${producto.nombre}">
+//        ${
+//          producto.imagen_back
+//            ? `<img src="imagenes/${producto.imagen_back}" alt="${producto.nombre} dorso">`
+//            : ""
+//        }
+//        <span class="icono-zoom">🔍</span>
+//      </div>
 
-      <h4 class="titulo-carta">${producto.nombre}</h4>
-      <p class="precio">$${producto.precio.toLocaleString()}</p>
-      <button class="agregar">Agregar al pedido</button>
-    `;
+//      <h4 class="titulo-carta">${producto.nombre}</h4>
+//      <p class="precio">$${producto.precio.toLocaleString()}</p>
+//      <button class="agregar">Agregar al pedido</button>
+//    `;
 
-    catalogo.appendChild(carta);
-  });
+//    catalogo.appendChild(carta);
+//  });
 
-  paginaActual++;
+//  paginaActual++;
 
-  if (btnVerMas && paginaActual * ITEMS_POR_PAGINA >= productosFiltrados.length) {
-    btnVerMas.style.display = "none";
-  }
-}
+//  if (btnVerMas && paginaActual * ITEMS_POR_PAGINA >= productosFiltrados.length) {
+//    btnVerMas.style.display = "none";
+//  }
+//}
 
-if (btnVerMas) {
-  btnVerMas.addEventListener("click", renderCatalogo);
-}
+//if (btnVerMas) {
+//  btnVerMas.addEventListener("click", renderCatalogo);
+//}
 
-renderCatalogo();
+//renderCatalogo();
