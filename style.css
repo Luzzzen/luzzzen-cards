@@ -690,36 +690,61 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  margin: 40px 0 20px;
+  gap: 12px;
+  margin: 40px auto 20px;
   flex-wrap: wrap;
 }
 
-.paginacion button {
-  padding: 10px 16px;
-  border-radius: 999px;
-  border: none;
-  background-color: rgba(255,255,255,0.1);
+.paginacion button,
+.paginacion .pagina-actual {
+  background: rgba(255, 255, 255, 0.08);
   color: #fff;
-  cursor: pointer;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
   font-size: 14px;
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.paginacion button:hover:not(:disabled) {
-  background-color: #e67e22;
-  transform: translateY(-1px);
 }
 
 .paginacion button:disabled {
   opacity: 0.4;
-  cursor: default;
 }
 
-#info-pagina {
-  font-size: 14px;
+.pagina-actual {
   font-weight: 500;
-  padding: 6px 14px;
-  border-radius: 999px;
-  background-color: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* =========================
+   PAGINACIÓN – MOBILE
+========================= */
+
+@media (max-width: 480px) {
+  .paginacion {
+    gap: 8px;
+  }
+
+  .paginacion button {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  /* Ocultamos Primera y Última en mobile */
+  .paginacion .primera,
+  .paginacion .ultima {
+    display: none;
+  }
+
+  .pagina-actual {
+    width: 100%;
+    text-align: center;
+    order: 2;
+  }
+
+  .paginacion .anterior {
+    order: 1;
+  }
+
+  .paginacion .siguiente {
+    order: 3;
+  }
 }
