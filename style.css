@@ -715,37 +715,58 @@ button {
 }
 
 /* =========================
-   PAGINACIÓN – MOBILE
+   PAGINACIÓN – MOBILE FIRST
+========================= */
+
+.paginacion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 30px auto 20px;
+}
+
+/* Botones */
+.paginacion button {
+  min-width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: none;
+  background-color: #e67e22;
+  color: #ffffff;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.paginacion button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Texto página */
+#info-pagina {
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* =========================
+   MOBILE (≤480px)
 ========================= */
 
 @media (max-width: 480px) {
   .paginacion {
-    gap: 8px;
+    gap: 6px;
   }
 
-  .paginacion button {
-    padding: 10px 14px;
-    font-size: 13px;
-  }
-
-  /* Ocultamos Primera y Última en mobile */
-  .paginacion .primera,
-  .paginacion .ultima {
+  /* Ocultar Primera / Última */
+  #btn-primera,
+  #btn-ultima {
     display: none;
   }
 
-  .pagina-actual {
-    width: 100%;
-    text-align: center;
-    order: 2;
-  }
-
-  .paginacion .anterior {
-    order: 1;
-  }
-
-  .paginacion .siguiente {
-    order: 3;
+  #info-pagina {
+    font-size: 13px;
   }
 }
 
