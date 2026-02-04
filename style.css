@@ -96,13 +96,13 @@ section {
   opacity: 0;
 }
 
-/* Hover SOLO desktop */
+/* Hover SOLO si hay segunda imagen */
 @media (hover: hover) {
-  .carta:hover .imagenes-carta img:nth-child(1) {
+  .imagenes-carta:has(img:nth-child(2)):hover img:nth-child(1) {
     opacity: 0;
   }
 
-  .carta:hover .imagenes-carta img:nth-child(2) {
+  .imagenes-carta:has(img:nth-child(2)):hover img:nth-child(2) {
     opacity: 1;
   }
 }
