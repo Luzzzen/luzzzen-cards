@@ -748,3 +748,24 @@ button {
     order: 3;
   }
 }
+
+.item-carrito {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.thumb-carrito {
+  width: 42px;
+  height: auto;
+  border-radius: 6px;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+.info-carrito {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
