@@ -201,16 +201,21 @@ function abrirDrawer() {
 
   items.forEach(item => {
     const li = document.createElement("li");
+
     li.innerHTML = `
-  <div class="item-carrito">
-    <img src="${item.imagen}" alt="${item.nombre}">
-    <span class="item-texto">
-      ${item.nombre}<br>
-      $${item.precio.toLocaleString()}
-    </span>
-    <button class="eliminar">✕</button>
-  </div>
-`;
+      <div class="item-carrito">
+        <img
+          src="${item.imagen}"
+          alt="${item.nombre}"
+          class="thumb-carrito"
+        >
+        <span class="item-texto">
+          ${item.nombre}<br>
+          $${item.precio.toLocaleString()}
+        </span>
+        <button class="eliminar">✕</button>
+      </div>
+    `;
 
     li.querySelector(".eliminar").addEventListener("click", () => {
       eliminarItem(item.nombre);
