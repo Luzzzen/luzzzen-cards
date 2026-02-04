@@ -89,12 +89,14 @@ document.addEventListener("DOMContentLoaded", () => {
         <p class="precio">$${producto.precio.toLocaleString()}</p>
 
         <button
-          class="agregar"
-          data-id="${producto.id}"
-          data-nombre="${producto.nombre}"
-          data-precio="${producto.precio}">
-          Agregar al pedido
-        </button>
+           class="agregar"
+           data-id="${producto.id}"
+           data-nombre="${producto.nombre}"
+           data-precio="${producto.precio}"
+           data-imagen="imagenes/${producto.imagen_front}">
+           Agregar al pedido
+         </button>
+
       `;
 
       catalogo.appendChild(carta);
