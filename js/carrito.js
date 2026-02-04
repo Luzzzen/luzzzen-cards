@@ -45,7 +45,9 @@ function cargarCarrito() {
 
   if (listaPedido) {
     listaPedido.innerHTML = "";
-    items.forEach(item => agregarItemDOM(item.nombre, item.precio));
+    items.forEach(item =>
+  agregarItemDOM(item.nombre, item.precio, item.imagen)
+);
   }
 
   actualizarTotal();
@@ -136,7 +138,7 @@ document.addEventListener("click", e => {
 });
   total += precio;
 
-  agregarItemDOM(nombre, precio);
+  agregarItemDOM(nombre, precio, boton.dataset.imagen);
   guardarCarrito();
   actualizarTotal();
   actualizarCarritoFloat();
@@ -193,9 +195,15 @@ function abrirDrawer() {
   items.forEach(item => {
     const li = document.createElement("li");
     li.innerHTML = `
-      ${item.nombre} – $${item.precio.toLocaleString()}
-      <button class="eliminar">✕</button>
-    `;
+  <div class="item-carrito">
+    <img src="${item.imagen}" alt="${item.nombre}">
+    <span class="item-texto">
+      ${item.nombre}<br>
+      $${item.precio.toLocaleString()}
+    </span>
+    <button class="eliminar">✕</button>
+  </div>
+`;
 
     li.querySelector(".eliminar").addEventListener("click", () => {
       eliminarItem(item.nombre);
