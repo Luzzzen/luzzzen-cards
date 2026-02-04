@@ -63,18 +63,19 @@ function agregarItemDOM(nombre, precio, imagen) {
 
   const li = document.createElement("li");
   li.innerHTML = `
-  <div class="item-carrito">
-    <img
-  src="${imagen}"
-  alt="${nombre}"
-  class="thumb-carrito">
-    <span class="item-texto">
-      ${nombre}<br>
-      $${precio.toLocaleString()}
-    </span>
-    <button class="eliminar">✕</button>
-  </div>
-`;
+    <div class="item-carrito">
+      <img
+        src="${imagen}"
+        alt="${nombre}"
+        class="thumb-carrito"
+      >
+      <span class="item-texto">
+        ${nombre}<br>
+        $${precio.toLocaleString()}
+      </span>
+      <button class="eliminar">✕</button>
+    </div>
+  `;
 
   li.querySelector(".eliminar").addEventListener("click", () => {
     eliminarItem(nombre);
@@ -134,17 +135,20 @@ document.addEventListener("click", e => {
     return;
   }
 
-  items.push({
+  const imagen = boton.dataset.imagen;
+
+items.push({
   nombre,
   precio,
-  imagen: boton.dataset.imagen
+  imagen
 });
-  total += precio;
 
-  agregarItemDOM(nombre, precio, boton.dataset.imagen);
-  guardarCarrito();
-  actualizarTotal();
-  actualizarCarritoFloat();
+total += precio;
+
+agregarItemDOM(nombre, precio, imagen);
+guardarCarrito();
+actualizarTotal();
+actualizarCarritoFloat();
 });
 
 /* =========================
