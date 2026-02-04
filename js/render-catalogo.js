@@ -68,14 +68,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
       carta.innerHTML = `
         <div class="imagenes-carta">
-          <img src="imagenes/${producto.imagen_front}" alt="${producto.nombre}">
-          ${
-            producto.imagen_back
-              ? `<img src="imagenes/${producto.imagen_back}" alt="${producto.nombre} dorso">`
-              : ""
-          }
-          <span class="icono-zoom">🔍</span>
-        </div>
+  <img 
+    src="imagenes/${producto.imagen_front}" 
+    alt="${producto.nombre}"
+    loading="lazy"
+  >
+  ${
+    producto.imagen_back
+      ? `<img 
+           src="imagenes/${producto.imagen_back}" 
+           alt="${producto.nombre} dorso"
+           loading="lazy"
+         >`
+      : ""
+  }
+  <span class="icono-zoom">🔍</span>
+</div>
 
         <h4 class="titulo-carta">${producto.nombre}</h4>
         <p class="precio">$${producto.precio.toLocaleString()}</p>
