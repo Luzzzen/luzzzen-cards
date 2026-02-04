@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ${
     producto.imagen_back
       ? `<img 
-           src="imagenes/${producto.imagen_back}" 
+           src="imagenes/${producto.imagen_back || producto.imagen_front}" 
            alt="${producto.nombre} dorso"
            loading="lazy"
          >`
