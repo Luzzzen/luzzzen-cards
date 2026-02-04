@@ -769,3 +769,34 @@ button {
   flex-direction: column;
   font-size: 14px;
 }
+
+/* =========================
+   CARRITO – MINIATURAS
+========================= */
+
+.item-carrito {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.item-carrito img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.item-texto {
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+@media (max-width: 480px) {
+  .item-carrito img {
+    width: 42px;
+    height: 42px;
+  }
+}
+
