@@ -123,7 +123,11 @@ document.addEventListener("click", e => {
     return;
   }
 
-  items.push({ nombre, precio });
+  items.push({
+  nombre,
+  precio,
+  imagen: boton.dataset.imagen
+});
   total += precio;
 
   agregarItemDOM(nombre, precio);
