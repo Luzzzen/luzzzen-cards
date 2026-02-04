@@ -56,14 +56,20 @@ function cargarCarrito() {
    RENDER PEDIDO (VISTA LARGA)
 ========================= */
 
-function agregarItemDOM(nombre, precio) {
+function agregarItemDOM(nombre, precio, imagen) {
   if (!listaPedido) return;
 
   const li = document.createElement("li");
   li.innerHTML = `
-    ${nombre} – $${precio.toLocaleString()}
+  <div class="item-carrito">
+    <img src="${imagen}" alt="${nombre}">
+    <span class="item-texto">
+      ${nombre}<br>
+      $${precio.toLocaleString()}
+    </span>
     <button class="eliminar">✕</button>
-  `;
+  </div>
+`;
 
   li.querySelector(".eliminar").addEventListener("click", () => {
     eliminarItem(nombre);
