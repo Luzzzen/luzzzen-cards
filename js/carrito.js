@@ -64,7 +64,10 @@ function agregarItemDOM(nombre, precio, imagen) {
   const li = document.createElement("li");
   li.innerHTML = `
   <div class="item-carrito">
-    <img src="${imagen}" alt="${nombre}">
+    <img
+  src="${imagen}"
+  alt="${nombre}"
+  class="thumb-carrito">
     <span class="item-texto">
       ${nombre}<br>
       $${precio.toLocaleString()}
