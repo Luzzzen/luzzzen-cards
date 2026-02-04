@@ -67,23 +67,21 @@ document.addEventListener("DOMContentLoaded", () => {
       carta.className = "carta";
 
       carta.innerHTML = `
-        <div class="imagenes-carta">
-  <img 
-    src="imagenes/${producto.imagen_front}" 
-    alt="${producto.nombre}"
-    loading="lazy"
-  >
-  ${
-    producto.imagen_back
-      ? `<img 
-           src="imagenes/${producto.imagen_back || producto.imagen_front}" 
-           alt="${producto.nombre} dorso"
-           loading="lazy"
-         >`
-      : ""
-  }
-  <span class="icono-zoom">🔍</span>
-</div>
+  <div class="imagenes-carta">
+    <img
+      data-src="imagenes/${producto.imagen_front}"
+      alt="${producto.nombre}"
+      class="lazy"
+    >
+
+    <img
+      data-src="imagenes/${producto.imagen_back || producto.imagen_front}"
+      alt="${producto.nombre} dorso"
+      class="lazy"
+    >
+
+    <span class="icono-zoom">🔍</span>
+  </div>
 
         <h4 class="titulo-carta">${producto.nombre}</h4>
         <p class="precio">$${producto.precio.toLocaleString()}</p>
@@ -99,12 +97,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
       `;
 
-      catalogo.appendChild(carta);
+     catalogo.appendChild(carta);
+      });
+
+      activarLazyLoading(); // 👈 ESTA LÍNEA ES CLAVE
+      actualizarPaginacion();
+
+   /* =========================
+   LAZY LOADING REAL
+========================= */
+
+const observer = new IntersectionObserver(
+  entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.src = img.dataset.src;
+        img.classList.remove("lazy");
+        observer.unobserve(img);
+      }
     });
-
-    actualizarPaginacion();
+  },
+  {
+    rootMargin: "200px",
+    threshold: 0.1
   }
+);
 
+function activarLazyLoading() {
+  document.querySelectorAll("img.lazy").forEach(img => {
+    observer.observe(img);
+  });
+}
+   
   /* =========================
      PAGINACIÓN UI
   ========================= */
