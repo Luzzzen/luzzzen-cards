@@ -815,3 +815,16 @@ button {
     font-size: 15px;
   }
 }
+
+.badge-vendido {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #c0392b;
+  color: #fff;
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  z-index: 3;
+}
