@@ -112,6 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
               : ""
           }
           <span class="icono-zoom">🔍</span>
+          ${producto.vendido === "x" ? `<span class="badge-vendido">Vendido</span>` : ""}
         </div>
 
         <h4 class="titulo-carta">${producto.nombre}</h4>
