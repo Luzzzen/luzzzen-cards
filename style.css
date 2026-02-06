@@ -927,3 +927,10 @@ button {
   pointer-events: none;
   font-size: 15px;
 }
+
+.mensaje-carrito {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #27ae60;
+  text-align: center;
+}
