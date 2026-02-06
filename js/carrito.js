@@ -129,26 +129,35 @@ document.addEventListener("click", e => {
 
   const nombre = boton.dataset.nombre;
   const precio = parseInt(boton.dataset.precio);
+  const imagen = boton.dataset.imagen;
 
   if (items.some(i => i.nombre === nombre)) {
     alert("Este producto ya está en tu pedido.");
     return;
   }
 
-  const imagen = boton.dataset.imagen;
+  items.push({
+    nombre,
+    precio,
+    imagen
+  });
 
-items.push({
-  nombre,
-  precio,
-  imagen
-});
+  total += precio;
 
-total += precio;
+  agregarItemDOM(nombre, precio, imagen);
+  guardarCarrito();
+  actualizarTotal();
+  actualizarCarritoFloat();
 
-agregarItemDOM(nombre, precio, imagen);
-guardarCarrito();
-actualizarTotal();
-actualizarCarritoFloat();
+  // 🔥 FEEDBACK VISUAL
+  const textoOriginal = boton.textContent;
+  boton.classList.add("agregado");
+  boton.textContent = "✓ Agregado";
+
+  setTimeout(() => {
+    boton.classList.remove("agregado");
+    boton.textContent = textoOriginal;
+  }, 1200);
 });
 
 /* =========================
