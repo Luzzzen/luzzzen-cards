@@ -917,19 +917,13 @@ button {
   transform: scale(0.96);
 }
 
-/* Estado agregado */
+/* =========================
+   BOTÓN – AGREGADO
+========================= */
+
 .agregar.agregado {
   background-color: #27ae60;
   color: #ffffff;
   pointer-events: none;
-}
-
-/* Texto del botón cuando se agrega */
-.agregar.agregado::after {
-  content: "✓ Agregado";
-}
-
-/* Ocultamos el texto original */
-.agregar.agregado {
   font-size: 15px;
 }
