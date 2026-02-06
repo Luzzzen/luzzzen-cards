@@ -145,6 +145,16 @@ button {
   background-color: #cf6d17;
 }
 
+.agregar:disabled {
+  background-color: #555;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.agregar:disabled:hover {
+  background-color: #555;
+}
+
 /* =========================
    PEDIDO
 ========================= */
@@ -854,4 +864,41 @@ button {
   .nota {
     font-size: 13px;
   }
+}
+
+/* =========================
+   CONTACTO – LINK DESTACADO
+========================= */
+
+.contacto-instagram {
+  margin-top: 12px;
+  font-size: 16px;
+}
+
+.contacto-instagram a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  margin-left: 6px;
+  padding: 6px 14px;
+
+  background-color: #e67e22;
+  color: #ffffff;
+  text-decoration: none;
+
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 15px;
+
+  transition: background-color 0.25s ease, transform 0.2s ease;
+}
+
+.contacto-instagram a:hover {
+  background-color: #cf6d17;
+  transform: translateY(-1px);
+}
+
+.contacto-instagram a:active {
+  transform: scale(0.97);
 }
