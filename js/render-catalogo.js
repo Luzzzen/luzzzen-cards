@@ -124,8 +124,10 @@ document.addEventListener("DOMContentLoaded", () => {
           data-nombre="${producto.nombre}"
           data-precio="${producto.precio}"
           data-imagen="imagenes/${producto.imagen_front}">
-          Agregar al pedido
-        </button>
+          ${producto.vendido === "x" ? "disabled" : ""}
+            >
+          ${producto.vendido === "x" ? "Vendido" : "Agregar al pedido"}
+         </button>
       `;
 
       catalogo.appendChild(carta);
