@@ -127,15 +127,19 @@ document.addEventListener("click", e => {
   const boton = e.target.closest(".agregar");
   if (!boton) return;
 
+  // ⛔ Evitar doble click / spam
+  if (boton.dataset.bloqueado === "true") return;
+
   const nombre = boton.dataset.nombre;
-  const precio = parseInt(boton.dataset.precio);
+  const precio = parseInt(boton.dataset.precio, 10);
   const imagen = boton.dataset.imagen;
 
+  // ⛔ Evitar duplicados en carrito
   if (items.some(i => i.nombre === nombre)) {
-    alert("Este producto ya está en tu pedido.");
     return;
   }
 
+  // 👉 Agregar al estado
   items.push({
     nombre,
     precio,
@@ -149,16 +153,20 @@ document.addEventListener("click", e => {
   actualizarTotal();
   actualizarCarritoFloat();
 
-  // 🔥 FEEDBACK VISUAL
-  boton.classList.add("agregado");
-boton.textContent = "✓ Agregado";
-boton.disabled = true;
+  /* =========================
+     FEEDBACK VISUAL
+  ========================= */
 
-setTimeout(() => {
-  boton.classList.remove("agregado");
-  boton.textContent = "> Agregar al pedido";
-  boton.disabled = false;
-}, 1200);
+  boton.dataset.bloqueado = "true";
+  boton.classList.add("agregado");
+  boton.textContent = "✓ Agregado";
+
+  setTimeout(() => {
+    boton.classList.remove("agregado");
+    boton.textContent = "> Agregar al pedido";
+    boton.dataset.bloqueado = "false";
+  }, 1200);
+});
 
 /* =========================
    VACIAR CARRITO
