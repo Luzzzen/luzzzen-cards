@@ -934,3 +934,10 @@ button {
   color: #27ae60;
   text-align: center;
 }
+
+.agregar.en-carrito {
+  background-color: #2ecc71;
+  color: #fff;
+  pointer-events: none;
+  opacity: 0.9;
+}
