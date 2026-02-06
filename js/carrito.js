@@ -150,15 +150,15 @@ document.addEventListener("click", e => {
   actualizarCarritoFloat();
 
   // 🔥 FEEDBACK VISUAL
-  const textoOriginal = boton.textContent;
   boton.classList.add("agregado");
-  boton.textContent = "✓ Agregado";
+boton.textContent = "✓ Agregado";
+boton.disabled = true;
 
-  setTimeout(() => {
-    boton.classList.remove("agregado");
-    boton.textContent = textoOriginal;
-  }, 1200);
-});
+setTimeout(() => {
+  boton.classList.remove("agregado");
+  boton.textContent = "> Agregar al pedido";
+  boton.disabled = false;
+}, 1200);
 
 /* =========================
    VACIAR CARRITO
