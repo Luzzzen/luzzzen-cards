@@ -139,7 +139,10 @@ document.addEventListener("click", e => {
     return;
   }
 
-  // 👉 Agregar al estado
+  /* =========================
+     AGREGAR AL CARRITO
+  ========================= */
+
   items.push({
     nombre,
     precio,
@@ -154,18 +157,27 @@ document.addEventListener("click", e => {
   actualizarCarritoFloat();
 
   /* =========================
-     FEEDBACK VISUAL
+     FEEDBACK VISUAL (3 ESTADOS)
   ========================= */
 
+  // Estado 2: agregado
   boton.dataset.bloqueado = "true";
   boton.classList.add("agregado");
   boton.textContent = "✓ Agregado";
 
+  // Estado 3: en el carrito (persistente)
   setTimeout(() => {
-    boton.classList.remove("agregado");
-    boton.textContent = "> Agregar al pedido";
-    boton.dataset.bloqueado = "false";
-  }, 1200);
+    boton.textContent = "En el carrito";
+    boton.classList.add("en-carrito");
+  }, 900);
+
+  // Mensaje fijo debajo del botón (si no existe)
+  if (!boton.nextElementSibling?.classList.contains("mensaje-carrito")) {
+    const msg = document.createElement("div");
+    msg.className = "mensaje-carrito";
+    msg.textContent = "✔ Este producto ya está en tu carrito";
+    boton.after(msg);
+  }
 });
 
 /* =========================
