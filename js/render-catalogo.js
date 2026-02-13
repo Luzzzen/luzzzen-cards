@@ -120,16 +120,16 @@ document.addEventListener("DOMContentLoaded", () => {
     <p class="precio">$${producto.precio.toLocaleString()}</p>
 
     <button
-      class="agregar ${vendido ? "vendido" : ""}"
-      data-id="${producto.id}"
-      data-nombre="${producto.nombre}"
-      data-precio="${producto.precio}"
-      data-imagen="imagenes/${producto.imagen_front}"
-      ${vendido ? "disabled" : ""}
-    >
-      ${vendido ? "Vendido" : "Agregar al pedido"}
-    </button>
-  `;
+  class="agregar ${vendido ? "vendido" : ""}"
+  data-id="${producto.id}"
+  data-nombre="${producto.nombre}"
+  data-precio="${producto.precio}"
+  data-imagen="imagenes/${producto.imagen_front}"
+  ${vendido ? "disabled" : ""}
+>
+  ${vendido ? "Vendido" : "Agregar al pedido"}
+</button>
+`;
 
   catalogo.appendChild(carta);
 });
