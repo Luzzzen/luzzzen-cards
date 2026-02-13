@@ -89,49 +89,50 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    bloque.forEach(producto => {
-      const carta = document.createElement("div");
-      carta.className = "carta";
+  bloque.forEach(producto => {
+  const carta = document.createElement("div");
+  carta.className = "carta";
 
-      const tieneBack = producto.imagen_back && producto.imagen_back !== "";
+  const tieneBack = producto.imagen_back && producto.imagen_back !== "";
+  const vendido = producto.vendido === "x"; // ⭐ ESTA LÍNEA FALTABA
 
-      carta.innerHTML = `
-        <div class="imagenes-carta">
-          <img
-            data-src="imagenes/${producto.imagen_front}"
-            alt="${producto.nombre}"
-            class="lazy"
-          >
-          ${
-            tieneBack
-              ? `<img
-                   data-src="imagenes/${producto.imagen_back}"
-                   alt="${producto.nombre} dorso"
-                   class="lazy"
-                 >`
-              : ""
-          }
-          <span class="icono-zoom">🔍</span>
-          ${producto.vendido === "x" ? `<span class="badge-vendido">Vendido</span>` : ""}
-        </div>
+  carta.innerHTML = `
+    <div class="imagenes-carta">
+      <img
+        data-src="imagenes/${producto.imagen_front}"
+        alt="${producto.nombre}"
+        class="lazy"
+      >
+      ${
+        tieneBack
+          ? `<img
+               data-src="imagenes/${producto.imagen_back}"
+               alt="${producto.nombre} dorso"
+               class="lazy"
+             >`
+          : ""
+      }
+      <span class="icono-zoom">🔍</span>
+      ${vendido ? `<span class="badge-vendido">Vendido</span>` : ""}
+    </div>
 
-        <h4 class="titulo-carta">${producto.nombre}</h4>
-        <p class="precio">$${producto.precio.toLocaleString()}</p>
+    <h4 class="titulo-carta">${producto.nombre}</h4>
+    <p class="precio">$${producto.precio.toLocaleString()}</p>
 
-       <button
-           class="agregar ${vendido ? "vendido" : ""}"
-           data-id="${producto.id}"
-           data-nombre="${producto.nombre}"
-           data-precio="${producto.precio}"
-           data-imagen="imagenes/${producto.imagen_front}"
-           ${vendido ? "disabled" : ""}
-           >
-           ${vendido ? "Vendido" : "Agregar al pedido"}
-      </button>
+    <button
+      class="agregar ${vendido ? "vendido" : ""}"
+      data-id="${producto.id}"
+      data-nombre="${producto.nombre}"
+      data-precio="${producto.precio}"
+      data-imagen="imagenes/${producto.imagen_front}"
+      ${vendido ? "disabled" : ""}
+    >
+      ${vendido ? "Vendido" : "Agregar al pedido"}
+    </button>
+  `;
 
-
-      catalogo.appendChild(carta);
-    });
+  catalogo.appendChild(carta);
+});
 
     activarLazyLoading();
     actualizarPaginacion();
