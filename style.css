@@ -957,3 +957,7 @@ button {
   background-color: #555;
   transform: none;
 }
+
+.carta:has(.agregar.vendido) {
+  opacity: 0.65;
+}
