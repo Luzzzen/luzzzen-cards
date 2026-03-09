@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const ultimas = [...cartas]
         .sort((a, b) => Number(b.id) - Number(a.id))
-        .slice(0, 8);
+        .slice(0, 3);
 
       ultimas.forEach(carta => {
         if (ultimasContainer) {
