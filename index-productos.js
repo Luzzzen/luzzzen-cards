@@ -7,13 +7,14 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(res => res.json())
     .then(productos => {
 
-      const cartas = productos.filter(p => p.categoria === "cartas");
-
+      const cartas = productos.filter(
+  p => p.categoria === "cartas" && p.vendido !== "x"
+);
       /* =========================
          CARTA SORPRESA
       ========================= */
 
-      const cartasBuenas = cartas.filter(p => p.precio > 20000 && p.vendido !== "x");
+      const cartasBuenas = cartas.filter(p => p.precio > 3000 && p.vendido !== "x");
 
       if (cartasBuenas.length && sorpresaContainer) {
 
@@ -28,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ========================= */
 
       const ultimas = [...cartas]
-        .sort((a, b) => b.id - a.id)
+        .sort((a, b) => Number(b.id) - Number(a.id))
         .slice(0, 8);
 
       ultimas.forEach(carta => {
