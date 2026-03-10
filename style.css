@@ -1022,3 +1022,32 @@ button {
   text-decoration:none;
   width:fit-content;
 }
+
+/* =========================
+   CARTA SORPRESA – DESTACADA
+========================= */
+
+#carta-sorpresa .carta {
+  border: 2px solid #f1c40f;
+  box-shadow: 0 0 25px rgba(241,196,15,0.35);
+}
+
+/* =========================
+   ANIMACIÓN APARICIÓN CARTAS
+========================= */
+
+.carta {
+  animation: cartaFade 0.35s ease;
+}
+
+@keyframes cartaFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
