@@ -2,10 +2,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const sorpresaContainer = document.getElementById("carta-sorpresa");
   const ultimasContainer = document.getElementById("ultimas-cartas");
+  const botonOtra = document.getElementById("otra-carta");
 
   fetch("productos.json")
     .then(res => res.json())
     .then(productos => {
+    const cartasBuenas = productos.filter(p => p.precio > 3000 && p.vendido !== "x");
 
       const cartas = productos.filter(
   p => p.categoria === "cartas" && p.vendido !== "x"
