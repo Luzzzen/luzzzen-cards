@@ -4,27 +4,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const ultimasContainer = document.getElementById("ultimas-cartas");
   const botonOtra = document.getElementById("otra-carta");
 
+  let cartasBuenas = [];
+
   fetch("productos.json")
     .then(res => res.json())
     .then(productos => {
-    const cartasBuenas = productos.filter(p => p.precio > 3000 && p.vendido !== "x");
 
       const cartas = productos.filter(
-  p => p.categoria === "cartas" && p.vendido !== "x"
-);
+        p => p.categoria === "cartas" && p.vendido !== "x"
+      );
+
       /* =========================
-         CARTA SORPRESA
+         CARTAS BUENAS (para sorpresa)
       ========================= */
 
-      const cartasBuenas = cartas.filter(p => p.precio > 3000 && p.vendido !== "x");
+      cartasBuenas = cartas.filter(p => p.precio > 3000);
 
-      if (cartasBuenas.length && sorpresaContainer) {
-
-        const randomCarta = cartasBuenas[Math.floor(Math.random() * cartasBuenas.length)];
-
-        sorpresaContainer.appendChild(crearCarta(randomCarta));
-      }
-
+      mostrarCartaRandom();
 
       /* =========================
          ÚLTIMAS AGREGADAS
@@ -42,6 +38,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
+  /* =========================
+     MOSTRAR CARTA RANDOM
+  ========================= */
+
+  function mostrarCartaRandom() {
+
+    if (!cartasBuenas.length || !sorpresaContainer) return;
+
+    const randomCarta =
+      cartasBuenas[Math.floor(Math.random() * cartasBuenas.length)];
+
+    sorpresaContainer.innerHTML = "";
+    sorpresaContainer.appendChild(crearCarta(randomCarta));
+  }
+
+  /* =========================
+     BOTÓN OTRA CARTA
+  ========================= */
+
+  if (botonOtra) {
+    botonOtra.addEventListener("click", mostrarCartaRandom);
+  }
 
   /* =========================
      CREAR CARTA
