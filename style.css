@@ -1033,6 +1033,22 @@ button {
 }
 
 /* =========================
+   SUBTITULO CARTA SORPRESA
+========================= */
+
+.subtitulo-descubre{
+  text-align:center;
+  margin-top:-10px;
+  margin-bottom:22px;
+  color:rgba(255,255,255,0.75);
+  font-size:14px;
+  max-width:420px;
+  margin-left:auto;
+  margin-right:auto;
+  line-height:1.4;
+}
+
+/* =========================
    ANIMACIÓN APARICIÓN CARTAS
 ========================= */
 
