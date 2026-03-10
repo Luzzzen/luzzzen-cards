@@ -985,7 +985,7 @@ button {
   #ultimas-cartas {
     grid-template-columns: repeat(3, 1fr);
     max-width: 720px;
-    margin: 0 auto;
+    margin:0 auto 26px;
   }
 
   #carta-sorpresa {
