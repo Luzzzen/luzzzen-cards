@@ -52,18 +52,27 @@ document.addEventListener("DOMContentLoaded", () => {
   /* =========================
      CARGA JSON
   ========================= */
+  const barra = document.getElementById("barra-progreso");
+  if (barra) barra.style.width = "40%";
 
   fetch("productos.json")
     .then(res => res.json())
     .then(productos => {
+      if (barra) barra.style.width = "80%";
+
       productosCategoria = productos.filter(
         p => p.categoria === categoriaActual
       );
-
       productosFiltrados = [...productosCategoria];
       paginaActual = 1;
 
       renderPagina();
+
+      if (barra) {
+        barra.style.width = "100%";
+        setTimeout(() => { barra.style.opacity = "0"; }, 300);
+        setTimeout(() => { barra.style.width = "0%"; barra.style.opacity = "1"; }, 650);
+      }
     })
     .catch(error => {
       console.error("Error cargando productos.json", error);
