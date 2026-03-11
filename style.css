@@ -1082,3 +1082,40 @@ button {
   padding: 13px 28px;
   width: auto;
 }
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+  text-align: center;
+  padding: 48px 20px 36px;
+  border-top: 1px solid rgba(230,126,34,0.25);
+  margin-top: 40px;
+}
+
+.footer-logo {
+  width: 100px;
+  display: block;
+  margin: 0 auto 20px;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+  opacity: 0.85;
+}
+
+.footer-links a {
+  color: var(--naranja);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.footer-copy {
+  margin-top: 12px;
+  color: var(--blanco-40);
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
