@@ -202,13 +202,13 @@ section {
 
 .menu-catalogo {
   display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 14px;
   margin-top: 16px;
 }
 
 @media (min-width: 769px) {
   .menu-catalogo {
-    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
 }
