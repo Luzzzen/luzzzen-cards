@@ -1064,31 +1064,6 @@ button {
   }
 }
 
-#carta-sorpresa .carta{
-  border:2px solid #f1c40f;
-  box-shadow:
-    0 0 10px rgba(241,196,15,0.4),
-    0 0 25px rgba(241,196,15,0.25);
-}
-
-#carta-sorpresa .carta{
-  animation: brilloCarta 2.5s ease-in-out infinite;
-}
-
-@keyframes brilloCarta{
-  0%{
-    box-shadow:0 0 10px rgba(241,196,15,0.25);
-  }
-
-  50%{
-    box-shadow:0 0 25px rgba(241,196,15,0.45);
-  }
-
-  100%{
-    box-shadow:0 0 10px rgba(241,196,15,0.25);
-  }
-}
-
 /* =========================
    HERO INDEX
 ========================= */
