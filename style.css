@@ -1165,3 +1165,19 @@ footer {
     transform: translateY(0);
   }
 }
+
+/* =========================
+   BARRA DE PROGRESO
+========================= */
+
+#barra-progreso {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: var(--naranja);
+  z-index: 9999;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 8px var(--naranja-glow);
+}
