@@ -1029,15 +1029,6 @@ button {
 }
 
 /* =========================
-   CARTA SORPRESA – DESTACADA
-========================= */
-
-#carta-sorpresa .carta {
-  border: 2px solid #f1c40f;
-  box-shadow: 0 0 25px rgba(241,196,15,0.35);
-}
-
-/* =========================
    SUBTITULO CARTA SORPRESA
 ========================= */
 
