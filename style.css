@@ -1140,3 +1140,8 @@ button {
   transform:translateY(-2px);
   box-shadow:0 10px 25px rgba(230,126,34,0.35);
 }
+
+.hero-index{
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  padding-bottom:40px;
+}
