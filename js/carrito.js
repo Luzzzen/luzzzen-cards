@@ -267,6 +267,7 @@ function abrirDrawer() {
 function cerrarDrawer() {
   drawer.classList.remove("abierto");
   drawerOverlay.classList.remove("activo");
+  if (items.length) carritoFloat.classList.add("visible");
 }
 
 if (carritoFloat) carritoFloat.addEventListener("click", abrirDrawer);
