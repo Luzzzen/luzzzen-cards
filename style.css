@@ -638,9 +638,24 @@ button {
 .nav-catalogo {
   display: flex;
   gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin: 20px auto 28px;
+  margin: 20px 0 28px;
+  padding: 0 16px 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.nav-catalogo::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .nav-catalogo {
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow-x: visible;
+    padding: 0;
+  }
 }
 
 .nav-item {
@@ -653,6 +668,7 @@ button {
   font-size: 13px;
   font-weight: 500;
   transition: background var(--trans), border-color var(--trans), transform var(--trans);
+  flex-shrink: 0;
 }
 
 .nav-item:hover {
