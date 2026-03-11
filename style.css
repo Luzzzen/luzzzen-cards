@@ -1149,19 +1149,18 @@ footer {
 /* =========================
    ANIMACIÓN HERO
 ========================= */
-
 .hero-index h1 {
   animation: heroFade 0.6s ease both;
 }
-
 .hero-sub {
   animation: heroFade 0.6s ease 0.15s both;
 }
-
 .btn-explorar {
   animation: heroFade 0.6s ease 0.3s both;
 }
-
+.hero-categorias {
+  animation: heroFade 0.6s ease 0.45s both;
+}
 @keyframes heroFade {
   from {
     opacity: 0;
