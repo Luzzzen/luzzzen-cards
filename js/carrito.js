@@ -229,6 +229,7 @@ if (drawerWhatsapp) drawerWhatsapp.addEventListener("click", enviarWhatsapp);
 
 function abrirDrawer() {
   if (!drawer) return;
+  carritoFloat.classList.remove("visible");
 
   drawerLista.innerHTML = "";
 
