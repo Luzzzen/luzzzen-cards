@@ -1188,3 +1188,49 @@ footer {
   transition: width 0.3s ease;
   box-shadow: 0 0 8px var(--naranja-glow);
 }
+
+/* =========================
+   HERO CATEGORÍAS
+========================= */
+
+.hero-categorias {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.hero-cat-item {
+  padding: 10px 20px;
+  border-radius: var(--radio-pill);
+  background: var(--blanco-06);
+  border: 1px solid var(--blanco-12);
+  color: var(--blanco);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background var(--trans), border-color var(--trans), transform var(--trans);
+  white-space: nowrap;
+}
+
+.hero-cat-item:hover {
+  background: rgba(230,126,34,0.15);
+  border-color: rgba(230,126,34,0.5);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .hero-categorias {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 6px;
+    scrollbar-width: none;
+    margin-top: 22px;
+  }
+
+  .hero-categorias::-webkit-scrollbar {
+    display: none;
+  }
+}
