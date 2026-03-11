@@ -3,17 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Cartas individuales | Luzzzen Cards</title>
-
   <!-- FUENTES -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
-
   <!-- CSS -->
   <link rel="stylesheet" href="style.css">
-
   <!-- FAVICON -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -21,25 +17,21 @@
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
 </head>
-
 <body data-categoria="cartas">
 
 <!-- =========================
      HEADER
 ========================= -->
 <header class="header-principal">
-
   <a href="index.html" class="btn-volver volver-top">
     ← Volver al inicio
   </a>
-
   <img src="logo.png" alt="Luzzzen Cards" class="logo-catalogo">
-
   <h1>Cartas individuales</h1>
   <p>Cartas de fútbol disponibles</p>
 </header>
 
- <div class="buscador-wrap">
+<div class="buscador-wrap">
   <input
     type="search"
     id="buscador"
@@ -58,38 +50,23 @@
 </nav>
 
 <main>
-
   <!-- =========================
        CATÁLOGO
   ========================= -->
   <section id="productos">
-  <div class="catalogo" id="catalogo"></div>
-<div class="paginacion">
-  <button id="btn-primera">⏮ Primera</button>
-  <button id="btn-anterior">◀ Anterior</button>
-
-  <span id="info-pagina">Página 1</span>
-
-  <button id="btn-siguiente">Siguiente ▶</button>
-  <button id="btn-ultima">Última ⏭</button>
-</div> 
-</section>
-
-  <!-- =========================
-       PEDIDO (VISTA LARGA)
-  ========================= -->
-  <section id="pedido">
-    <h2>Tu pedido</h2>
-    <ul id="lista-pedido"></ul>
-    <p id="total">Total: $0</p>
-    <button id="vaciar">Vaciar pedido</button>
-    <button id="whatsapp">Enviar pedido por WhatsApp</button>
+    <div class="catalogo" id="catalogo"></div>
+    <div class="paginacion">
+      <button id="btn-primera">⏮ Primera</button>
+      <button id="btn-anterior">◀ Anterior</button>
+      <span id="info-pagina">Página 1</span>
+      <button id="btn-siguiente">Siguiente ▶</button>
+      <button id="btn-ultima">Última ⏭</button>
+    </div>
   </section>
 
   <div class="volver-footer">
     <a href="index.html" class="btn-volver">← Volver al inicio</a>
   </div>
-
 </main>
 
 <!-- =========================
@@ -112,15 +89,12 @@
      DRAWER CARRITO
 ========================= -->
 <div id="drawer-overlay"></div>
-
 <aside id="drawer-carrito">
   <header class="drawer-header">
     <h3>Tu pedido</h3>
     <button id="cerrar-drawer">✕</button>
   </header>
-
   <ul id="drawer-lista"></ul>
-
   <div class="drawer-footer">
     <p id="drawer-total">Total: $0</p>
     <button id="drawer-vaciar" class="drawer-secundario">Vaciar carrito</button>
@@ -129,10 +103,17 @@
 </aside>
 
 <!-- =========================
-     CARRITO + ZOOM (GLOBAL)
+     FOOTER
 ========================= -->
+<footer>
+  <img src="logo.png" alt="Luzzzen Cards" class="footer-logo">
+  <p class="footer-links">
+    <a href="https://instagram.com/luzzzen.cards" target="_blank" rel="noopener">@luzzzen.cards</a>
+  </p>
+  <p class="footer-copy">© 2024 Luzzzen Cards</p>
+</footer>
+
 <script src="js/render-catalogo.js"></script>
 <script src="js/carrito.js"></script>
-
 </body>
 </html>
