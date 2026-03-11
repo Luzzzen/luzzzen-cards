@@ -1097,3 +1097,45 @@ button {
     box-shadow:0 0 10px rgba(241,196,15,0.25);
   }
 }
+
+/* =========================
+   HERO INDEX
+========================= */
+
+.hero-index{
+  text-align:center;
+  margin:40px auto 60px;
+  max-width:800px;
+  padding:0 20px;
+}
+
+.hero-index h1{
+  font-size:42px;
+  margin-bottom:10px;
+}
+
+.hero-sub{
+  color:rgba(255,255,255,0.75);
+  margin:10px 0 28px;
+  font-size:16px;
+}
+
+.btn-explorar{
+  display:inline-block;
+  padding:14px 30px;
+  border-radius:12px;
+  background:linear-gradient(
+    135deg,
+    #f2994a,
+    #e67e22
+  );
+  color:white;
+  text-decoration:none;
+  font-weight:500;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+
+.btn-explorar:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 25px rgba(230,126,34,0.35);
+}
