@@ -116,7 +116,11 @@ function actualizarCarritoFloat() {
   if (!carritoFloat) return;
 
   carritoBadge.innerText = items.length;
-  carritoFloat.style.display = items.length ? "flex" : "none";
+  if (items.length) {
+    carritoFloat.classList.add("visible");
+  } else {
+    carritoFloat.classList.remove("visible");
+  }
 }
 
 /* =========================
@@ -276,6 +280,7 @@ if (drawerVaciar) {
     cerrarDrawer();
     actualizarTotal();
     actualizarCarritoFloat();
+    resetearBotonesAgregar();
   });
 }
 
@@ -327,6 +332,15 @@ if (modal) {
   modal.addEventListener("click", () => {
     modal.style.display = "none";
   });
+}
+
+function resetearBotonesAgregar() {
+  document.querySelectorAll(".agregar").forEach(btn => {
+    btn.dataset.bloqueado = "false";
+    btn.classList.remove("agregado", "en-carrito");
+    btn.textContent = "Agregar al pedido";
+  });
+  document.querySelectorAll(".mensaje-carrito").forEach(msg => msg.remove());
 }
 
 /* =========================
