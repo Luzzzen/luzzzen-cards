@@ -109,16 +109,14 @@ document.addEventListener("DOMContentLoaded", () => {
   carta.innerHTML = `
     <div class="imagenes-carta">
       <img
-        data-src="imagenes/${producto.imagen_front}"
+        src="imagenes/${producto.imagen_front}"
         alt="${producto.nombre}"
-        class="lazy"
       >
       ${
         tieneBack
           ? `<img
-               data-src="imagenes/${producto.imagen_back}"
+               src="imagenes/${producto.imagen_back}"
                alt="${producto.nombre} dorso"
-               class="lazy"
              >`
           : ""
       }
