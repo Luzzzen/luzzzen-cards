@@ -338,8 +338,21 @@ section {
   box-shadow: 0 8px 28px rgba(0,0,0,0.35);
   transition: transform var(--trans), box-shadow var(--trans);
   position: relative;
-  animation: cartaFade 0.35s ease;
+  animation: cartaFade 0.4s ease both;
 }
+
+.catalogo .carta:nth-child(1)  { animation-delay: 0.05s; }
+.catalogo .carta:nth-child(2)  { animation-delay: 0.10s; }
+.catalogo .carta:nth-child(3)  { animation-delay: 0.15s; }
+.catalogo .carta:nth-child(4)  { animation-delay: 0.20s; }
+.catalogo .carta:nth-child(5)  { animation-delay: 0.25s; }
+.catalogo .carta:nth-child(6)  { animation-delay: 0.30s; }
+.catalogo .carta:nth-child(7)  { animation-delay: 0.35s; }
+.catalogo .carta:nth-child(8)  { animation-delay: 0.40s; }
+.catalogo .carta:nth-child(9)  { animation-delay: 0.45s; }
+.catalogo .carta:nth-child(10) { animation-delay: 0.50s; }
+.catalogo .carta:nth-child(11) { animation-delay: 0.55s; }
+.catalogo .carta:nth-child(12) { animation-delay: 0.60s; }
 
 .carta:hover {
   transform: translateY(-7px);
