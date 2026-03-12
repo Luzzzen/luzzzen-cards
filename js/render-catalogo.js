@@ -86,6 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderPagina() {
     catalogo.innerHTML = "";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
     const inicio = (paginaActual - 1) * ITEMS_POR_PAGINA;
     const fin = inicio + ITEMS_POR_PAGINA;
