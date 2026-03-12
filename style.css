@@ -266,9 +266,19 @@ section {
 
 @media (min-width: 769px) {
   #ultimas-cartas {
-    grid-template-columns: repeat(3, 1fr);
-    max-width: 740px;
-    margin: 0 auto 28px;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 20px;
+    padding-bottom: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--naranja) transparent;
+    margin: 0 0 28px;
+  }
+
+  #ultimas-cartas .carta {
+    min-width: 220px;
+    flex-shrink: 0;
   }
 
   #carta-sorpresa {
