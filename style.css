@@ -264,6 +264,28 @@ section {
   margin-bottom: 28px;
 }
 
+@media (max-width: 768px) {
+  #ultimas-cartas {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 16px;
+    padding-bottom: 12px;
+    scrollbar-width: none;
+    margin: 0 0 24px;
+  }
+
+  #ultimas-cartas::-webkit-scrollbar {
+    display: none;
+  }
+
+  #ultimas-cartas .carta {
+    min-width: 200px;
+    max-width: 200px;
+    flex-shrink: 0;
+  }
+}
+
 @media (min-width: 769px) {
   #ultimas-cartas {
     display: flex;
