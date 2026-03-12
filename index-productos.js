@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
          CARTAS BUENAS (para sorpresa)
       ========================= */
 
-      cartasBuenas = cartas.filter(p => p.precio > 3000);
+      cartasBuenas = cartas.filter(p => p.precio > 2500);
 
       mostrarCartaRandom();
 
@@ -27,8 +27,12 @@ document.addEventListener("DOMContentLoaded", () => {
       ========================= */
 
       const ultimas = [...cartas]
-        .sort((a, b) => Number(b.id) - Number(a.id))
-        .slice(0, 3);
+  .sort((a, b) => {
+    const numA = parseInt(a.id.replace("LZ-", ""), 10);
+    const numB = parseInt(b.id.replace("LZ-", ""), 10);
+    return numB - numA;
+  })
+  .slice(0, 7);
 
       ultimas.forEach(carta => {
         if (ultimasContainer) {
