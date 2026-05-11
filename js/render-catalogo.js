@@ -60,9 +60,13 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(productos => {
       if (barra) barra.style.width = "80%";
 
-      productosCategoria = productos.filter(
-        p => p.categoria === categoriaActual
-      );
+      productosCategoria = productos
+        .filter(p => p.categoria === categoriaActual)
+        .sort((a, b) => {
+          const numA = parseInt(a.id.toString().replace(/\D/g, ""));
+          const numB = parseInt(b.id.toString().replace(/\D/g, ""));
+          return numB - numA;
+        });
       productosFiltrados = [...productosCategoria];
       paginaActual = 1;
 
