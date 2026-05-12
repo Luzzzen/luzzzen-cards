@@ -60,8 +60,12 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(productos => {
       if (barra) barra.style.width = "80%";
 
+      const categoriasActuales = categoriaActual === "jerseys-firmas"
+        ? ["jerseys", "firmas"]
+        : [categoriaActual];
+
       productosCategoria = productos
-        .filter(p => p.categoria === categoriaActual)
+        .filter(p => categoriasActuales.includes(p.categoria))
         .sort((a, b) => {
           const numA = parseInt(a.id.toString().replace(/\D/g, ""));
           const numB = parseInt(b.id.toString().replace(/\D/g, ""));
