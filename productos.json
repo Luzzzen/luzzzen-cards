@@ -3585,5 +3585,22 @@
     "jpgref": ".jpg",
     "imagen_front": "12-5/20260511_201155.jpg",
     "imagen_back": ""
+  },
+  {
+    "id": "LZ-000221",
+    "categoria": "sobres",
+    "jugador": "Caja de Almacenamiento - 3200 Cartas de capacidad",
+    "equipo": "",
+    "coleccion": "",
+    "anio": "",
+    "nombre": "Caja de Almacenamiento - 3200 Cartas de capacidad",
+    "precio": 150000,
+    "vendido": "",
+    "carpeta": "12-5/",
+    "frente": "175256430935a2d3aa689e48d91ff6574ca29e6a9a",
+    "dorso": "ChatGPT Image 12 may 2026, 02_47_47 p.m..png",
+    "jpgref": ".jpg",
+    "imagen_front": "12-5/175256430935a2d3aa689e48d91ff6574ca29e6a9a.jpg",
+    "imagen_back": "12-5/ChatGPT Image 12 may 2026, 02_47_47 p.m..png"
   }
 ]
