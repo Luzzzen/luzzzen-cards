@@ -64,12 +64,17 @@ document.addEventListener("DOMContentLoaded", () => {
         ? ["jerseys", "firmas"]
         : [categoriaActual];
 
+      const CORTE = 168; // ← actualizar al último ID de la tanda anterior en cada nueva carga
+
       productosCategoria = productos
         .filter(p => categoriasActuales.includes(p.categoria))
         .sort((a, b) => {
           const numA = parseInt(a.id.toString().replace(/\D/g, ""));
           const numB = parseInt(b.id.toString().replace(/\D/g, ""));
-          return numB - numA;
+          const tandaA = numA > CORTE ? 1 : 0;
+          const tandaB = numB > CORTE ? 1 : 0;
+          if (tandaB !== tandaA) return tandaB - tandaA;
+          return numA - numB;
         });
       productosFiltrados = [...productosCategoria];
       paginaActual = 1;
