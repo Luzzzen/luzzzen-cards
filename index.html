@@ -3,179 +3,136 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Luzzzen Cards</title>
-
+  <title>Luzzzen Cards · Cartas de fútbol coleccionables</title>
+  <meta name="description" content="Cartas de fútbol coleccionables, firmas, jerseys y accesorios. Pedidos por WhatsApp, entregas en Parque Rivadavia y envíos a todo el país.">
+  <meta name="theme-color" content="#05090f">
+  <meta property="og:title" content="Luzzzen Cards">
+  <meta property="og:description" content="Cartas de fútbol coleccionables, firmas, jerseys y accesorios.">
+  <meta property="og:image" content="https://luzzzen.com.ar/img/logo-grande.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="style.css">
-
-  <!-- FAVICON -->
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-
-<!-- APP / MOBILE -->
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="manifest" href="site.webmanifest">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+  <link rel="icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
 </head>
+<body data-pagina="inicio">
+<main>
 
-<body>
+  <!-- ===== Portada: buscar o entrar a una categoría ===== -->
+  <section class="portada">
+    <div class="portada-int">
+      <img class="portada-logo" src="img/logo-grande.png" alt="Luzzzen Cards" width="300" height="245">
+      <p class="eyebrow">Cartas · Firmas · Jerseys</p>
+      <h1>Cartas de fútbol <em>coleccionables</em></h1>
+      <p class="portada-sub">Esa carta que te falta para completar la colección, probablemente esté acá.</p>
 
-  <header>
-    <img src="logo.png" alt="Luzzzen Cards" class="logo">
-    <h1>Luzzzen Cards</h1>
-    <p>· Cartas coleccionables ·</p>
-  </header>
+      <form class="buscador-grande" action="catalogo.html" role="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm9 16-4-4"/></svg>
+        <label for="buscar-inicio" class="oculto-visual">Buscar</label>
+        <input id="buscar-inicio" name="q" type="search" placeholder="Buscá jugador, equipo o colección" autocomplete="off">
+        <button class="boton" type="submit">Buscar</button>
+      </form>
 
-<section class="hero-index">
-  <h1>Cartas coleccionables de fútbol</h1>
-  <p class="hero-sub">
-  Explorá nuestro catálogo con más de 200 cartas disponibles.
-  </p>
-  <a href="cartas.html" class="btn-explorar">
-  Explorar catálogo
-  </a>
+      <div class="accesos" id="accesos">
+        <a class="acceso" href="catalogo.html?cat=cartas"><strong>Cartas individuales</strong><span data-cuenta="cartas">&nbsp;</span></a>
+        <a class="acceso" href="catalogo.html?cat=firmas-jerseys"><strong>Firmas y jerseys</strong><span data-cuenta="firmas-jerseys">&nbsp;</span></a>
+        <a class="acceso" href="catalogo.html?cat=accesorios"><strong>Accesorios</strong><span data-cuenta="accesorios">&nbsp;</span></a>
+      </div>
+      <p class="portada-todo"><a href="catalogo.html">Ver todo el catálogo</a></p>
+    </div>
+  </section>
 
-  <nav class="hero-categorias">
-    <a href="cartas.html" class="hero-cat-item">Cartas</a>
-    <a href="jerseys.html" class="hero-cat-item">Jerseys y Firmas</a>
-    <a href="firmas.html" class="hero-cat-item">Cajas y Sobres</a>
-    <a href="sobres.html" class="hero-cat-item">Accesorios</a>
-  </nav>
-</section>
+  <!-- ===== Últimas agregadas ===== -->
+  <section class="seccion" id="ultimas">
+    <div class="envoltura">
+      <div class="seccion-cabecera">
+        <div><p class="eyebrow">Recién llegadas</p><h2>Últimas agregadas</h2></div>
+        <a class="ver-mas" href="catalogo.html?orden=recientes">Ver todas →</a>
+      </div>
+      <div class="carril" id="carril-ultimas">
+        <div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div>
+      </div>
+    </div>
+  </section>
 
-  <main>
+  <!-- ===== Ofertas (solo aparece si hay) ===== -->
+  <section class="seccion" id="ofertas" hidden>
+    <div class="envoltura">
+      <div class="seccion-cabecera">
+        <div><p class="eyebrow">Por tiempo limitado</p><h2>En oferta</h2></div>
+      </div>
+      <div class="carril" id="carril-ofertas"></div>
+    </div>
+  </section>
 
-<!-- =========================
-     CARTA SORPRESA
-========================= -->
+  <!-- ===== Abrí un sobre ===== -->
+  <section class="seccion" id="sobre-seccion" hidden>
+    <div class="envoltura bloque-sobre">
+      <div class="texto">
+        <p class="eyebrow">¿No sabés qué buscar?</p>
+        <h2>Abrí un sobre</h2>
+        <p>Tres cartas al azar del catálogo. Tocá el sobre para abrirlo y después cada carta para darla vuelta. Si te gusta una, tocala otra vez y vas a su página.</p>
+        <div class="sobre-acciones" id="sobre-acciones">
+          <button type="button" class="boton boton-secundario" id="otro-sobre">Abrir otro</button>
+          <a class="boton" href="catalogo.html?cat=cartas">Ver todas las cartas</a>
+        </div>
+      </div>
+      <div class="escena" id="escena">
+        <div class="sobre" id="sobre" role="button" tabindex="0" aria-label="Abrir un sobre con tres cartas al azar">
+          <div class="tira"><div class="brillo"></div></div>
+          <div class="cuerpo">
+            <div class="franja"></div><div class="franja fina"></div>
+            <div class="brillo"></div>
+            <p class="etiqueta top">EDICIÓN LUZZZEN</p>
+            <img class="logo-sobre" src="img/logo.png" alt="">
+            <p class="etiqueta nombre">LUZZZEN CARDS</p>
+            <p class="etiqueta cant"><b>3</b> CARTAS DE FÚTBOL</p>
+            <div class="crimp"></div>
+          </div>
+          <p class="pista">Tocá para abrir</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<section class="bloque-destacado">
+  <!-- ===== Cómo comprar ===== -->
+  <section class="seccion" id="como-comprar">
+    <div class="envoltura">
+      <div class="seccion-cabecera"><div><p class="eyebrow">Simple</p><h2>¿Cómo comprar?</h2></div></div>
+      <ol class="pasos">
+        <li><strong>Elegí</strong><p>Buscá en el catálogo y tocá “Agregar” en lo que te guste.</p></li>
+        <li><strong>Revisá tu pedido</strong><p>Desde el carrito de arriba. Si tenés un código de descuento, cargalo ahí.</p></li>
+        <li><strong>Mandalo por WhatsApp</strong><p>Se abre con el mensaje armado: solo tenés que enviarlo.</p></li>
+        <li><strong>Coordinamos</strong><p>Te respondemos para acordar pago y entrega.</p></li>
+      </ol>
+      <div class="notas">
+        <span>Las cartas se reservan una vez confirmado el pedido por WhatsApp.</span>
+        <span>Entregas sin cargo los domingos en Parque Rivadavia.</span>
+        <span>Envíos a todo el país, a cargo del comprador.</span>
+      </div>
+    </div>
+  </section>
 
-<h2>🎲 Descubrí una carta</h2>
-<p class="subtitulo-descubre">
-Te mostramos una carta al azar de nuestro catálogo.
-</p>
+  <!-- ===== Sobre Luzzzen ===== -->
+  <section class="seccion" id="sobre-luzzzen">
+    <div class="envoltura historia">
+      <div><p class="eyebrow">Desde 2024</p><h2>Sobre Luzzzen</h2></div>
+      <div class="texto">
+        <p><strong>Luzzzen Cards</strong> (antes <em>Luzu Colecciones</em>) nació a comienzos de 2024 como una colección personal.</p>
+        <p>Con el tiempo se convirtió en un espacio para coleccionistas, donde cada producto se ofrece con transparencia, cuidado y atención personalizada.</p>
+        <p>El objetivo es simple: ayudarte a conseguir esa carta, firma o pieza especial que te falta.</p>
+      </div>
+    </div>
+  </section>
 
-<div id="carta-sorpresa"></div>
+</main>
 
-<button id="otra-carta" class="btn-ver-mas">
-Mostrar otra
-</button>
-
-</section>
-
-<!-- =========================
-     ÚLTIMAS AGREGADAS
-========================= -->
-
-<section class="bloque-destacado">
-  <h2>🔥 Últimas cartas agregadas</h2>
-  <div id="ultimas-cartas" class="catalogo"></div>
-
-  <div class="ver-catalogo">
-    <a href="cartas.html" class="menu-item">Ver catálogo completo</a>
-  </div>
-</section>
-
-   <section id="como-comprar" class="seccion-info">
-  <h2 class="titulo-seccion">¿Cómo comprar?</h2>
-
-  <ol class="pasos-compra">
-    <li>Ingresá a la categoría que te interese (cartas, firmas, jerseys).</li>
-    <li>Elegí los productos que desees y tocá <strong>“Agregar al pedido”</strong>.</li>
-    <li>Revisá tu pedido antes de continuar.</li>
-    <li>Presioná <strong>“Enviar pedido por WhatsApp”</strong>.</li>
-    <li>Se abrirá WhatsApp con el mensaje ya armado: solo tenés que enviarlo.</li>
-    <li>Nos contactamos con vos para coordinar pago y entrega.</li>
-  </ol>
-
-  <div class="notas-compra">
-    <p>💡 Las cartas se reservan únicamente una vez confirmado el pedido por WhatsApp.</p>
-    <p>💡 Entregas sin cargo los domingos en Parque Rivadavia.</p>
-    <p>💡 Realizamos envíos a todo el país (a cargo del comprador).</p>
-  </div>
-</section>
-
-<section id="sobre-luzzzen" class="seccion-info">
-  <h2 class="titulo-seccion">Sobre Luzzzen</h2>
-
-  <p>
-    <strong>Luzzzen Cards</strong> (anteriormente <em>Luzu Colecciones</em>) nació a comienzos de 2024 como una colección personal.
-  </p>
-
-  <p>
-    Con el tiempo, el proyecto fue creciendo hasta convertirse en un espacio pensado para coleccionistas, donde cada producto se ofrece con transparencia, cuidado y atención personalizada.
-  </p>
-
-  <p>
-    El objetivo es simple: ayudarte a conseguir esa carta, firma o pieza especial que te falta para completar tu colección.
-  </p>
-</section>
-
-<section id="contacto" class="seccion-info">
-  <h2 class="titulo-seccion">Contacto</h2>
-
-  <p>
-    📩 Instagram:
-    <a href="https://instagram.com/luzzzen.cards" target="_blank" rel="noopener">
-      @luzzzen.cards
-    </a>
-  </p>
-</section>
-
-    
-  </main>  
-
-<footer>
-  <img src="logo.png" alt="Luzzzen Cards" class="footer-logo">
-  <p class="footer-links">
-    <a href="https://instagram.com/luzzzen.cards" target="_blank" rel="noopener">@luzzzen.cards</a>
-  </p>
-  <p class="footer-copy">© 2024 Luzzzen Cards</p>
-</footer>
-  
-  <!-- CARRITO FLOTANTE -->
-<button id="carrito-float">
-  🛒
-  <span id="carrito-badge">0</span>
-</button>
-
-  <!-- DRAWER -->
-<div id="drawer-overlay"></div>
-
-<aside id="drawer-carrito">
-  <header class="drawer-header">
-    <h3>Tu pedido</h3>
-    <button id="cerrar-drawer">✕</button>
-  </header>
-
-  <ul id="drawer-lista"></ul>
-
-  <div class="drawer-footer">
-    <p id="drawer-total">Total: $0</p>
-
-    <button id="drawer-vaciar" class="drawer-secundario">
-      Vaciar carrito
-    </button>
-
-    <button id="drawer-whatsapp">
-      Enviar pedido por WhatsApp
-    </button>
-  </div>
-</aside>
-
- <div id="modal" class="modal">
-  <button class="flecha izquierda">‹</button>
-  <img id="modal-img" alt="">
-  <button class="flecha derecha">›</button>
-</div>
- <script src="index-productos.js"></script>
- <script src="js/carrito.js"></script>
-  
+<script src="js/config.js"></script>
+<script src="js/comun.js"></script>
+<script src="js/datos.js"></script>
+<script src="js/inicio.js"></script>
 </body>
 </html>

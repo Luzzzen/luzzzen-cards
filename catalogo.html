@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo · Luzzzen Cards</title>
+  <meta name="description" content="Catálogo de cartas de fútbol coleccionables, firmas, jerseys y accesorios.">
+  <meta name="theme-color" content="#05090f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+  <link rel="icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+</head>
+<body data-pagina="catalogo">
+<main class="envoltura">
+
+  <div class="catalogo-cabecera">
+    <p class="eyebrow">Catálogo</p>
+    <h1 id="titulo-catalogo">Todo el catálogo</h1>
+  </div>
+
+  <div class="chips" id="chips" role="group" aria-label="Categoría"></div>
+
+  <form class="barra-filtros" id="filtros" role="search" onsubmit="return false">
+    <label class="filtro filtro-busqueda">
+      <span>Buscar</span>
+      <input type="search" name="q" placeholder="Jugador, equipo, colección, ID…" autocomplete="off">
+    </label>
+    <label class="filtro extra">
+      <span>Jugador</span>
+      <input name="jugador" list="lista-jugadores" placeholder="Todos" autocomplete="off">
+    </label>
+    <label class="filtro extra">
+      <span>Equipo</span>
+      <input name="equipo" list="lista-equipos" placeholder="Todos" autocomplete="off">
+    </label>
+    <label class="filtro extra">
+      <span>Selección / país</span>
+      <input name="sel" list="lista-selecciones" placeholder="Todas" autocomplete="off">
+    </label>
+    <div class="filtro extra">
+      <span>Precio</span>
+      <div class="rango">
+        <input name="min" type="number" inputmode="numeric" min="0" step="500" placeholder="Desde" aria-label="Precio desde">
+        <input name="max" type="number" inputmode="numeric" min="0" step="500" placeholder="Hasta" aria-label="Precio hasta">
+      </div>
+    </div>
+    <button type="button" class="boton boton-secundario extra" id="limpiar">Limpiar</button>
+    <datalist id="lista-jugadores"></datalist>
+    <datalist id="lista-equipos"></datalist>
+    <datalist id="lista-selecciones"></datalist>
+  </form>
+
+  <div class="barra-secundaria">
+    <p class="resultados" id="resultados" aria-live="polite">&nbsp;</p>
+    <div class="orden-fila">
+      <button type="button" class="boton boton-chico boton-secundario toggle-filtros" id="toggle-filtros" aria-expanded="false">Más filtros</button>
+      <label class="casilla"><input type="checkbox" id="solo-disponibles"> Solo disponibles</label>
+      <label class="oculto-visual" for="orden">Ordenar</label>
+      <select id="orden">
+        <option value="recientes">Más nuevas primero</option>
+        <option value="antiguas">Más viejas primero</option>
+        <option value="precio-asc">Menor precio</option>
+        <option value="precio-desc">Mayor precio</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="grilla" id="grilla">
+    <div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div>
+    <div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div>
+  </div>
+  <nav class="paginacion" id="paginacion" aria-label="Páginas"></nav>
+
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/comun.js"></script>
+<script src="js/datos.js"></script>
+<script src="js/catalogo.js"></script>
+</body>
+</html>

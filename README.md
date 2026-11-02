@@ -1,157 +1,73 @@
 # Luzzzen Cards
 
-Tienda de cartas coleccionables de fútbol. Sitio estático hosteado en GitHub Pages.
+Tienda de cartas de fútbol coleccionables, firmas, jerseys y accesorios.
+Sitio estático en GitHub Pages (`luzzzen.com.ar`) con los productos en Supabase y panel de admin propio.
 
-**URL:** https://luzzzen.github.io/luzzzen-cards  
-**Repo:** https://github.com/Luzzzen/luzzzen-cards  
-**Instagram:** @luzzzen.cards  
-**WhatsApp pedidos:** +5491125608635  
-**Entregas:** Domingos en Parque Rivadavia
+- **Instagram:** @luzzzen.cards
+- **WhatsApp pedidos:** +54 9 11 2560-8635
+- **Entregas:** domingos en Parque Rivadavia · envíos a todo el país a cargo del comprador
 
 ---
 
-## Estructura de archivos
+## Cómo está armado
 
 ```
 /
-├── index.html           → Página principal
-├── cartas.html          → Catálogo de cartas individuales
-├── jerseys.html         → Catálogo de Jerseys y Firmas (categorías "jerseys" + "firmas")
-├── firmas.html          → Catálogo de Cajas y Sobres (categoría "cajas-sobres")
-├── sobres.html          → Catálogo de Accesorios (categoría "sobres")
-├── productos.json       → Base de datos de todos los productos
-├── style.css            → Estilos globales (paleta azul profundo + naranja)
-├── index-productos.js   → Lógica exclusiva del index (carta sorpresa + últimas agregadas)
+├── index.html          → Inicio: buscador, categorías, últimas agregadas, ofertas, "Abrí un sobre"
+├── catalogo.html       → Catálogo con filtros y orden (?cat=cartas | firmas-jerseys | accesorios)
+├── carta.html          → Página de cada producto (?id=LZ-000123)
+├── admin.html          → Panel (no aparece en buscadores)
+├── cartas.html, jerseys.html, firmas.html, sobres.html
+│                       → Páginas viejas: redirigen al catálogo nuevo para no romper links
+├── 404.html
+├── css/
+│   ├── estilos.css     → Tienda (paleta azul Chelsea + naranja Costa de Marfil)
+│   └── admin.css       → Panel
 ├── js/
-│   ├── render-catalogo.js  → Renderiza catálogo, buscador y paginación
-│   └── carrito.js          → Lógica del carrito (localStorage, drawer, WhatsApp)
-└── imagenes/
-    └── [carpeta-por-dia]/  → Fotos organizadas por fecha de carga (ej: 5-11/)
+│   ├── config.js       → Datos de Supabase, WhatsApp, Instagram, categorías
+│   ├── comun.js        → Cabecera, pie, tarjetas, carrito y códigos de descuento
+│   ├── datos.js        → Trae los productos de Supabase (con copia de respaldo en el navegador)
+│   ├── inicio.js, catalogo.js, carta.js
+│   └── admin.js        → Panel: productos, códigos e importador
+├── img/                → Logo
+├── supabase/esquema.sql → Base de datos completa (tablas, permisos, fotos)
+└── .github/workflows/mantener-supabase.yml → Evita que Supabase pause el proyecto
 ```
 
----
+## Base de datos (Supabase)
 
-## Categorías
+| Tabla | Para qué |
+|---|---|
+| `productos` | Todo el catálogo. El ID (`LZ-000222`…) se asigna solo. |
+| `codigos` | Códigos de descuento. Nadie de afuera puede leer la lista: la tienda solo pregunta si un código vale (`validar_codigo`). |
+| `admins` | Mails que pueden usar el panel. |
 
-Las categorías se definen en el campo `"categoria"` de cada producto en `productos.json`.
+Las fotos van al bucket público `fotos`. El panel las achica a 1000 px en WebP (~50 KB cada una) antes de subirlas.
 
-| Valor en JSON     | Página          | Muestra como       |
-|-------------------|-----------------|--------------------|
-| `cartas`          | cartas.html     | Cartas             |
-| `jerseys`         | jerseys.html    | Jerseys y Firmas   |
-| `firmas`          | jerseys.html    | Jerseys y Firmas   |
-| `cajas-sobres`    | firmas.html     | Cajas y Sobres     |
-| `sobres`          | sobres.html     | Accesorios         |
+**Orden:** por fecha de carga, lo último primero. Ya no hay que tocar ningún `CORTE`.
+**Oferta:** si un producto tiene "precio antes" mayor al precio, se muestra tachado con el % de descuento.
+**Vendidos:** siguen visibles con la etiqueta "Vendida" y van al final del listado. Para sacarlos, apagá "Visible".
 
-> `jerseys.html` filtra por ambas categorías (`jerseys` y `firmas`) a la vez.  
-> Los nombres de los archivos HTML no cambiaron para no romper links existentes.
+## Cargar productos
 
----
+1. Entrá a `luzzzen.com.ar/admin.html`.
+2. **+ Nuevo producto** → arrastrá la foto del frente (y del dorso, si tiene) → completá → **Guardar**.
+3. Para cargar una tanda: **Guardar y cargar otro** deja la misma categoría, colección y año.
 
-## Estructura de un producto en productos.json
+Para marcar algo como vendido u ocultarlo, usá los interruptores de la lista. No hace falta abrirlo.
 
-```json
-{
-  "id": "LZ-000169",
-  "categoria": "cartas",
-  "jugador": "Nombre del jugador",
-  "equipo": "Equipo",
-  "coleccion": "Panini WCCF",
-  "anio": "2014-2015",
-  "nombre": "Jugador - Equipo - Colección - Año",
-  "precio": 3000,
-  "vendido": "",
-  "carpeta": "5-11/",
-  "frente": "LZ-000169-front",
-  "dorso": "LZ-000169-back",
-  "jpgref": ".jpg",
-  "imagen_front": "5-11/LZ-000169-front.jpg",
-  "imagen_back": "5-11/LZ-000169-back.jpg"
-}
-```
+## Códigos de descuento
 
-- `"vendido": "x"` → la carta aparece como vendida y el botón queda deshabilitado.
-- `"imagen_back": ""` → carta sin dorso, no muestra segunda imagen.
+Pestaña **Códigos de descuento**: porcentaje o monto fijo, interruptor de activo, vencimiento opcional (se apaga solo) y compra mínima opcional.
+El descuento se aplica sobre el total de productos, ya con las ofertas. El cliente lo escribe en el carrito (da igual mayúsculas o minúsculas) y sale en el mensaje de WhatsApp.
 
----
+> El mensaje de WhatsApp se puede editar antes de mandarlo, así que alguien podría inventar un descuento a mano. Como cada pedido lo confirmás vos, lo ves antes de cobrar.
 
-## IDs
+## Puesta en marcha (una sola vez)
 
-Formato: `LZ-XXXXXX` (número de 6 dígitos con ceros a la izquierda).  
-El último ID cargado es el más alto en el JSON.  
-Siempre revisar cuál es el próximo ID disponible antes de cargar.
-
----
-
-## Orden de visualización en el catálogo
-
-Las cartas se ordenan por tanda de carga: **la tanda más reciente aparece primero**, y dentro de cada tanda el orden es **ascendente** (la primera carta cargada en esa tanda aparece antes).
-
-La lógica está en `js/render-catalogo.js`:
-
-```js
-const CORTE = 168; // ← actualizar este número con cada nueva carga
-// Todo lo que tenga ID > CORTE es "tanda nueva" y aparece primero
-.sort((a, b) => {
-  const numA = parseInt(a.id.toString().replace(/\D/g, ""));
-  const numB = parseInt(b.id.toString().replace(/\D/g, ""));
-  const tandaA = numA > CORTE ? 1 : 0;
-  const tandaB = numB > CORTE ? 1 : 0;
-  if (tandaB !== tandaA) return tandaB - tandaA;
-  return numA - numB;
-});
-```
-
-**⚠️ Cada vez que cargues una tanda nueva, actualizá el número `CORTE`** al último ID de la tanda anterior. Por ejemplo, si la tanda anterior terminó en LZ-000214, el CORTE pasa a ser `214`.
-
----
-
-## Flujo de carga de cartas nuevas
-
-1. **Sacar fotos** con el Samsung S20FE (frente y dorso de cada carta).
-2. **Pasar fotos a la PC** via Google Fotos o cable USB.
-3. **Comprimir fotos** con IrfanView:
-   - File → Batch Conversion/Rename
-   - Output: JPG, calidad 60-65
-   - Resize: ancho máximo 800px
-4. **Renombrar fotos** al formato `LZ-XXXXXX-front.jpg` / `LZ-XXXXXX-back.jpg`.  
-   Usar el script `.bat` generado por el Cargador, o armar uno manualmente.
-5. **Cargar datos** con el Cargador (`luzzzen-cargador.html`, abrirlo en Chrome localmente):
-   - Subir las fotos del día
-   - Ingresar ID inicial y carpeta del día (ej: `5-11`)
-   - Emparejar frente y dorso de cada carta
-   - Completar datos (jugador, equipo, colección, precio, categoría)
-   - Generar y descargar el JSON
-6. **Mergear el JSON**: pegar el contenido generado al final de `productos.json`, antes del último `]`. Agregar una coma después del último item existente.
-7. **Subir al repo** via GitHub online:
-   - Subir las imágenes a la carpeta del día en `/imagenes/`
-   - Actualizar `productos.json`
-   - Actualizar el `CORTE` en `js/render-catalogo.js`
-
----
-
-## Herramientas locales
-
-### luzzzen-cargador.html
-Abrirlo en Chrome. No requiere instalación ni servidor.  
-Genera el JSON de cartas nuevas usando el nombre original de cada foto.  
-No renombra archivos — el renombrado se hace aparte con el `.bat`.
-
----
-
-## Diseño
-
-- **Paleta:** azul profundo (`#060e1a`) + naranja (`#e67e22`) + blanco
-- **Fuentes:** Inter (body) + Playfair Display (títulos)
-- **Cartas:** fondo blanco, hover con zoom, flip al pasar el mouse si tiene dorso
-- **Responsive:** mobile-first, buscador, paginación de 24 items por página
-- **Lazy loading** activado en todas las imágenes del catálogo
-
----
-
-## Notas varias
-
-- El JSON no tiene un campo de fecha de carga — el orden se maneja por el número de ID y el valor `CORTE` en el JS.
-- `productos.js` (en la raíz) es un archivo legacy con 4 productos de prueba. No se usa en producción, no borrar por las dudas.
-- El carrito usa `localStorage` para persistir entre páginas.
-- Los pedidos se envían por WhatsApp con un mensaje pre-armado que incluye todos los productos y el total.
+1. Supabase → **SQL Editor** → pegar `supabase/esquema.sql` (con tu mail en la última línea) → **Run**.
+2. Supabase → **Authentication → Users → Add user**: tu mail y una contraseña (marcá "Auto Confirm User").
+3. Supabase → **Authentication → Sign In / Providers**: apagá **Allow new users to sign up**.
+4. Subir el sitio al repo.
+5. En el panel, pestaña **Importar** → **Importar productos**. Cuando termine sin errores, borrar `productos.json` y la carpeta `imagenes/` del repo.
+6. GitHub → pestaña **Actions** → "Mantener Supabase activo" → **Run workflow** una vez para probarlo.

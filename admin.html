@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Panel · Luzzzen Cards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="icon" href="favicon.ico">
+</head>
+<body>
+
+  <!-- ===== Login ===== -->
+  <main id="vista-login" class="login" hidden>
+    <img src="img/logo.png" alt="Luzzzen Cards" width="120">
+    <h1>Panel</h1>
+    <form id="form-login" class="login-form">
+      <label class="campo"><span>Mail</span><input name="email" type="email" autocomplete="username" required></label>
+      <label class="campo"><span>Contraseña</span><input name="clave" type="password" autocomplete="current-password" required></label>
+      <p id="login-error" class="aviso-error" role="alert" hidden></p>
+      <button class="boton" type="submit">Entrar</button>
+    </form>
+  </main>
+
+  <!-- ===== Panel ===== -->
+  <div id="vista-panel" hidden>
+    <header class="admin-cabecera">
+      <img src="img/logo.png" alt="" width="40">
+      <strong>Luzzzen <em>Panel</em></strong>
+      <nav class="admin-tabs" aria-label="Secciones del panel">
+        <button type="button" data-tab="productos">Productos</button>
+        <button type="button" data-tab="codigos">Códigos de descuento</button>
+        <button type="button" data-tab="importar">Importar</button>
+      </nav>
+      <a href="index.html" target="_blank" rel="noopener" class="admin-link">Ver tienda ↗</a>
+      <button id="salir" type="button" class="enlace">Salir</button>
+    </header>
+    <main id="admin-contenido" class="admin-contenido"></main>
+  </div>
+
+  <!-- ===== Editor de producto ===== -->
+  <dialog id="editor" class="editor" aria-labelledby="editor-titulo"></dialog>
+
+  <!-- ===== Avisos ===== -->
+  <div id="aviso" class="admin-aviso" role="status" hidden></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
