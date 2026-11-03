@@ -28,7 +28,7 @@
   <form class="barra-filtros" id="filtros" role="search" onsubmit="return false">
     <label class="filtro filtro-busqueda">
       <span>Buscar</span>
-      <input type="search" name="q" placeholder="Jugador, equipo, colección, ID…" autocomplete="off">
+      <input type="search" name="q" placeholder="Jugador, equipo o colección" autocomplete="off">
     </label>
     <label class="filtro extra">
       <span>Jugador</span>
@@ -42,7 +42,7 @@
       <span>Selección / país</span>
       <input name="sel" list="lista-selecciones" placeholder="Todas" autocomplete="off">
     </label>
-    <div class="filtro extra">
+    <div class="filtro extra filtro-precio">
       <span>Precio</span>
       <div class="rango">
         <input name="min" type="number" inputmode="numeric" min="0" step="500" placeholder="Desde" aria-label="Precio desde">
@@ -70,6 +70,7 @@
     </div>
   </div>
 
+  <h2 class="oculto-visual">Productos</h2>
   <div class="grilla" id="grilla">
     <div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div>
     <div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div>

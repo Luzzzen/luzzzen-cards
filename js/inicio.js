@@ -104,6 +104,17 @@ function iniciarSobre(pozo) {
     $('.pista', sobre).style.display = '';
   }
 
+  // Si giran el celu o cambia el ancho, las cartas se reacomodan
+  let espera;
+  window.addEventListener('resize', () => {
+    clearTimeout(espera);
+    espera = setTimeout(() => cartas.forEach((el, i) => {
+      if (!el.classList.contains('dada')) return;
+      const q = posiciones()[i];
+      el.style.transform = `translate(${q.x}px,${q.y}px) rotate(${q.r}deg)${el.classList.contains('vuelta') ? ' rotateY(180deg)' : ''}`;
+    }), 150);
+  });
+
   sobre.addEventListener('click', abrir);
   sobre.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrir(); } });
   $('#otro-sobre').addEventListener('click', reiniciar);

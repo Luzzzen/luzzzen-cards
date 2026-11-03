@@ -49,17 +49,17 @@ function tarjetaHTML(p, { lazy = true } = {}) {
     !p.vendido && p.descuento ? `<span class="insignia oferta">−${p.descuento}%</span>` : '',
     esNuevo(p) ? '<span class="insignia nueva">Nuevo</span>' : ''
   ].join('');
-  const img = src => src
-    ? `<img src="${esc(src)}" alt="${esc(p.titulo)}"${lazy ? ' loading="lazy"' : ''} decoding="async">`
+  const img = (src, alt) => src
+    ? `<img src="${esc(src)}" alt="${alt}"${lazy ? ' loading="lazy"' : ''} decoding="async">`
     : '<span class="sin-foto">Sin foto</span>';
   return `
     <article class="tarjeta${p.vendido ? ' es-vendida' : ''}" data-id="${esc(p.id)}">
-      <${p.vendido ? 'div' : 'a'} class="tarjeta-foto${p.dorso ? ' con-dorso' : ''}"${p.vendido ? '' : ` href="${linkProducto(p)}" aria-label="${esc(p.titulo)}"`}>
-        <span class="cara frente">${img(p.frente)}</span>
-        ${p.dorso ? `<span class="cara dorso">${img(p.dorso)}</span>` : ''}
+      <${p.vendido ? 'div' : 'a'} class="tarjeta-foto${p.dorso ? ' con-dorso' : ''}"${p.vendido ? '' : ` href="${linkProducto(p)}" tabindex="-1"`}>
+        <span class="cara frente">${img(p.frente, esc(p.titulo))}</span>
+        ${p.dorso ? `<span class="cara dorso">${img(p.dorso, '')}</span>` : ''}
         <span class="insignias">${insignias}</span>
       </${p.vendido ? 'div' : 'a'}>
-      ${p.dorso ? `<button type="button" class="tarjeta-girar" data-girar aria-label="Ver dorso">${ICONO.girar}</button>` : ''}
+      ${p.dorso ? `<button type="button" class="tarjeta-girar" data-girar aria-label="Ver el dorso de ${esc(p.titulo)}">${ICONO.girar}</button>` : ''}
       <div class="tarjeta-info">
         ${p.meta ? `<p class="tarjeta-meta">${esc(p.meta)}</p>` : `<p class="tarjeta-meta">${esc(nombreCategoria(p.categoria, true))}</p>`}
         <h3 class="tarjeta-titulo">${p.vendido ? esc(p.titulo) : `<a href="${linkProducto(p)}">${esc(p.titulo)}</a>`}</h3>
@@ -194,11 +194,37 @@ const Carrito = (() => {
   }
 
   function actualizarContador() {
-    const el = $('#contador-carrito');
-    if (!el) return;
     const n = disponibles().length;
-    el.textContent = n;
-    el.hidden = n === 0;
+    const el = $('#contador-carrito');
+    if (el) {
+      el.textContent = n;
+      el.hidden = n === 0;
+      $('#abrir-carrito').setAttribute('aria-label', n ? `Ver tu pedido (${n} producto${n === 1 ? '' : 's'})` : 'Ver tu pedido');
+    }
+    // Barra de abajo en el celu: acceso rápido al pedido
+    let barra = $('#barra-pedido');
+    if (!barra) {
+      document.body.insertAdjacentHTML('beforeend', `
+        <button type="button" class="barra-pedido" id="barra-pedido" hidden>
+          ${ICONO.carrito}<span class="bp-texto"></span><span class="bp-total"></span>
+        </button>`);
+      barra = $('#barra-pedido');
+      barra.addEventListener('click', abrir);
+    }
+    const cajonAbierto = $('#cajon') && $('#cajon').classList.contains('abierto');
+    const mostrar = n > 0 && !cajonAbierto;
+    if (n) {
+      const st = subtotal(), total = st - descuento(st);
+      $('.bp-texto', barra).textContent = `Ver pedido · ${n} producto${n === 1 ? '' : 's'}`;
+      $('.bp-total', barra).textContent = plata(total);
+    }
+    barra.hidden = !mostrar && !barra.classList.contains('visible');
+    requestAnimationFrame(() => {
+      barra.hidden = false;
+      barra.classList.toggle('visible', mostrar);
+      document.body.classList.toggle('con-barra', n > 0);
+    });
+    if (!mostrar) setTimeout(() => { if (!barra.classList.contains('visible')) barra.hidden = true; }, 350);
   }
 
   function pintarCajon() {
@@ -328,10 +354,13 @@ const Carrito = (() => {
   }
   function quitar(id) { ids = ids.filter(x => x !== id); cambio(); }
 
+  let focoAnterior = null;
   function abrir() {
+    pintarCajon();
+    focoAnterior = document.activeElement;
     render();
     $('#cajon-fondo').hidden = false;
-    requestAnimationFrame(() => { $('#cajon').classList.add('abierto'); $('#cajon').setAttribute('aria-hidden', 'false'); });
+    requestAnimationFrame(() => { $('#cajon').classList.add('abierto'); $('#cajon').setAttribute('aria-hidden', 'false'); actualizarContador(); });
     document.body.classList.add('sin-scroll');
     setTimeout(() => $('#cerrar-cajon').focus(), 50);
   }
@@ -341,6 +370,8 @@ const Carrito = (() => {
     c.classList.remove('abierto'); c.setAttribute('aria-hidden', 'true');
     $('#cajon-fondo').hidden = true;
     document.body.classList.remove('sin-scroll');
+    actualizarContador();
+    if (focoAnterior && document.contains(focoAnterior)) focoAnterior.focus();
   }
 
   // Al cargar: revisa el código guardado por si venció
@@ -353,8 +384,9 @@ const Carrito = (() => {
       try {
         codigo = await consultarCodigo(guardado);
         if (!codigo) mensajeCodigo = `El código ${guardado} ya no está vigente.`;
-      } catch { codigo = null; }
-      guardarCodigo();
+        guardarCodigo();
+      } catch { codigo = null; }   // sin conexión: se deja guardado para la próxima
+      actualizarContador();
     }
   }
 

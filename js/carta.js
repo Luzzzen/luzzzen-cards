@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const quien = p.jugador || p.equipo;
     cont.innerHTML = `
       <div class="vacio">
-        <h2>${esc(p.titulo)} ya se vendió</h2>
+        <h1>${esc(p.titulo)} ya se vendió</h1>
         <p>${quien ? `Fijate si hay otras de ${esc(quien)} en el catálogo.` : 'Mirá lo que hay disponible en el catálogo.'}</p>
         <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
           ${quien ? `<a class="boton" href="catalogo.html?${p.jugador ? 'jugador' : 'equipo'}=${encodeURIComponent(quien)}&disp=1">Ver otras de ${esc(quien)}</a>` : ''}
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!p) {
     cont.innerHTML = `
       <div class="vacio">
-        <h2>${ok ? 'No encontramos este producto' : 'No se pudo cargar el catálogo'}</h2>
+        <h1>${ok ? 'No encontramos este producto' : 'No se pudo cargar el catálogo'}</h1>
         <p>${ok ? 'Puede que ya no esté publicado.' : 'Revisá tu conexión y probá de nuevo en un rato.'}</p>
         <a class="boton" href="catalogo.html">Ir al catálogo</a>
       </div>`;
@@ -113,10 +113,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const src = visor.classList.contains('girado') ? p.dorso : p.frente;
     if (!src) return;
     $('img', zoom).src = src;
+    $('img', zoom).alt = p.titulo;
     zoom.hidden = false;
+    document.body.classList.add('sin-scroll');
+    $('.zoom-cerrar', zoom).focus();
   });
-  zoom.addEventListener('click', () => zoom.hidden = true);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') zoom.hidden = true; });
+  visor.setAttribute('tabindex', '0');
+  visor.setAttribute('role', 'button');
+  visor.setAttribute('aria-label', 'Ampliar foto');
+  visor.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); visor.click(); } });
+  const cerrarZoom = () => { if (zoom.hidden) return; zoom.hidden = true; document.body.classList.remove('sin-scroll'); visor.focus(); };
+  zoom.addEventListener('click', cerrarZoom);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarZoom(); });
 
   // Compartir
   $('#compartir').addEventListener('click', async () => {

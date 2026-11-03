@@ -32,8 +32,8 @@
       <form class="buscador-grande" action="catalogo.html" role="search">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm9 16-4-4"/></svg>
         <label for="buscar-inicio" class="oculto-visual">Buscar</label>
-        <input id="buscar-inicio" name="q" type="search" placeholder="Buscá jugador, equipo o colección" autocomplete="off">
-        <button class="boton" type="submit">Buscar</button>
+        <input id="buscar-inicio" name="q" type="search" placeholder="Buscá jugador o equipo" autocomplete="off">
+        <button class="boton" type="submit" aria-label="Buscar"><span>Buscar</span><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
       </form>
 
       <div class="accesos" id="accesos">
@@ -75,15 +75,15 @@
         <p class="eyebrow">¿No sabés qué buscar?</p>
         <h2>Abrí un sobre</h2>
         <p>Tres cartas al azar del catálogo. Tocá el sobre para abrirlo y después cada carta para darla vuelta. Si te gusta una, tocala otra vez y vas a su página.</p>
-        <div class="sobre-acciones" id="sobre-acciones">
-          <button type="button" class="boton boton-secundario" id="otro-sobre">Abrir otro</button>
-          <a class="boton" href="catalogo.html?cat=cartas">Ver todas las cartas</a>
-        </div>
+      </div>
+      <div class="sobre-acciones" id="sobre-acciones">
+        <button type="button" class="boton boton-secundario" id="otro-sobre">Abrir otro</button>
+        <a class="boton" href="catalogo.html?cat=cartas">Ver todas las cartas</a>
       </div>
       <div class="escena" id="escena">
-        <div class="sobre" id="sobre" role="button" tabindex="0" aria-label="Abrir un sobre con tres cartas al azar">
+        <div class="sobre" id="sobre" role="button" tabindex="0">
           <div class="tira"><div class="brillo"></div></div>
-          <div class="cuerpo">
+          <div class="cuerpo" aria-hidden="true">
             <div class="franja"></div><div class="franja fina"></div>
             <div class="brillo"></div>
             <p class="etiqueta top">EDICIÓN LUZZZEN</p>
@@ -92,7 +92,7 @@
             <p class="etiqueta cant"><b>3</b> CARTAS DE FÚTBOL</p>
             <div class="crimp"></div>
           </div>
-          <p class="pista">Tocá para abrir</p>
+          <p class="pista">Tocá para abrir<span class="oculto-visual"> un sobre con tres cartas al azar</span></p>
         </div>
       </div>
     </div>
