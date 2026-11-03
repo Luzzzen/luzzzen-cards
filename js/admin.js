@@ -763,7 +763,7 @@ function tabImportar(cont) {
     await Promise.all([trabajador(), trabajador(), trabajador()]);
 
     estado.sucio = false;
-    boton.disabled = false; boton.textContent = 'Volver a intentar los que fallaron';
+    boton.disabled = false; boton.textContent = fallidos ? 'Volver a intentar los que fallaron' : 'Importar productos';
     log(fallidos
       ? `Terminó con ${fallidos} error${fallidos === 1 ? '' : 'es'}. Apretá el botón otra vez para reintentar solo esos.`
       : `Listo: ${ok} productos importados.${ya.size ? ` (${viejos.length - pendientes.length} ya estaban.)` : ''}`, fallidos ? 'error' : 'ok');

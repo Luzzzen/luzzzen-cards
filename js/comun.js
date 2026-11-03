@@ -54,15 +54,15 @@ function tarjetaHTML(p, { lazy = true } = {}) {
     : '<span class="sin-foto">Sin foto</span>';
   return `
     <article class="tarjeta${p.vendido ? ' es-vendida' : ''}" data-id="${esc(p.id)}">
-      <a class="tarjeta-foto${p.dorso ? ' con-dorso' : ''}" href="${linkProducto(p)}" aria-label="${esc(p.titulo)}">
+      <${p.vendido ? 'div' : 'a'} class="tarjeta-foto${p.dorso ? ' con-dorso' : ''}"${p.vendido ? '' : ` href="${linkProducto(p)}" aria-label="${esc(p.titulo)}"`}>
         <span class="cara frente">${img(p.frente)}</span>
         ${p.dorso ? `<span class="cara dorso">${img(p.dorso)}</span>` : ''}
         <span class="insignias">${insignias}</span>
-      </a>
+      </${p.vendido ? 'div' : 'a'}>
       ${p.dorso ? `<button type="button" class="tarjeta-girar" data-girar aria-label="Ver dorso">${ICONO.girar}</button>` : ''}
       <div class="tarjeta-info">
         ${p.meta ? `<p class="tarjeta-meta">${esc(p.meta)}</p>` : `<p class="tarjeta-meta">${esc(nombreCategoria(p.categoria, true))}</p>`}
-        <h3 class="tarjeta-titulo"><a href="${linkProducto(p)}">${esc(p.titulo)}</a></h3>
+        <h3 class="tarjeta-titulo">${p.vendido ? esc(p.titulo) : `<a href="${linkProducto(p)}">${esc(p.titulo)}</a>`}</h3>
         <p class="tarjeta-equipo">${esc(p.equipo || ' ')}</p>
         <div class="tarjeta-pie">
           <div class="precios">${precioHTML(p)}</div>
@@ -237,7 +237,7 @@ const Carrito = (() => {
           <li class="cajon-item${p.faltante || p.vendido ? ' no-disponible' : ''}">
             ${p.frente ? `<img src="${esc(p.frente)}" alt="" loading="lazy">` : '<span class="cajon-sin-foto"></span>'}
             <div>
-              <p class="cajon-titulo">${p.faltante ? esc(p.id) : `<a href="${linkProducto(p)}">${esc(p.titulo)}</a>`}</p>
+              <p class="cajon-titulo">${p.faltante ? esc(p.id) : p.vendido ? esc(p.titulo) : `<a href="${linkProducto(p)}">${esc(p.titulo)}</a>`}</p>
               <p class="cajon-meta">${p.faltante || p.vendido ? 'Ya no está disponible' : esc([p.equipo, p.meta].filter(Boolean).join(' · '))}</p>
             </div>
             <div class="cajon-derecha">

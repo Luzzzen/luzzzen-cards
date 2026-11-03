@@ -39,7 +39,7 @@ body {
 }
 body.sin-scroll { overflow: hidden; }
 main { flex: 1; }
-img { max-width: 100%; display: block; }
+img { max-width: 100%; height: auto; display: block; }
 a { color: inherit; }
 h1, h2, h3 { font-family: var(--titulos); font-weight: 600; line-height: 1.15; margin: 0; }
 p { margin: 0; }
@@ -165,7 +165,8 @@ button, input, select { font: inherit; color: inherit; }
 @media (max-width: 640px) { .carril { grid-auto-columns: 46%; gap: 12px; } }
 
 /* ===== Tarjeta ===== */
-.grilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 18px; }
+.grilla { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+@media (max-width: 1000px) { .grilla { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 640px) { .grilla { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
 .tarjeta {
   position: relative; display: flex; flex-direction: column;
@@ -175,7 +176,7 @@ button, input, select { font: inherit; color: inherit; }
 .tarjeta:hover { border-color: var(--chelsea-claro); transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0, 0, 0, .45); }
 .tarjeta-foto { position: relative; display: block; aspect-ratio: 3 / 4; border-radius: 8px; background: var(--chelsea); perspective: 1000px; }
 .tarjeta-foto .cara { position: absolute; inset: 0; border-radius: 8px; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden; transition: transform .6s cubic-bezier(.2, .8, .2, 1); }
-.tarjeta-foto img { width: 100%; height: 100%; object-fit: cover; }
+.tarjeta-foto img { width: 100%; height: 100%; object-fit: contain; background: #0a0f17; }
 .tarjeta-foto .dorso { transform: rotateY(180deg); }
 .tarjeta.girada .frente { transform: rotateY(-180deg); }
 .tarjeta.girada .dorso { transform: rotateY(0); }
@@ -207,6 +208,7 @@ button, input, select { font: inherit; color: inherit; }
 .precio { font-weight: 600; color: var(--naranja); font-size: 16px; }
 .precio-antes { color: var(--gris-oscuro); text-decoration: line-through; font-size: 12px; }
 .es-vendida .tarjeta-foto img { filter: grayscale(.85) brightness(.6); }
+.tarjeta.es-vendida:hover { transform: none; box-shadow: none; border-color: var(--borde); }
 .es-vendida .tarjeta-titulo, .es-vendida .precio { color: var(--gris); }
 @media (max-width: 640px) {
   .tarjeta { padding: 7px; }
@@ -255,7 +257,7 @@ button, input, select { font: inherit; color: inherit; }
 .carta-sobre .dorso::before { content: ""; position: absolute; inset: 8px; border: 1px solid rgba(201, 164, 106, .5); border-radius: 6px; }
 .carta-sobre .dorso img { width: 90px; }
 .carta-sobre .frente { transform: rotateY(180deg); background: #111; }
-.carta-sobre .frente img { width: 100%; height: 100%; object-fit: cover; }
+.carta-sobre .frente img { width: 100%; height: 100%; object-fit: contain; background: #0a0f17; }
 .carta-sobre .info { position: absolute; left: 0; right: 0; bottom: 0; padding: 24px 10px 8px; background: linear-gradient(transparent, rgba(5, 9, 15, .94) 45%); font-size: 12px; }
 .carta-sobre .info strong { display: block; font-family: var(--titulos); font-size: 15px; }
 .carta-sobre .info span { color: var(--oro); font-size: 11px; }
@@ -386,7 +388,7 @@ select option { background: var(--superficie); }
 .ficha-estado::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
 .ficha-estado.vendida { color: var(--gris); }
 .ficha-acciones { display: flex; gap: 10px; margin: 22px 0; flex-wrap: wrap; }
-.ficha-acciones .boton { padding: 13px 22px; font-size: 15px; }
+.ficha-acciones .boton { padding: 13px 22px; font-size: 15px; white-space: normal; text-align: center; }
 .datos { border-top: 1px solid var(--borde); margin: 0; }
 .datos div { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-bottom: 1px solid var(--borde); font-size: 14px; }
 .datos dt { color: var(--gris); }

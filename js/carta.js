@@ -6,6 +6,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   const p = PRODUCTOS.find(x => x.id === id);
   const cont = $('#contenido');
 
+  // Las vendidas no tienen página: si llegan por un link viejo, se avisa
+  if (p && p.vendido) {
+    const quien = p.jugador || p.equipo;
+    cont.innerHTML = `
+      <div class="vacio">
+        <h2>${esc(p.titulo)} ya se vendió</h2>
+        <p>${quien ? `Fijate si hay otras de ${esc(quien)} en el catálogo.` : 'Mirá lo que hay disponible en el catálogo.'}</p>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          ${quien ? `<a class="boton" href="catalogo.html?${p.jugador ? 'jugador' : 'equipo'}=${encodeURIComponent(quien)}&disp=1">Ver otras de ${esc(quien)}</a>` : ''}
+          <a class="boton boton-secundario" href="catalogo.html?disp=1">Ir al catálogo</a>
+        </div>
+      </div>`;
+    document.title = 'Vendida · Luzzzen Cards';
+    return;
+  }
+
   if (!p) {
     cont.innerHTML = `
       <div class="vacio">
@@ -26,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const filas = [
     p.categoria === 'cartas' && p.jugador ? ['Jugador', linkFiltro('jugador', p.jugador)] : null,
     p.equipo ? ['Equipo', linkFiltro('equipo', p.equipo)] : null,
-    p.seleccion ? ['Selección', linkFiltro('sel', p.seleccion)] : null,
+    p.seleccion && p.seleccion !== p.equipo ? ['Selección', linkFiltro('sel', p.seleccion)] : null,
     p.coleccion ? ['Colección', linkFiltro('q', p.coleccion)] : null,
     p.anio ? ['Año', esc(p.anio)] : null,
     ['Categoría', `<a href="catalogo.html?cat=${p.categoria}">${esc(cat ? cat.nombre : p.categoria)}</a>`],
@@ -54,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="ficha-info">
         <span class="eyebrow">${esc(p.meta || (cat ? cat.nombre : ''))}</span>
         <h1>${esc(p.titulo)}</h1>
-        ${p.equipo ? `<p class="ficha-equipo">${esc(p.equipo)}${p.seleccion ? ' · ' + esc(p.seleccion) : ''}</p>` : ''}
+        ${p.equipo ? `<p class="ficha-equipo">${esc(p.equipo)}${p.seleccion && p.seleccion !== p.equipo ? ' · ' + esc(p.seleccion) : ''}</p>` : ''}
 
         <div class="ficha-precio">
           ${precioHTML(p)}
