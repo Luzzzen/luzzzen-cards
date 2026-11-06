@@ -158,7 +158,12 @@ const Carrito = (() => {
   let codigo = null;          // { codigo, tipo, valor, minimo } ya validado
   let mensajeCodigo = '';
 
-  try { ids = JSON.parse(localStorage.getItem(CLAVE)) || []; } catch {}
+  // Siempre se lee de localStorage: la copia en memoria puede estar vieja
+  // (página restaurada con el botón "atrás" o pedido cambiado en otra pestaña)
+  function leer() {
+    try { const v = JSON.parse(localStorage.getItem(CLAVE)); ids = Array.isArray(v) ? v : []; } catch {}
+  }
+  leer();
   // Carrito del sitio viejo: se pasa al nuevo formato
   try {
     const viejo = JSON.parse(localStorage.getItem('luzzzenCarrito') || 'null');
@@ -346,13 +351,22 @@ const Carrito = (() => {
   function cambio() { guardar(); actualizarContador(); render(); refrescarBotones(); }
 
   function agregar(id) {
-    if (ids.includes(id)) return;
+    leer();
+    if (ids.includes(id)) { cambio(); return; }
     ids.push(id);
     cambio();
     const p = (window.PRODUCTOS || []).find(x => x.id === id);
     aviso(`${p ? p.titulo : 'Producto'} agregado a tu pedido`);
   }
-  function quitar(id) { ids = ids.filter(x => x !== id); cambio(); }
+  function quitar(id) { leer(); ids = ids.filter(x => x !== id); cambio(); }
+
+  // Resincroniza la vista con lo guardado
+  function sincronizar() {
+    leer();
+    actualizarContador();
+    render();
+    refrescarBotones();
+  }
 
   let focoAnterior = null;
   function abrir() {
@@ -390,7 +404,13 @@ const Carrito = (() => {
     }
   }
 
-  return { agregar, quitar, abrir, cerrar, iniciar, actualizarContador, tiene: id => ids.includes(id) };
+  // Volver con "atrás" restaura la página desde la caché del navegador (bfcache)
+  // sin volver a correr el JS: hay que releer el pedido.
+  window.addEventListener('pageshow', e => { if (e.persisted) sincronizar(); });
+  // Cambios hechos en otra pestaña
+  window.addEventListener('storage', e => { if (e.key === CLAVE || e.key === null) sincronizar(); });
+
+  return { agregar, quitar, abrir, cerrar, iniciar, actualizarContador, sincronizar, tiene: id => ids.includes(id) };
 })();
 
 /* ===== Arranque común ===== */
