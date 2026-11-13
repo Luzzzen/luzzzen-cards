@@ -1,12 +1,13 @@
 # Evita que Supabase (plan gratis) pause el proyecto por inactividad.
-# Cada 3 días hace una consulta chiquita a la base. No toca nada.
+# Todos los días: actualiza la fila de la tabla "latido" (escritura mínima, no toca productos)
+# y hace una lectura de productos. Requiere haber corrido latido.sql una vez.
 
 name: Mantener Supabase activo
 
 on:
   schedule:
-    - cron: '23 13 */3 * *'   # cada 3 días, 10:23 de Argentina
-  workflow_dispatch:           # botón para correrlo a mano desde la pestaña Actions
+    - cron: '23 13 * * *'   # todos los días, 10:23 de Argentina
+  workflow_dispatch:         # botón para correrlo a mano desde la pestaña Actions
 
 env:
   SUPABASE_URL: https://pepqbpayfneibyvducbl.supabase.co
@@ -17,12 +18,18 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Consultar la base
+      - name: Latido (escritura)
+        run: |
+          codigo=$(curl -s -o respuesta.txt -w "%{http_code}" -X POST \
+            "$SUPABASE_URL/rest/v1/rpc/latido" \
+            -H "apikey: $SUPABASE_KEY" -H "Content-Type: application/json" -d '{}')
+          echo "Respuesta: $codigo"; cat respuesta.txt; echo
+          test "$codigo" = "200"
+      - name: Lectura de productos
         run: |
           codigo=$(curl -s -o respuesta.txt -w "%{http_code}" \
             "$SUPABASE_URL/rest/v1/$TABLA?select=id&limit=1" \
             -H "apikey: $SUPABASE_KEY")
-          echo "Respuesta: $codigo"
-          cat respuesta.txt
-          # Si falla, el workflow queda en rojo y GitHub te manda un mail
+          echo "Respuesta: $codigo"; cat respuesta.txt; echo
+          # Si algo falla, el workflow queda en rojo y GitHub te manda un mail
           test "$codigo" = "200"
