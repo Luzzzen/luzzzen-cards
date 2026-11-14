@@ -143,7 +143,7 @@ function pintarPie() {
         <a href="${CONFIG.instagram}" target="_blank" rel="noopener">${ICONO.ig}${esc(CONFIG.instagramUsuario)}</a>
         <a href="${linkWhatsApp('¡Hola! Te escribo desde la web de Luzzzen Cards.')}" target="_blank" rel="noopener">${ICONO.wa}WhatsApp</a>
       </div>
-      <p class="pie-chico">© ${new Date().getFullYear()} Luzzzen Cards</p>
+      <p class="pie-chico">© ${new Date().getFullYear()} Luzzzen Cards · <a class="pie-credito" href="https://nazarenocarreto.com.ar/" target="_blank" rel="noopener">Sitio hecho por Nazareno Carreto</a></p>
     </div>`;
   document.body.appendChild(pie);
 }
