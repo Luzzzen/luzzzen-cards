@@ -385,7 +385,8 @@ input, select { font-size: 16px; }    /* 16px evita que iPhone haga zoom al toca
 .pie-links a { display: inline-flex; align-items: center; gap: 6px; min-height: var(--toque); text-decoration: none; color: var(--marfil); font-size: 15px; }
 .pie-links svg { width: 18px; height: 18px; }
 .pie-chico { color: var(--gris); font-size: 12px; }
-@media (hover: hover) { .pie-links a:hover { color: var(--naranja); } }
+.pie-credito { color: inherit; text-decoration: underline; text-underline-offset: 3px; display: inline-block; padding: 6px 0; }
+@media (hover: hover) { .pie-links a:hover, .pie-credito:hover { color: var(--naranja); } }
 
 /* ===== Catálogo ===== */
 .catalogo-cabecera { padding: 24px 0 14px; }
