@@ -57,24 +57,36 @@ function ordenar(lista) {
 
 /* ===== Pintar ===== */
 
-function pintarChips() {
-  const base = filtrar({ ignorarCategoria: true });
-  const opciones = [{ id: '', nombre: 'Todo' }, ...CONFIG.categorias];
-  $('#chips').innerHTML = opciones.map(c => {
-    const n = c.id ? base.filter(p => p.categoria === c.id).length : base.length;
-    return `<button type="button" class="chip" data-cat="${c.id}" aria-pressed="${filtros.cat === c.id}">${esc(c.nombre)}<small>${n}</small></button>`;
-  }).join('');
+// Opciones de los desplegables del panel, con cuántas cartas hay de cada una.
+// Se cuentan dentro de la categoría elegida para no ofrecer opciones vacías.
+function pintarListas() {
+  const enCat = PRODUCTOS.filter(p => !filtros.cat || p.categoria === filtros.cat);
+  const opciones = (campo, todos) => {
+    const cuenta = new Map();
+    enCat.forEach(p => { const v = (p[campo] || '').trim(); if (v) cuenta.set(v, (cuenta.get(v) || 0) + 1); });
+    const valores = [...cuenta.keys()].sort((a, b) => a.localeCompare(b, 'es'));
+    return `<option value="">${todos}</option>` +
+      valores.map(v => `<option value="${esc(v)}">${esc(v)} (${cuenta.get(v)})</option>`).join('');
+  };
+  $('#f-jugador').innerHTML = opciones('jugador', 'Todos');
+  $('#f-equipo').innerHTML = opciones('equipo', 'Todos');
+  $('#f-sel').innerHTML = opciones('seleccion', 'Todas');
+  // Sin selecciones cargadas en esta categoría, el filtro no tiene sentido
+  $('#f-sel').closest('.filtro').hidden = !enCat.some(p => p.seleccion);
+
+  const disp = PRODUCTOS.filter(p => !p.vendido);
+  $('#f-cat').innerHTML = [{ id: '', nombre: 'Todo el catálogo' }, ...CONFIG.categorias]
+    .map(c => `<option value="${c.id}">${esc(c.nombre)} (${c.id ? disp.filter(p => p.categoria === c.id).length : disp.length})</option>`).join('');
+  sincronizarFormulario();
 }
 
-function pintarListas() {
-  const unicos = arr => [...new Set(arr.filter(Boolean).map(s => s.trim()))].sort((a, b) => a.localeCompare(b, 'es'));
-  const enCat = PRODUCTOS.filter(p => !filtros.cat || p.categoria === filtros.cat);
-  const opciones = arr => unicos(arr).map(v => `<option value="${esc(v)}">`).join('');
-  $('#lista-jugadores').innerHTML = opciones(enCat.map(p => p.jugador));
-  $('#lista-equipos').innerHTML = opciones(enCat.map(p => p.equipo));
-  $('#lista-selecciones').innerHTML = opciones(enCat.map(p => p.seleccion));
-  // Si todavía no hay selecciones cargadas, el filtro no tiene sentido
-  $('[name="sel"]').closest('.filtro').style.display = PRODUCTOS.some(p => p.seleccion) ? '' : 'none';
+// Un valor que vino por la URL y no está en la lista (ej. un link viejo) se agrega igual
+function asegurarOpcion(select, valor) {
+  if (valor && ![...select.options].some(o => o.value === valor)) select.add(new Option(valor, valor));
+}
+
+function filtrosActivos() {
+  return ['jugador', 'equipo', 'sel'].filter(k => filtros[k]).length + (filtros.min || filtros.max ? 1 : 0) + (filtros.disp ? 1 : 0);
 }
 
 function pintarPaginacion(total) {
@@ -104,9 +116,15 @@ function pintar() {
   const pagina = lista.slice(desde, desde + CONFIG.porPagina);
   const disponibles = lista.filter(p => !p.vendido).length;
 
-  $('#resultados').innerHTML = lista.length
-    ? `<b>${lista.length}</b> producto${lista.length === 1 ? '' : 's'} · ${disponibles} disponible${disponibles === 1 ? '' : 's'}`
-    : '&nbsp;';
+  // Siempre se cuenta lo disponible (el mismo número que en la portada); las vendidas se aclaran aparte
+  const vendidas = lista.length - disponibles;
+  $('#resultados').innerHTML = !lista.length ? '&nbsp;'
+    : !disponibles ? `No hay disponibles por ahora. ${vendidas === 1 ? 'Esta ya se vendió' : 'Estas ya se vendieron'}.`
+    : `<b>${disponibles}</b> disponible${disponibles === 1 ? '' : 's'}${vendidas ? ` · ${vendidas} vendida${vendidas === 1 ? '' : 's'} al final` : ''}`;
+  $('#ver-resultados').textContent = disponibles ? `Ver ${disponibles} disponible${disponibles === 1 ? '' : 's'}` : lista.length ? `Ver ${lista.length} vendida${lista.length === 1 ? '' : 's'}` : 'Sin resultados';
+  const n = filtrosActivos();
+  $('#cuenta-filtros').hidden = !n;
+  $('#cuenta-filtros').textContent = n;
 
   $('#grilla').innerHTML = pagina.length
     ? pagina.map((p, i) => tarjetaHTML(p, { lazy: i > 7 })).join('')
@@ -116,13 +134,13 @@ function pintar() {
          <button type="button" class="boton boton-secundario" data-limpiar>Limpiar filtros</button>
        </div>`;
 
-  pintarChips();
   pintarPaginacion(lista.length);
 }
 
 function sincronizarFormulario() {
   const f = $('#filtros');
-  for (const k of ['q', 'jugador', 'equipo', 'sel', 'min', 'max']) f[k].value = filtros[k];
+  for (const k of ['jugador', 'equipo', 'sel']) asegurarOpcion(f[k], filtros[k]);
+  for (const k of ['cat', 'q', 'jugador', 'equipo', 'sel', 'min', 'max']) f[k].value = filtros[k];
   $('#orden').value = filtros.orden;
   $('#solo-disponibles').checked = filtros.disp;
 }
@@ -151,30 +169,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!k) return;
     filtros[k] = e.target.value.trim();
     filtros.p = 1;
+    if (k === 'cat') { escribirURL(); pintarListas(); pintar(); marcarNav(); return; }
     clearTimeout(espera);
     espera = setTimeout(() => { escribirURL(true); pintar(); }, 180);
   });
   $('#orden').addEventListener('change', e => { filtros.orden = e.target.value; filtros.p = 1; escribirURL(); pintar(); });
   $('#solo-disponibles').addEventListener('change', e => { filtros.disp = e.target.checked; filtros.p = 1; escribirURL(); pintar(); });
   $('#limpiar').addEventListener('click', limpiar);
-  $('#toggle-filtros').addEventListener('click', e => {
-    const abierta = $('#filtros').classList.toggle('abierta');
-    e.currentTarget.setAttribute('aria-expanded', abierta);
-    e.currentTarget.textContent = abierta ? 'Menos filtros' : 'Más filtros';
-  });
-  if (filtros.jugador || filtros.equipo || filtros.sel || filtros.min || filtros.max) $('#toggle-filtros').click();
 
-  $('#chips').addEventListener('click', e => {
-    const b = e.target.closest('[data-cat]');
-    if (!b) return;
-    filtros.cat = b.dataset.cat; filtros.p = 1;
-    escribirURL(); pintarListas(); pintar();
-    // Marcar la categoría en la cabecera
-    $$('.nav a').forEach(a => {
-      if (filtros.cat && a.href.endsWith('cat=' + filtros.cat)) a.setAttribute('aria-current', 'page');
-      else a.removeAttribute('aria-current');
-    });
-  });
+  // Panel de filtros (celu)
+  const panel = $('#panel-filtros'), fondo = $('#panel-fondo'), abrirBtn = $('#abrir-filtros');
+  const abrirPanel = () => {
+    fondo.hidden = false;
+    requestAnimationFrame(() => panel.classList.add('abierto'));
+    abrirBtn.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('sin-scroll');
+    setTimeout(() => $('#cerrar-filtros').focus(), 60);
+  };
+  const cerrarPanel = () => {
+    if (!panel.classList.contains('abierto')) return;
+    panel.classList.remove('abierto');
+    fondo.hidden = true;
+    abrirBtn.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('sin-scroll');
+    abrirBtn.focus();
+  };
+  abrirBtn.addEventListener('click', abrirPanel);
+  $('#cerrar-filtros').addEventListener('click', cerrarPanel);
+  fondo.addEventListener('click', cerrarPanel);
+  $('#ver-resultados').addEventListener('click', () => { cerrarPanel(); $('#grilla').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarPanel(); });
+
   $('#paginacion').addEventListener('click', e => {
     const b = e.target.closest('[data-pag]');
     if (!b || b.disabled) return;
@@ -184,5 +209,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   document.addEventListener('click', e => { if (e.target.closest('[data-limpiar]')) limpiar(); });
 
-  window.addEventListener('popstate', () => { leerURL(); sincronizarFormulario(); pintarListas(); pintar(); });
+  window.addEventListener('popstate', () => { leerURL(); pintarListas(); pintar(); marcarNav(); });
 });
+
+
+// Marca en la cabecera la categoría que se está viendo
+function marcarNav() {
+  $$('.nav a').forEach(a => {
+    if (filtros.cat && a.href.endsWith('cat=' + filtros.cat)) a.setAttribute('aria-current', 'page');
+    else a.removeAttribute('aria-current');
+  });
+}

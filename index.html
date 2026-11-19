@@ -25,7 +25,6 @@
   <section class="portada">
     <div class="portada-int">
       <img class="portada-logo" src="img/logo-grande.png" alt="Luzzzen Cards" width="300" height="245">
-      <p class="eyebrow">Cartas · Firmas · Jerseys</p>
       <h1>Cartas de fútbol <em>coleccionables</em></h1>
       <p class="portada-sub">Esa carta que te falta para completar la colección, probablemente esté acá.</p>
 
@@ -36,12 +35,18 @@
         <button class="boton" type="submit" aria-label="Buscar"><span>Buscar</span><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
       </form>
 
-      <div class="accesos" id="accesos">
-        <a class="acceso" href="catalogo.html?cat=cartas"><strong>Cartas individuales</strong><span data-cuenta="cartas">&nbsp;</span></a>
-        <a class="acceso" href="catalogo.html?cat=firmas-jerseys"><strong>Firmas y jerseys</strong><span data-cuenta="firmas-jerseys">&nbsp;</span></a>
-        <a class="acceso" href="catalogo.html?cat=accesorios"><strong>Accesorios</strong><span data-cuenta="accesorios">&nbsp;</span></a>
+      <!-- Atajos por equipo: se arman solos con los equipos que más cartas tienen (inicio.js) -->
+      <div class="equipos" id="equipos" hidden>
+        <h2 class="equipos-titulo">Buscá por equipo</h2>
+        <ul class="equipos-lista" id="equipos-lista"></ul>
       </div>
-      <p class="portada-todo"><a href="catalogo.html">Ver todo el catálogo</a></p>
+
+      <a class="boton boton-ancho" id="ver-cartas" href="catalogo.html?cat=cartas&amp;disp=1">Ver las cartas</a>
+
+      <ul class="otras-categorias">
+        <li><a href="catalogo.html?cat=firmas-jerseys"><span>Firmas y jerseys</span><small data-cuenta="firmas-jerseys">&nbsp;</small></a></li>
+        <li><a href="catalogo.html?cat=accesorios"><span>Accesorios</span><small data-cuenta="accesorios">&nbsp;</small></a></li>
+      </ul>
     </div>
   </section>
 
@@ -49,8 +54,8 @@
   <section class="seccion" id="ultimas">
     <div class="envoltura">
       <div class="seccion-cabecera">
-        <div><p class="eyebrow">Recién llegadas</p><h2>Últimas agregadas</h2></div>
-        <a class="ver-mas" href="catalogo.html?orden=recientes">Ver todas →</a>
+        <h2>Últimas agregadas</h2>
+        <a class="ver-mas" href="catalogo.html?cat=cartas&amp;disp=1">Ver todas</a>
       </div>
       <div class="carril" id="carril-ultimas">
         <div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div>
@@ -62,7 +67,7 @@
   <section class="seccion" id="ofertas" hidden>
     <div class="envoltura">
       <div class="seccion-cabecera">
-        <div><p class="eyebrow">Por tiempo limitado</p><h2>En oferta</h2></div>
+        <h2>En oferta</h2>
       </div>
       <div class="carril" id="carril-ofertas"></div>
     </div>
@@ -72,13 +77,20 @@
   <section class="seccion" id="sobre-seccion" hidden>
     <div class="envoltura bloque-sobre">
       <div class="texto">
-        <p class="eyebrow">¿No sabés qué buscar?</p>
         <h2>Abrí un sobre</h2>
-        <p>Tres cartas al azar del catálogo. Tocá el sobre para abrirlo y después cada carta para darla vuelta. Si te gusta una, tocala otra vez y vas a su página.</p>
+        <p>Tres cartas al azar del catálogo. Dalas vuelta y, si te gusta alguna, tocala para verla.</p>
       </div>
       <div class="sobre-acciones" id="sobre-acciones">
-        <button type="button" class="boton boton-secundario" id="otro-sobre">Abrir otro</button>
-        <a class="boton" href="catalogo.html?cat=cartas">Ver todas las cartas</a>
+        <!-- Oferta: llevarse las 3 juntas con descuento (inicio.js la arma) -->
+        <div class="oferta-sobre" id="oferta-sobre" hidden>
+          <p class="oferta-precio"><s id="oferta-antes"></s> <strong id="oferta-ahora"></strong></p>
+          <button type="button" class="boton" id="llevar-sobre">Llevate el sobre entero</button>
+        </div>
+        <p class="oferta-nota" id="oferta-nota" hidden></p>
+        <div class="sobre-botones">
+          <button type="button" class="boton boton-secundario" id="otro-sobre">Abrir otro</button>
+          <a class="enlace" href="catalogo.html?cat=cartas&amp;disp=1">Ver todas las cartas</a>
+        </div>
       </div>
       <div class="escena" id="escena">
         <div class="sobre" id="sobre" role="button" tabindex="0">
@@ -98,28 +110,23 @@
     </div>
   </section>
 
-  <!-- ===== Cómo comprar ===== -->
+  <!-- ===== Cómo comprar: una jugada de pizarra ===== -->
   <section class="seccion" id="como-comprar">
     <div class="envoltura">
-      <div class="seccion-cabecera"><div><p class="eyebrow">Simple</p><h2>¿Cómo comprar?</h2></div></div>
-      <ol class="pasos">
-        <li><strong>Elegí</strong><p>Buscá en el catálogo y tocá “Agregar” en lo que te guste.</p></li>
-        <li><strong>Revisá tu pedido</strong><p>Desde el carrito de arriba. Si tenés un código de descuento, cargalo ahí.</p></li>
-        <li><strong>Mandalo por WhatsApp</strong><p>Se abre con el mensaje armado: solo tenés que enviarlo.</p></li>
-        <li><strong>Coordinamos</strong><p>Te respondemos para acordar pago y entrega.</p></li>
+      <h2 class="jugada-titulo">¿Cómo comprar?</h2>
+      <ol class="jugada">
+        <li><strong>Elegí las cartas</strong><p>Tocá “Agregar” en las que quieras.</p></li>
+        <li><strong>Revisá el pedido</strong><p>En el carrito, con tu código de descuento si tenés.</p></li>
+        <li><strong>Mandalo por WhatsApp</strong><p>El mensaje ya sale armado. Las cartas quedan reservadas cuando confirmamos.</p></li>
+        <li class="gol"><strong>Coordinamos y nos vemos</strong><p>Domingos sin cargo en Parque Rivadavia, o envío a todo el país a cargo del comprador.</p></li>
       </ol>
-      <div class="notas">
-        <span>Las cartas se reservan una vez confirmado el pedido por WhatsApp.</span>
-        <span>Entregas sin cargo los domingos en Parque Rivadavia.</span>
-        <span>Envíos a todo el país, a cargo del comprador.</span>
-      </div>
     </div>
   </section>
 
   <!-- ===== Sobre Luzzzen ===== -->
   <section class="seccion" id="sobre-luzzzen">
     <div class="envoltura historia">
-      <div><p class="eyebrow">Desde 2024</p><h2>Sobre Luzzzen</h2></div>
+      <h2>Sobre Luzzzen</h2>
       <div class="texto">
         <p><strong>Luzzzen Cards</strong> (antes <em>Luzu Colecciones</em>) nació a comienzos de 2024 como una colección personal.</p>
         <p>Con el tiempo se convirtió en un espacio para coleccionistas, donde cada producto se ofrece con transparencia, cuidado y atención personalizada.</p>

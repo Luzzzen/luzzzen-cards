@@ -130,6 +130,27 @@ function pintarCabecera() {
     </div>`;
   document.body.prepend(cab);
   $('#abrir-carrito').addEventListener('click', () => Carrito.abrir());
+  esconderCabeceraAlBajar(cab);
+}
+
+// Celu: al bajar la cabecera se va y al subir vuelve. Arriba de todo siempre se ve.
+// (El CSS solo la mueve en pantallas de hasta 760px, en compu queda fija.)
+function esconderCabeceraAlBajar(cab) {
+  let ultimo = scrollY, pendiente = false;
+  addEventListener('scroll', () => {
+    if (pendiente) return;
+    pendiente = true;
+    requestAnimationFrame(() => {
+      pendiente = false;
+      const y = Math.max(scrollY, 0), delta = y - ultimo;
+      if (Math.abs(delta) < 6) return;                     // ignora temblores del dedo
+      if (document.body.classList.contains('sin-scroll')) { ultimo = y; return; }
+      cab.classList.toggle('escondida', delta > 0 && y > cab.offsetHeight);
+      ultimo = y;
+    });
+  }, { passive: true });
+  // Si alguien navega con teclado y el foco cae en la cabecera, que aparezca
+  cab.addEventListener('focusin', () => cab.classList.remove('escondida'));
 }
 
 function pintarPie() {
@@ -143,7 +164,10 @@ function pintarPie() {
         <a href="${CONFIG.instagram}" target="_blank" rel="noopener">${ICONO.ig}${esc(CONFIG.instagramUsuario)}</a>
         <a href="${linkWhatsApp('¡Hola! Te escribo desde la web de Luzzzen Cards.')}" target="_blank" rel="noopener">${ICONO.wa}WhatsApp</a>
       </div>
-      <p class="pie-chico">© ${new Date().getFullYear()} Luzzzen Cards · <a class="pie-credito" href="https://nazarenocarreto.com.ar/" target="_blank" rel="noopener">Sitio hecho por Nazareno Carreto</a></p>
+      <p class="pie-chico">
+        <span>© ${new Date().getFullYear()} Luzzzen Cards</span>
+        <a class="pie-credito" href="https://nazarenocarreto.com.ar/" target="_blank" rel="noopener">Sitio hecho por <b>Nazareno Carreto</b><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M8 7h9v9"/></svg></a>
+      </p>
     </div>`;
   document.body.appendChild(pie);
 }
@@ -153,8 +177,9 @@ function pintarPie() {
    ===================================================================== */
 
 const Carrito = (() => {
-  const CLAVE = 'lz-carrito-v2', CLAVE_CODIGO = 'lz-codigo';
+  const CLAVE = 'lz-carrito-v2', CLAVE_CODIGO = 'lz-codigo', CLAVE_SOBRES = 'lz-sobres';
   let ids = [];
+  let sobres = [];            // [{ ids: [a, b, c] }] cartas que se llevan como sobre (con descuento)
   let codigo = null;          // { codigo, tipo, valor, minimo } ya validado
   let mensajeCodigo = '';
 
@@ -162,6 +187,7 @@ const Carrito = (() => {
   // (página restaurada con el botón "atrás" o pedido cambiado en otra pestaña)
   function leer() {
     try { const v = JSON.parse(localStorage.getItem(CLAVE)); ids = Array.isArray(v) ? v : []; } catch {}
+    try { const v = JSON.parse(localStorage.getItem(CLAVE_SOBRES)); sobres = Array.isArray(v) ? v.filter(x => x && Array.isArray(x.ids)) : []; } catch { sobres = []; }
   }
   leer();
   // Carrito del sitio viejo: se pasa al nuevo formato
@@ -173,10 +199,25 @@ const Carrito = (() => {
     }
   } catch {}
 
-  const guardar = () => { try { localStorage.setItem(CLAVE, JSON.stringify(ids)); } catch {} };
+  const guardar = () => {
+    // Un sobre solo existe si sus 3 cartas siguen en el pedido
+    sobres = sobres.filter(x => x.ids.every(id => ids.includes(id)));
+    try { localStorage.setItem(CLAVE, JSON.stringify(ids)); localStorage.setItem(CLAVE_SOBRES, JSON.stringify(sobres)); } catch {}
+  };
   const productos = () => ids.map(id => (window.PRODUCTOS || []).find(p => p.id === id) || { id, faltante: true });
   const disponibles = () => productos().filter(p => !p.faltante && !p.vendido);
   const subtotal = () => disponibles().reduce((t, p) => t + p.precio, 0);
+  const buscar = id => (window.PRODUCTOS || []).find(p => p.id === id);
+  // Sobres con descuento: valen mientras las 3 cartas sigan disponibles
+  const sobresValidos = () => sobres.filter(x => x.ids.every(id => { const p = buscar(id); return p && !p.vendido; }));
+  const enSobre = id => sobresValidos().some(x => x.ids.includes(id));
+  const pctSobre = () => (CONFIG.sobre && CONFIG.sobre.descuento) || 0;
+  const descuentoSobres = () => sobresValidos().reduce((t, x) => t + Math.round(x.ids.reduce((s, id) => s + buscar(id).precio, 0) * pctSobre() / 100), 0);
+  // Total: primero el descuento del sobre y después el código (se acumulan)
+  function totales() {
+    const st = subtotal(), ds = descuentoSobres(), dc = descuento(st - ds);
+    return { st, ds, dc, total: st - ds - dc };
+  }
   function descuento(st = subtotal()) {
     if (!codigo || (codigo.minimo && st < codigo.minimo)) return 0;
     return codigo.tipo === 'porcentaje' ? Math.round(st * codigo.valor / 100) : Math.min(codigo.valor, st);
@@ -219,9 +260,8 @@ const Carrito = (() => {
     const cajonAbierto = $('#cajon') && $('#cajon').classList.contains('abierto');
     const mostrar = n > 0 && !cajonAbierto;
     if (n) {
-      const st = subtotal(), total = st - descuento(st);
       $('.bp-texto', barra).textContent = `Ver pedido · ${n} producto${n === 1 ? '' : 's'}`;
-      $('.bp-total', barra).textContent = plata(total);
+      $('.bp-total', barra).textContent = plata(totales().total);
     }
     barra.hidden = !mostrar && !barra.classList.contains('visible');
     requestAnimationFrame(() => {
@@ -260,11 +300,10 @@ const Carrito = (() => {
         </div>`;
       return;
     }
-    const st = subtotal(), desc = descuento(st);
-    const falta = codigo && codigo.minimo && st < codigo.minimo ? codigo.minimo - st : 0;
-    cuerpo.innerHTML = `
-      <ul class="cajon-lista">
-        ${lista.map(p => `
+    const { st, ds, dc } = totales();
+    const base = st - ds;
+    const falta = codigo && codigo.minimo && base < codigo.minimo ? codigo.minimo - base : 0;
+    const item = p => `
           <li class="cajon-item${p.faltante || p.vendido ? ' no-disponible' : ''}">
             ${p.frente ? `<img src="${esc(p.frente)}" alt="" loading="lazy">` : '<span class="cajon-sin-foto"></span>'}
             <div>
@@ -275,7 +314,21 @@ const Carrito = (() => {
               ${p.faltante || p.vendido ? '' : `<span class="cajon-precio">${plata(p.precio)}</span>`}
               <button type="button" class="enlace" data-quitar="${esc(p.id)}">Quitar</button>
             </div>
+          </li>`;
+    const grupos = sobresValidos();
+    const agrupados = new Set(grupos.flatMap(x => x.ids));
+    const sueltos = lista.filter(p => !agrupados.has(p.id));
+    cuerpo.innerHTML = `
+      <ul class="cajon-lista">
+        ${grupos.map((x, n) => `
+          <li class="cajon-sobre">
+            <div class="cajon-sobre-cabecera">
+              <strong>Sobre Luzzzen <span>−${pctSobre()}%</span></strong>
+              <button type="button" class="enlace" data-quitar-sobre="${n}">Quitar sobre</button>
+            </div>
+            <ul class="cajon-lista">${x.ids.map(id => item(buscar(id))).join('')}</ul>
           </li>`).join('')}
+        ${sueltos.map(item).join('')}
       </ul>
 
       <div class="bloque-codigo">
@@ -293,9 +346,10 @@ const Carrito = (() => {
       </div>
 
       <dl class="cajon-totales">
-        ${desc ? `<div><dt>Subtotal</dt><dd>${plata(st)}</dd></div>
-                  <div class="linea-descuento"><dt>Código ${esc(codigo.codigo)}</dt><dd>−${plata(desc)}</dd></div>` : ''}
-        <div class="total"><dt>Total</dt><dd>${plata(st - desc)}</dd></div>
+        ${ds || dc ? `<div><dt>Subtotal</dt><dd>${plata(st)}</dd></div>` : ''}
+        ${ds ? `<div class="linea-descuento"><dt>Sobre${grupos.length > 1 ? 's' : ''} (−${pctSobre()}%)</dt><dd>−${plata(ds)}</dd></div>` : ''}
+        ${dc ? `<div class="linea-descuento"><dt>Código ${esc(codigo.codigo)}</dt><dd>−${plata(dc)}</dd></div>` : ''}
+        <div class="total"><dt>Total</dt><dd>${plata(st - ds - dc)}</dd></div>
       </dl>
 
       <button type="button" class="boton boton-wa" id="enviar-pedido"${disponibles().length ? '' : ' disabled'}>${ICONO.wa}Enviar pedido por WhatsApp</button>
@@ -303,6 +357,11 @@ const Carrito = (() => {
       <button type="button" class="enlace cajon-vaciar" id="vaciar-carrito">Vaciar pedido</button>`;
 
     $$('[data-quitar]', cuerpo).forEach(b => b.addEventListener('click', () => quitar(b.dataset.quitar)));
+    $$('[data-quitar-sobre]', cuerpo).forEach(b => b.addEventListener('click', () => {
+      const x = sobresValidos()[Number(b.dataset.quitarSobre)];
+      if (!x) return;
+      leer(); ids = ids.filter(id => !x.ids.includes(id)); cambio();
+    }));
     const aplicar = $('#aplicar-codigo', cuerpo);
     if (aplicar) {
       aplicar.addEventListener('click', aplicarCodigo);
@@ -313,7 +372,7 @@ const Carrito = (() => {
     $('#enviar-pedido', cuerpo).addEventListener('click', enviar);
     $('#vaciar-carrito', cuerpo).addEventListener('click', () => {
       if (!confirm('¿Vaciar el pedido?')) return;
-      ids = []; guardar(); cambio();
+      ids = []; sobres = []; guardar(); cambio();
     });
   }
 
@@ -337,13 +396,20 @@ const Carrito = (() => {
   function enviar() {
     const lista = disponibles();
     if (!lista.length) return;
-    const st = subtotal(), desc = descuento(st);
-    const lineas = lista.map(p => `• ${p.id} · ${p.titulo}${p.equipo ? ' – ' + p.equipo : ''}${p.meta ? ' (' + p.meta + ')' : ''}: ${plata(p.precio)}`);
+    const { st, ds, dc, total } = totales();
+    const linea = p => `• ${p.id} · ${p.titulo}${p.equipo ? ' – ' + p.equipo : ''}${p.meta ? ' (' + p.meta + ')' : ''}: ${plata(p.precio)}`;
+    const grupos = sobresValidos();
+    const agrupados = new Set(grupos.flatMap(x => x.ids));
+    const bloquesSobre = grupos.flatMap((x, n) => [`Sobre Luzzzen${grupos.length > 1 ? ' ' + (n + 1) : ''} (−${pctSobre()}%):`, ...x.ids.map(id => linea(buscar(id))), '']);
+    const sueltas = lista.filter(p => !agrupados.has(p.id)).map(linea);
     const texto = [
       '¡Hola! Quiero hacer este pedido en Luzzzen Cards:', '',
-      ...lineas, '',
-      ...(desc ? [`Subtotal: ${plata(st)}`, `Código ${codigo.codigo} (${etiquetaCodigo(codigo)}): −${plata(desc)}`] : []),
-      `Total: ${plata(st - desc)}`
+      ...bloquesSobre,
+      ...(sueltas.length ? [...sueltas, ''] : []),
+      ...(ds || dc ? [`Subtotal: ${plata(st)}`] : []),
+      ...(ds ? [`Descuento por sobre: −${plata(ds)}`] : []),
+      ...(dc ? [`Código ${codigo.codigo} (${etiquetaCodigo(codigo)}): −${plata(dc)}`] : []),
+      `Total: ${plata(total)}`
     ].join('\n');
     window.open(linkWhatsApp(texto), '_blank', 'noopener');
   }
@@ -358,7 +424,22 @@ const Carrito = (() => {
     const p = (window.PRODUCTOS || []).find(x => x.id === id);
     aviso(`${p ? p.titulo : 'Producto'} agregado a tu pedido`);
   }
-  function quitar(id) { leer(); ids = ids.filter(x => x !== id); cambio(); }
+  function quitar(id) {
+    leer();
+    if (enSobre(id) && !confirm(`Si sacás esta carta, el sobre pierde el ${pctSobre()}% de descuento. ¿La sacás igual?`)) return;
+    ids = ids.filter(x => x !== id);
+    cambio();
+  }
+
+  // Agrega las 3 cartas de un sobre como grupo (si alguna ya estaba suelta, pasa al sobre)
+  function agregarSobre(lista) {
+    leer();
+    lista.forEach(id => { if (!ids.includes(id)) ids.push(id); });
+    sobres = sobres.filter(x => !x.ids.some(id => lista.includes(id)));
+    sobres.push({ ids: lista.slice() });
+    cambio();
+    aviso(`Sobre agregado con ${pctSobre()}% de descuento`);
+  }
 
   // Resincroniza la vista con lo guardado
   function sincronizar() {
@@ -408,9 +489,9 @@ const Carrito = (() => {
   // sin volver a correr el JS: hay que releer el pedido.
   window.addEventListener('pageshow', e => { if (e.persisted) sincronizar(); });
   // Cambios hechos en otra pestaña
-  window.addEventListener('storage', e => { if (e.key === CLAVE || e.key === null) sincronizar(); });
+  window.addEventListener('storage', e => { if (e.key === CLAVE || e.key === CLAVE_SOBRES || e.key === null) sincronizar(); });
 
-  return { agregar, quitar, abrir, cerrar, iniciar, actualizarContador, sincronizar, tiene: id => ids.includes(id) };
+  return { agregar, agregarSobre, quitar, abrir, cerrar, iniciar, actualizarContador, sincronizar, enSobre, tiene: id => ids.includes(id) };
 })();
 
 /* ===== Arranque común ===== */
