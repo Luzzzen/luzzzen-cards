@@ -64,12 +64,37 @@ function iniciarSobre(pozo) {
   const escena = $('#escena'), sobre = $('#sobre'), acciones = $('#sobre-acciones');
   const cfg = CONFIG.sobre || { descuento: 0, porDia: 0, raras: 0.12, chances: [1, 0, 0, 0] };
   let abierto = false, vueltas = 0, cartas = [], sorteadas = [], conOferta = false;
-  // Separación entre cartas: lo más abiertas posible sin salirse de la pantalla
-  const posiciones = () => {
-    const ancho = escena.clientWidth, carta = cartas[0] ? cartas[0].offsetWidth : 140;
-    const d = Math.min(innerWidth < 600 ? 112 : 196, Math.max(70, (ancho - carta) / 2 - 6));
-    return [{ x: -d, r: -7, y: 14 }, { x: 0, r: 0, y: -6 }, { x: d, r: 7, y: 14 }];
-  };
+  let activa = 1;   // en el abanico, la carta que queda adelante
+
+  /* Dos formas de repartir:
+     - "fila": si entran las 3 una al lado de la otra (compu), se separan sin taparse. Si falta poco, se achican un poco.
+     - "abanico": si no entran (celu), se superponen y la que tocás pasa adelante. */
+  function disposicion() {
+    const ancho = escena.clientWidth, w = cartas[0] ? cartas[0].offsetWidth : 140, gap = 16;
+    const escala = Math.min(1, (ancho - 2 * gap - 28) / (3 * w));   // 28px de margen para la inclinación
+    // En compu se aceptan cartas un poco más chicas con tal de que no se tapen; en el celu no, porque quedarían diminutas
+    if (escala >= (innerWidth >= 600 ? 0.72 : 0.95)) {
+      const d = (w * escala) + gap;
+      return { modo: 'fila', escala, pos: [{ x: -d, r: -3, y: 10 }, { x: 0, r: 0, y: 0 }, { x: d, r: 3, y: 10 }] };
+    }
+    const d = Math.max(70, Math.min(112, (ancho - w) / 2 - 6));
+    return { modo: 'abanico', escala: 1, pos: [{ x: -d, r: -7, y: 14 }, { x: 0, r: 0, y: -6 }, { x: d, r: 7, y: 14 }] };
+  }
+
+  // Ubica una carta según la disposición, si está dada vuelta y si es la de adelante
+  function colocar(el, i, extra = '') {
+    const { modo, escala, pos } = disposicion(), q = pos[i];
+    const frente = modo === 'abanico' && i === activa && vueltas > 0;
+    const atras = modo === 'abanico' && i !== activa && vueltas > 0;
+    const sc = escala * (frente ? 1.06 : atras ? 0.94 : 1);
+    const y = q.y + (frente ? -12 : 0);
+    el.style.zIndex = modo === 'fila' ? 1 : i === activa ? 5 : 2;
+    el.classList.toggle('derecha', modo === 'abanico' && i === 2);   // en el abanico, el nombre de la derecha va del lado que no se tapa
+    el.classList.toggle('atras', atras && el.classList.contains('vuelta'));
+    el.style.transform = `translate(${q.x}px,${y}px) rotate(${frente ? 0 : q.r}deg)${el.classList.contains('vuelta') ? ' rotateY(180deg)' : ''} scale(${sc})${extra}`;
+  }
+  const colocarTodas = () => cartas.forEach((el, i) => { if (el.classList.contains('dada')) colocar(el, i); });
+  const enAbanico = () => disposicion().modo === 'abanico';
 
   // Raras = las más caras del pozo (el % de cfg.raras). Que salgan varias juntas es cada vez menos probable.
   const precios = pozo.map(p => p.precio).sort((a, b) => b - a);
@@ -119,7 +144,7 @@ function iniciarSobre(pozo) {
   function crear(lista) {
     return lista.map(({ p, rara }, i) => {
       const el = document.createElement('div');
-      el.className = 'carta-sobre' + (rara ? ' rara' : '') + (i === 2 ? ' derecha' : '');   // la de la derecha muestra el nombre del lado que no tapa la del medio
+      el.className = 'carta-sobre' + (rara ? ' rara' : '');
       el.setAttribute('role', 'button');
       el.setAttribute('tabindex', '0');
       el.setAttribute('aria-label', 'Dar vuelta la carta');
@@ -131,8 +156,13 @@ function iniciarSobre(pozo) {
           <div class="info"><em>${plata(p.precio)}</em><strong>${esc(p.titulo)}</strong><span>${esc(p.meta || p.equipo)}</span></div>
         </div>`;
       el.style.transform = 'translateY(60px) scale(.6)';
-      el.style.zIndex = i === 1 ? 3 : 1;   // la del medio adelante, así no le tapan el nombre
-      const accion = () => el.classList.contains('vuelta') ? (location.href = linkProducto(p)) : darVuelta(el, i, p);
+      el.style.zIndex = i === 1 ? 3 : 1;
+      // Dada vuelta: si está atrás en el abanico, primero pasa adelante; si ya está adelante, abre su página
+      const accion = () => {
+        if (!el.classList.contains('vuelta')) return darVuelta(el, i, p);
+        if (enAbanico() && activa !== i) { activa = i; colocarTodas(); return; }
+        location.href = linkProducto(p);
+      };
       el.addEventListener('click', accion);
       el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); accion(); } });
       escena.appendChild(el);
@@ -143,11 +173,13 @@ function iniciarSobre(pozo) {
   function darVuelta(el, i, p) {
     el.classList.add('vuelta');
     el.setAttribute('aria-label', `${p.titulo}, ${plata(p.precio)}. Abrir la carta`);
-    const q = posiciones()[i];
-    el.style.transform = `translate(${q.x}px,${q.y - 14}px) rotate(${q.r}deg) rotateY(180deg) scale(1.04)`;
-    setTimeout(() => { el.style.transform = `translate(${q.x}px,${q.y}px) rotate(${q.r}deg) rotateY(180deg)`; }, 450);
+    vueltas++;
+    activa = i;                       // la que das vuelta pasa adelante
+    colocarTodas();
+    colocar(el, i, ' translateY(-14px)');
+    setTimeout(() => colocar(el, i), 450);
     if (el.classList.contains('rara')) setTimeout(() => aviso('¡Te salió una rara!'), 500);
-    if (++vueltas === 3) setTimeout(() => { mostrarOferta(); acciones.classList.add('visible'); }, 500);
+    if (vueltas === 3) setTimeout(() => { mostrarOferta(); acciones.classList.add('visible'); }, 500);
   }
 
   function abrir() {
@@ -159,17 +191,18 @@ function iniciarSobre(pozo) {
     conOferta = contarSobre() <= cfg.porDia;
     cartas = crear(sorteadas);
     setTimeout(() => sobre.classList.add('vaciado'), 650);
-    cartas.forEach((el, i) => setTimeout(() => {
-      const q = posiciones()[i];
+    // Reparto: salen del sobre de a una, la del medio primero y después los costados
+    [1, 0, 2].forEach((i, n) => setTimeout(() => {
+      const el = cartas[i];
       el.style.opacity = 1;
       el.classList.add('dada');
-      el.style.transform = `translate(${q.x}px,${q.y}px) rotate(${q.r}deg)`;
-    }, 800 + i * 160));
+      colocar(el, i);
+    }, 800 + n * 170));
   }
 
   function reiniciar() {
     cartas.forEach(c => c.remove());
-    cartas = []; vueltas = 0; abierto = false;
+    cartas = []; vueltas = 0; abierto = false; activa = 1;
     acciones.classList.remove('visible');
     sobre.classList.remove('abriendo', 'vaciado');
     $('.pista', sobre).style.display = '';
@@ -179,11 +212,7 @@ function iniciarSobre(pozo) {
   let espera;
   window.addEventListener('resize', () => {
     clearTimeout(espera);
-    espera = setTimeout(() => cartas.forEach((el, i) => {
-      if (!el.classList.contains('dada')) return;
-      const q = posiciones()[i];
-      el.style.transform = `translate(${q.x}px,${q.y}px) rotate(${q.r}deg)${el.classList.contains('vuelta') ? ' rotateY(180deg)' : ''}`;
-    }), 150);
+    espera = setTimeout(colocarTodas, 150);
   });
 
   sobre.addEventListener('click', abrir);

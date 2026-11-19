@@ -686,3 +686,41 @@ body {
 @media (min-width: 761px) {
   .jugada.preparada li::after { clip-path: inset(0 100% 0 0); }
 }
+
+/* ===== Campos hundidos + botón gelatina (buscador, código de descuento, buscador del catálogo) ===== */
+:root { --hueco: #03070d; }
+.buscador-grande, .fila-codigo, .filtro-busqueda input {
+  background: var(--hueco);
+  border: 1px solid rgba(28, 53, 84, .45);
+  border-radius: 9999px;
+  box-shadow: inset 2px 5px 10px rgba(0, 0, 0, .9), inset -1px -2px 0 rgba(242, 236, 225, .03);
+}
+.buscador-grande { padding: 5px 5px 5px 18px; }
+.buscador-grande:focus-within, .fila-codigo:focus-within, .filtro-busqueda input:focus {
+  border-color: rgba(230, 126, 34, .55);
+  box-shadow: inset 2px 5px 10px rgba(0, 0, 0, .9), 0 0 0 3px rgba(230, 126, 34, .14);
+}
+/* Código de descuento: input y botón dentro de la misma píldora */
+.fila-codigo { padding: 4px 4px 4px 16px; gap: 6px; align-items: center; }
+.fila-codigo input, .fila-codigo input:focus { background: none; border: 0; padding: 8px 0; min-height: 40px; }
+/* Botón de adentro: píldora naranja con rebote tipo gelatina */
+.buscador-grande .boton, .fila-codigo .boton {
+  border-radius: 9999px; box-shadow: none; margin: 0; min-height: 44px; border: 0;
+  transition: transform .15s, filter .2s;
+}
+.buscador-grande .boton { width: 46px; }
+.fila-codigo .boton { padding: 0 18px; background: var(--naranja); color: #1a0c02; }
+@keyframes gelatina {
+  0% { transform: scale3d(1, 1, 1); } 30% { transform: scale3d(.75, 1.25, 1); } 40% { transform: scale3d(1.25, .75, 1); }
+  50% { transform: scale3d(.85, 1.15, 1); } 65% { transform: scale3d(1.05, .95, 1); } 75% { transform: scale3d(.95, 1.05, 1); } 100% { transform: scale3d(1, 1, 1); }
+}
+@media (hover: hover) {
+  .buscador-grande .boton:hover, .fila-codigo .boton:hover { animation: gelatina .9s both; filter: brightness(1.08); transform: none; box-shadow: none; }
+}
+.buscador-grande .boton:active, .fila-codigo .boton:active { animation: none; transform: scale(.9); box-shadow: none; filter: none; }
+.buscador-grande .boton.rebote, .fila-codigo .boton.rebote { animation: gelatina .9s both; }
+@media (min-width: 641px) { .buscador-grande .boton { width: auto; padding: 0 22px; } }
+
+/* Sobre: en el abanico, las cartas que quedan atrás se oscurecen un poco */
+.carta-sobre .cara { transition: filter .3s, box-shadow .3s; }
+.carta-sobre.atras .cara { filter: brightness(.62); }

@@ -503,3 +503,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   Carrito.iniciar();
   refrescarBotones();
 });
+
+
+// Botón "Aplicar" del código: rebote tipo gelatina al tocarlo (en compu también sale al pasar el mouse)
+document.addEventListener('click', e => {
+  const b = e.target.closest('.fila-codigo .boton');
+  if (!b) return;
+  b.classList.remove('rebote'); void b.offsetWidth; b.classList.add('rebote');
+  b.addEventListener('animationend', () => b.classList.remove('rebote'), { once: true });
+});
